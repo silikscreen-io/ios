@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="pnv-XL-coI">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Map View Controller-->
+        <scene sceneID="Rdh-7S-2ue">
+            <objects>
+                <viewController id="8t3-bh-C91" customClass="MapViewController" customModule="HexagonPicker" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vQs-3W-DMO"/>
+                        <viewControllerLayoutGuide type="bottom" id="2Br-tp-IjJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gfH-01-qj6">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xYh-wF-iV9">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </mapView>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LAl-Pa-plp">
+                                <rect key="frame" x="461" y="550" width="123" height="30"/>
+                                <color key="backgroundColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="YiR-Af-dwe"/>
+                                    <constraint firstAttribute="width" constant="123" id="xXY-Z3-TJO"/>
+                                </constraints>
+                                <state key="normal" title="list">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                </state>
+                                <connections>
+                                    <action selector="tagsOnOffButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Mkq-IX-7EO"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="2Br-tp-IjJ" firstAttribute="top" secondItem="LAl-Pa-plp" secondAttribute="bottom" constant="20" id="3g0-bo-H5e"/>
+                            <constraint firstItem="xYh-wF-iV9" firstAttribute="leading" secondItem="gfH-01-qj6" secondAttribute="leading" id="3sR-vx-i9l"/>
+                            <constraint firstItem="xYh-wF-iV9" firstAttribute="top" secondItem="vQs-3W-DMO" secondAttribute="bottom" constant="-20" id="IYG-0r-ohO"/>
+                            <constraint firstItem="2Br-tp-IjJ" firstAttribute="top" secondItem="xYh-wF-iV9" secondAttribute="bottom" id="LV9-4b-aXf"/>
+                            <constraint firstAttribute="trailing" secondItem="xYh-wF-iV9" secondAttribute="trailing" id="fHH-wN-IqR"/>
+                            <constraint firstItem="LAl-Pa-plp" firstAttribute="trailing" secondItem="gfH-01-qj6" secondAttribute="trailingMargin" id="hzh-XR-APm"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="xYh-wF-iV9" id="QEb-4Z-O9X"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RwA-fv-ZkC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-918" y="136"/>
+        </scene>
+        <!--Map View Controller-->
+        <scene sceneID="Zda-5M-Sqe">
+            <objects>
+                <viewController id="pnv-XL-coI" customClass="GMapViewController" customModule="HexagonPicker" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Tv5-gU-Wz3"/>
+                        <viewControllerLayoutGuide type="bottom" id="f0z-bj-PUA"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Hx0-3g-5Ob">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KSg-Su-DBO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-918" y="813"/>
+        </scene>
+        <!--Login Web View Controller-->
+        <scene sceneID="78R-TP-XR1">
+            <objects>
+                <viewController id="Zhl-CF-D8k" customClass="LoginWebViewController" customModule="HexagonPicker" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="q1s-L1-ces"/>
+                        <viewControllerLayoutGuide type="bottom" id="58U-TH-lYe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ReQ-dI-r9N">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0rE-EC-dtA">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Zhl-CF-D8k" id="xSG-ho-BOA"/>
+                                </connections>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0rE-EC-dtA" firstAttribute="top" secondItem="q1s-L1-ces" secondAttribute="bottom" constant="-20" id="SeV-sC-hb9"/>
+                            <constraint firstAttribute="trailing" secondItem="0rE-EC-dtA" secondAttribute="trailing" id="WC7-cs-tMk"/>
+                            <constraint firstItem="58U-TH-lYe" firstAttribute="top" secondItem="0rE-EC-dtA" secondAttribute="bottom" id="mju-B8-p2Z"/>
+                            <constraint firstItem="0rE-EC-dtA" firstAttribute="leading" secondItem="ReQ-dI-r9N" secondAttribute="leading" id="pHh-Ke-68Q"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="0rE-EC-dtA" id="aQk-2d-1rV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KNx-F4-D6X" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-245" y="136"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="HexagonPicker" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zCq-g9-ugS"/>
+                        <viewControllerLayoutGuide type="bottom" id="ZG3-Xv-Ro2"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gemeos.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="NaF-hG-xiw">
+                                <rect key="frame" x="-50" y="-50" width="700" height="700"/>
+                            </imageView>
+                            <button opaque="NO" alpha="0.49999999999999961" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="52c-DV-ew2">
+                                <rect key="frame" x="16" y="562" width="123" height="30"/>
+                                <color key="backgroundColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="123" id="ATK-31-hA7"/>
+                                    <constraint firstAttribute="height" constant="30" id="y4l-AX-meD"/>
+                                </constraints>
+                                <state key="normal" title="tags on">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                </state>
+                                <connections>
+                                    <action selector="tagsOnOffButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gQR-Tx-CjO"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="NaF-hG-xiw" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6EH-pM-iEA"/>
+                            <constraint firstItem="NaF-hG-xiw" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="GbS-nm-IIt"/>
+                            <constraint firstItem="NaF-hG-xiw" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-66" id="GhN-fC-MAF"/>
+                            <constraint firstItem="52c-DV-ew2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Mv3-qj-q1i"/>
+                            <constraint firstItem="NaF-hG-xiw" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="-50" id="Z2X-aw-wXm"/>
+                            <constraint firstItem="ZG3-Xv-Ro2" firstAttribute="top" secondItem="52c-DV-ew2" secondAttribute="bottom" constant="8" id="sAh-Mh-qe9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backgroundImage" destination="NaF-hG-xiw" id="lgM-dp-TOA"/>
+                        <outlet property="tagsOnOffButton" destination="52c-DV-ew2" id="4Mb-S0-sVb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="415" y="136"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="gemeos.jpg" width="1280" height="850"/>
+    </resources>
+</document>

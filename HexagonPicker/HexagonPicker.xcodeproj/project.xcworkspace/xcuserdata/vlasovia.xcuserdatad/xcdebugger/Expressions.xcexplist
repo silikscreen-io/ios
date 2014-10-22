@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "HexagonPicker.ViewController.setMaskImage (HexagonPicker.ViewController)(ObjectiveC.UIImage) -&gt; ():ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HexagonPicker.ViewController.fillViewWithButtons (HexagonPicker.ViewController)() -&gt; ():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "x + width">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "HexagonPicker.ViewController.optimizeHexagonWidth (HexagonPicker.ViewController)() -&gt; ():ViewController.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
