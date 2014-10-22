@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ArtViewController.swift
 //  HexagonPicker
 //
 //  Created by Vlasov Illia on 18.10.14.
@@ -9,7 +9,14 @@
 import UIKit
 import CoreMotion
 
-class ViewController: UIViewController {
+protocol ArtViewControllerDelegate {
+    func dismissArtViewController()
+}
+
+
+class ArtViewController: UIViewController {
+    
+    var delegate: ArtViewControllerDelegate!
     
     let motionManager = CMMotionManager()
     
@@ -25,6 +32,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var tagsOnOffButton: UIButton!
+    @IBOutlet weak var showRouteButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,12 +56,21 @@ class ViewController: UIViewController {
         initMotions()
         self.view.bringSubviewToFront(tagsOnOffButton)
         backgroundImage.alpha = tagsOn ? 0.8 : 1
+        self.view.bringSubviewToFront(showRouteButton)
     }
     
     
     
     override func viewDidAppear(animated: Bool) {
         deviceOrientation = UIDevice.currentDevice().orientation
+    }
+    
+    
+    
+    @IBAction func showRouteButtonPressed(sender: UIButton) {
+        if delegate != nil {
+            delegate.dismissArtViewController()
+        }
     }
     
     

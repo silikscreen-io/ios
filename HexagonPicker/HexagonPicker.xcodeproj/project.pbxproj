@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B5173DB519F2726C00B50011 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5173DB419F2726C00B50011 /* AppDelegate.swift */; };
-		B5173DB719F2726C00B50011 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5173DB619F2726C00B50011 /* ViewController.swift */; };
+		B5173DB719F2726C00B50011 /* ArtViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5173DB619F2726C00B50011 /* ArtViewController.swift */; };
 		B5173DBA19F2726C00B50011 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5173DB819F2726C00B50011 /* Main.storyboard */; };
 		B5173DBC19F2726C00B50011 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5173DBB19F2726C00B50011 /* Images.xcassets */; };
 		B5173DBF19F2726C00B50011 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5173DBD19F2726C00B50011 /* LaunchScreen.xib */; };
@@ -67,7 +67,7 @@
 		B5173DAF19F2726C00B50011 /* HexagonPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HexagonPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5173DB319F2726C00B50011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5173DB419F2726C00B50011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B5173DB619F2726C00B50011 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B5173DB619F2726C00B50011 /* ArtViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtViewController.swift; sourceTree = "<group>"; };
 		B5173DB919F2726C00B50011 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B5173DBB19F2726C00B50011 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B5173DBE19F2726C00B50011 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 				B52898FA19F7A75D000CC9EF /* ForHeaderGeneration.m */,
 				B57DE42A19F5C16600F47A00 /* Resources */,
 				B5173DB419F2726C00B50011 /* AppDelegate.swift */,
-				B5173DB619F2726C00B50011 /* ViewController.swift */,
+				B5173DB619F2726C00B50011 /* ArtViewController.swift */,
 				B5173DB819F2726C00B50011 /* Main.storyboard */,
 				B5173DBB19F2726C00B50011 /* Images.xcassets */,
 				B5173DBD19F2726C00B50011 /* LaunchScreen.xib */,
@@ -384,7 +384,7 @@
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
 				B52898FB19F7A75D000CC9EF /* ForHeaderGeneration.m in Sources */,
 				B5173DEF19F5790700B50011 /* LoginWebViewController.swift in Sources */,
-				B5173DB719F2726C00B50011 /* ViewController.swift in Sources */,
+				B5173DB719F2726C00B50011 /* ArtViewController.swift in Sources */,
 				B5173DB519F2726C00B50011 /* AppDelegate.swift in Sources */,
 				B52898FD19F7A85A000CC9EF /* GMapViewController.swift in Sources */,
 			);

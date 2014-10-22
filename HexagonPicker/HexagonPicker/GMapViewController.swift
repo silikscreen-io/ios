@@ -11,7 +11,9 @@ import CoreLocation
 
 let iOS8Delta = (((UIDevice.currentDevice().systemVersion as NSString).floatValue >= 8.0 ) ? true : false )
 
-class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
+class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, ArtViewControllerDelegate {
+    
+    let SHOW_ART_SEGUE_ID = "showArtSegue"
     
     let locationManager = CLLocationManager()
     
@@ -39,11 +41,25 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     
+    func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
+        performSegueWithIdentifier(SHOW_ART_SEGUE_ID, sender: self)
+    }
+    
+    
+    
     func initMap() {
         var target: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 51.6, longitude: 17.2)
         var camera: GMSCameraPosition = GMSCameraPosition(target: target, zoom: 6, bearing: 0, viewingAngle: 0)
         
         mapView = GMSMapView(frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
+//        var myOptions = {
+//            zoom: 15,
+//            center: new google.maps.LatLng(53.385873, -1.471471),
+//            mapTypeId: google.maps.MapTypeId.ROADMAP,
+//            styles: style_array_from_above_here
+//        };
+//        
+//        var map = new google.maps.Map(document.getElementById('map'), myOptions);
         if let map = mapView? {
             map.myLocationEnabled = true
             map.camera = camera
@@ -68,17 +84,28 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     func addMarker(latitude: Double, _ longitude: Double, _ pictureNumber: Int) {
         var marker = GMSMarker(position: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
         marker.title = "Picture \(pictureNumber)"
-        marker.snippet = "\(latitude), \(longitude)"
+        //marker.snippet = "\(latitude), \(longitude)"
+        marker.snippet = "Tap me"
         marker.icon = UIImage(named: "annotation.png")
         marker.map = mapView
     }
     
     
     
+    func dismissArtViewController() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        createRoute(currentLocation!, tappedMarker!.position)
+        let bounds = GMSCoordinateBounds(coordinate: currentLocation!, coordinate: tappedMarker!.position)
+        let boundsCameraUpdate = GMSCameraUpdate.fitBounds(bounds, withPadding: 30)
+        mapView!.animateWithCameraUpdate(boundsCameraUpdate)
+    }
+    
+    
+    
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
         tappedMarker = marker
-        createRoute(currentLocation!, marker!.position)
-        return true
+//        createRoute(currentLocation!, marker!.position)
+        return false
     }
     
     
@@ -114,8 +141,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         let jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
         let routes: [NSDictionary] = jsonResult["routes"] as [NSDictionary]
         var locations: [CLLocationCoordinate2D] = []
-        let overviewPolyline1 = routes[0] as NSDictionary
-        let overviewPolyline = overviewPolyline1["overview_polyline"] as NSDictionary
+        let overviewPolyline = (routes[0] as NSDictionary)["overview_polyline"] as NSDictionary
         let points = overviewPolyline["points"] as String
         let path = GMSPath(fromEncodedPath: points)
         if polyline != nil {
@@ -142,8 +168,29 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     
+    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        var frame = mapView!.frame
+        frame.size.width = mapView!.frame.size.height
+        frame.size.height = mapView!.frame.size.width
+        mapView!.frame = frame
+    }
+    
+    
+    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        mapView!.frame.size = size
+        var frame = mapView!.frame
+        frame.size.width = mapView!.frame.size.height
+        frame.size.height = mapView!.frame.size.width
+        mapView!.frame = frame
+    }
+    
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == SHOW_ART_SEGUE_ID {
+            let artViewController = segue.destinationViewController as ArtViewController
+            artViewController.delegate = self
+        }
     }
     
 }
