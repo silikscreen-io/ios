@@ -16,6 +16,8 @@ protocol ArtViewControllerDelegate {
 
 class ArtViewController: UIViewController {
     
+    let queue = dispatch_queue_create("com.vaisoft.hexagonpicker", nil)
+    
     var delegate: ArtViewControllerDelegate!
     
     let motionManager = CMMotionManager()
@@ -40,10 +42,6 @@ class ArtViewController: UIViewController {
         //initParallaxEffect()
         
         fillViewWithButtons()
-        fillButtonWithImage("ann.jpg")
-        fillButtonWithImage("gal.jpg")
-        fillButtonWithImage("rah.jpg")
-        fillButtonWithImage("ste.jpg")
         
         var mask = UIImage(named: "hexagon_100.png")!
         UIGraphicsBeginImageContext(CGSize(width: width, height: height))
@@ -129,26 +127,37 @@ class ArtViewController: UIViewController {
     
     
     func fillViewWithButtons() {
-        optimizeHexagonWidth()
-        let screenSize = self.view.bounds
-        let maxX = screenSize.width
-        let maxY = screenSize.height
-        var firstLine = true
-        var x: CGFloat = 0
-        var y: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
-        while trunc(y + height) <= maxY {
-            while trunc(x + width) <= maxX {
-                HexaButton.addButton(x, y: y, target: self, action: "buttonPressed:", view: self.view)
-                x += width + R
+        dispatch_async(queue, {
+            self.optimizeHexagonWidth()
+            let screenSize = self.view.bounds
+            let maxX = screenSize.width
+            let maxY = screenSize.height
+            var firstLine = true
+            var x: CGFloat = 0
+            var y: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+            while trunc(y + height) <= maxY {
+                while trunc(x + width) <= maxX {
+                    HexaButton.addButton(x, y: y, target: self, action: "buttonPressed:", view: self.view)
+                    x += width + R
+                }
+                firstLine = !firstLine
+                if firstLine {
+                    x = 0
+                } else {
+                    x = width - xStep
+                }
+                y += r
             }
-            firstLine = !firstLine
-            if firstLine {
-                x = 0
-            } else {
-                x = width - xStep
-            }
-            y += r
-        }
+            dispatch_async(dispatch_get_main_queue(), {
+                self.fillButtonWithImage("ann.jpg")
+                self.fillButtonWithImage("gal.jpg")
+                self.fillButtonWithImage("rah.jpg")
+                self.fillButtonWithImage("ste.jpg")
+                self.view.bringSubviewToFront(self.tagsOnOffButton)
+                self.backgroundImage.alpha = self.tagsOn ? 0.8 : 1
+                self.view.bringSubviewToFront(self.showRouteButton)
+            })
+        })
     }
     
     

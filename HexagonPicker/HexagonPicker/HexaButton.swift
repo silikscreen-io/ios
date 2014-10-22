@@ -41,7 +41,9 @@ class HexaButton: UIButton {
         var button = HexaButton(frame: CGRectMake(x, y, width, height))
         button.index = buttons.count
         button.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
-        view.addSubview(button)
+        dispatch_async(dispatch_get_main_queue(), {
+            view.addSubview(button)
+        })
         buttons[button.index] = button
     }
     
@@ -85,7 +87,7 @@ class HexaButton: UIButton {
                 let bytesPerRow: UInt = bytesPerPixel * 1
                 let bitsPerComponent: UInt = 8
                 let colorSpace = CGColorSpaceCreateDeviceRGB()
-                let bitmapInfo = CGBitmapInfo.ByteOrder32Big// | CGBitmapInfo.fromMask(CGImageAlphaInfo.PremultipliedLast.toRaw())
+                let bitmapInfo = CGBitmapInfo.ByteOrder32Big | CGBitmapInfo(CGImageAlphaInfo.PremultipliedLast.rawValue)
                 let context = CGBitmapContextCreate(&pixelData, 1, 1, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo)
                 CGContextSetBlendMode(context, kCGBlendModeCopy)
                 
