@@ -21,6 +21,8 @@ class ArtViewController: UIViewController {
     var delegate: ArtViewControllerDelegate!
     
     let motionManager = CMMotionManager()
+    var artContent: ArtContentView?
+    var visualEffectView: UIVisualEffectView?
     
     let maxXMovement: CGFloat = 20
     let maxYMovement: CGFloat = 20
@@ -31,6 +33,7 @@ class ArtViewController: UIViewController {
     var deviceOrientation: UIDeviceOrientation?
     
     var tagsOn = true
+    var artContentDisplayed = false
 
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var tagsOnOffButton: UIButton!
@@ -55,8 +58,37 @@ class ArtViewController: UIViewController {
         self.view.bringSubviewToFront(tagsOnOffButton)
         backgroundImage.alpha = tagsOn ? 0.8 : 1
         self.view.bringSubviewToFront(showRouteButton)
+        
+        let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected")
+        singleTap.numberOfTapsRequired = 1
+        backgroundImage!.userInteractionEnabled = true
+        backgroundImage!.addGestureRecognizer(singleTap)
+        
+        var frame = self.view.bounds
+        frame.origin.x = 50
+        frame.origin.y = 50
+        artContent = ArtContentView(backgroundImage!, frame, artContentDisplayed)
+        artContent!.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
+        for _ in 0...Int(arc4random_uniform(4)) {
+            artContent!.addButton(ArtContentView.CONTENT_ID)
+        }
     }
     
+    
+    
+    func tapDetected() {
+        artContentDisplayed = !artContentDisplayed
+        artContent!.show(artContentDisplayed)
+        let alpha: CGFloat = artContentDisplayed ? 0 : 0.8
+        UIView.animateWithDuration(0.2, animations: { self.tagsOnOffButton.alpha = alpha })
+        UIView.animateWithDuration(0.2, animations: { self.showRouteButton.alpha = alpha })
+        if artContentDisplayed {
+            motionManager.stopAccelerometerUpdates()
+        } else {
+            initMotions()
+        }
+    }
+
     
     
     override func viewDidAppear(animated: Bool) {
@@ -189,10 +221,17 @@ class ArtViewController: UIViewController {
     
     
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillLayoutSubviews() {
+        if deviceOrientation == nil {
+            return
+        }
+        let previousOrientation = deviceOrientation
         deviceOrientation = UIDevice.currentDevice().orientation
-        let maxX = size.width
-        let maxY = size.height
+        if previousOrientation == deviceOrientation {
+            return
+        }
+        let maxX = self.view.frame.width
+        let maxY = self.view.frame.height
         var firstLine = true
         var x: CGFloat = 0
         var y: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
@@ -214,6 +253,10 @@ class ArtViewController: UIViewController {
             }
             y += r
         }
+        var frame = self.view.bounds
+        frame.origin.x = 50
+        frame.origin.y = 50
+        artContent!.updateToFrame(frame)
     }
     
     

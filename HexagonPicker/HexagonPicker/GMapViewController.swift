@@ -12,6 +12,7 @@ import CoreLocation
 let iOS8Delta = (((UIDevice.currentDevice().systemVersion as NSString).floatValue >= 8.0 ) ? true : false )
 
 class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, ArtViewControllerDelegate {
+    var deviceOrientation: UIDeviceOrientation?
     
     let SHOW_ART_SEGUE_ID = "showArtSegue"
     
@@ -50,7 +51,6 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     func initMap() {
         var target: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 51.6, longitude: 17.2)
         var camera: GMSCameraPosition = GMSCameraPosition(target: target, zoom: 6, bearing: 0, viewingAngle: 0)
-        
         mapView = GMSMapView(frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
 //        var myOptions = {
 //            zoom: 15,
@@ -67,6 +67,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             map.settings.myLocationButton = true
             map.settings.compassButton = true
             map.padding = UIEdgeInsets(top: self.topLayoutGuide.length + 5, left: 0, bottom: 0, right: 0)
+            
             self.view.addSubview(mapView!)
         }
     }
@@ -88,6 +89,12 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         marker.snippet = "Tap me"
         marker.icon = UIImage(named: "annotation.png")
         marker.map = mapView
+    }
+    
+    
+    
+    override func viewDidAppear(animated: Bool) {
+        deviceOrientation = UIDevice.currentDevice().orientation
     }
     
     
@@ -168,16 +175,15 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        var frame = mapView!.frame
-        frame.size.width = mapView!.frame.size.height
-        frame.size.height = mapView!.frame.size.width
-        mapView!.frame = frame
-    }
-    
-    
-    
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillLayoutSubviews() {
+        if deviceOrientation == nil {
+            return
+        }
+        let previousOrientation = deviceOrientation
+        deviceOrientation = UIDevice.currentDevice().orientation
+        if previousOrientation == deviceOrientation {
+            return
+        }
         var frame = mapView!.frame
         frame.size.width = mapView!.frame.size.height
         frame.size.height = mapView!.frame.size.width
