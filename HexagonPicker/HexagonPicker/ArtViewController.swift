@@ -35,6 +35,7 @@ class ArtViewController: UIViewController {
     var tagsOn = true
     var artContentDisplayed = false
 
+    var image: UIImage?
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var tagsOnOffButton: UIButton!
     @IBOutlet weak var showRouteButton: UIButton!
@@ -53,6 +54,7 @@ class ArtViewController: UIViewController {
         UIGraphicsEndImageContext();
         maskImage = newImage
         
+        backgroundImage.image = image
         frameBase = backgroundImage.frame
         initMotions()
         self.view.bringSubviewToFront(tagsOnOffButton)

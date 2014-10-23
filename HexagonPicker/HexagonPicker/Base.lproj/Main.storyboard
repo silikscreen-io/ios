@@ -38,21 +38,11 @@
                     <view key="view" contentMode="scaleToFill" id="sxo-HU-sGM">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BBV-hX-KVK">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Picture5.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="h8i-JX-ShW">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                    </imageView>
-                                </subviews>
-                            </scrollView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="scrollView" destination="BBV-hX-KVK" id="XZw-uO-Gsf"/>
                         <segue destination="pnv-XL-coI" kind="show" identifier="showMapSegue" id="aZT-Jl-g0J"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="showArtFromFeedSegue" id="5lf-Nk-XYR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ve-nP-dRL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -166,7 +156,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Picture5.jpg" width="800" height="800"/>
         <image name="gemeos.jpg" width="1280" height="850"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="5lf-Nk-XYR"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -9,20 +9,84 @@
 import UIKit
 
 class ArtFeedViewController: UIViewController, GMapViewControllerDelegate {
+    let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
+    
+    var images: [UIImage] = []
     
     let SHOW_MAP_SEGUE_ID = "showMapSegue"
 
-    @IBOutlet weak var scrollView: UIScrollView!
+    var scrollView: UIScrollView!
     
     var buttonsToolbar: UIToolbar!
     var buttonItems: [UIBarItem] = []
     var homeToolbar: UIToolbar!
     var homeToolbarItems: [UIBarItem]!
     
+    var tappedImage: UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.None)
+        initFeed()
+        initScrollView()
         initNavigationBar()
+    }
+    
+    
+    
+    func initFeed() {
+        for index in 1...6 {
+            images.append(UIImage(named: "Picture\(index).jpg")!)
+        }
+    }
+    
+    
+    
+    func initScrollView() {
+        scrollView = UIScrollView(frame: self.view.bounds)
+        let screenWidth = view.bounds.width
+        var scrollViewContentHeight: CGFloat = 0
+        var frame = CGRect()
+        for image in images {
+            let imageWidth = image.size.width
+            let imageHeight = image.size.height
+            let scaleFactor = image.size.width / screenWidth
+            let imageViewHeight = imageHeight / scaleFactor
+            frame.origin.y = scrollViewContentHeight
+            frame.size = CGSize(width: screenWidth, height: imageViewHeight)
+            let imageView = UIImageView(frame: frame)
+            imageView.image = image
+            scrollView.addSubview(imageView)
+            scrollViewContentHeight += imageViewHeight
+            
+            
+            let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected:")
+            singleTap.numberOfTapsRequired = 1
+            imageView.userInteractionEnabled = true
+            imageView.addGestureRecognizer(singleTap)
+
+        }
+        scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
+        self.view.addSubview(scrollView)
+    }
+    
+    
+    
+    func tapDetected(gestureRecognizer: UITapGestureRecognizer) {
+        tappedImage = (gestureRecognizer.view as UIImageView).image
+        performSegueWithIdentifier(SHOW_ART_FROM_FEED_SEGUE_ID, sender: self)
+    }
+    
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == SHOW_ART_FROM_FEED_SEGUE_ID {
+            let artViewController = segue.destinationViewController as ArtViewController
+            artViewController.image = tappedImage
+        } else if segue.identifier == SHOW_MAP_SEGUE_ID {
+            let mapViewController = segue.destinationViewController as GMapViewController
+            mapViewController.delegate = self
+        }
     }
     
     
@@ -86,15 +150,6 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate {
     
     func mapButtonTapped() {
         performSegueWithIdentifier("showMapSegue", sender: self)
-    }
-    
-    
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == SHOW_MAP_SEGUE_ID {
-            let mapViewController = segue.destinationViewController as GMapViewController
-            mapViewController.delegate = self
-        }
     }
     
     
