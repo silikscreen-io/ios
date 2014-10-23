@@ -11,7 +11,13 @@ import CoreLocation
 
 let iOS8Delta = (((UIDevice.currentDevice().systemVersion as NSString).floatValue >= 8.0 ) ? true : false )
 
+protocol GMapViewControllerDelegate {
+    func dismissGMapViewController()
+}
+
 class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, ArtViewControllerDelegate {
+    var delegate: GMapViewControllerDelegate!
+    
     var deviceOrientation: UIDeviceOrientation?
     
     let SHOW_ART_SEGUE_ID = "showArtSegue"
@@ -25,6 +31,10 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     var firstLook = true
     var currentLocation: CLLocationCoordinate2D?
 
+    var homeToolbar: UIToolbar!
+    var homeToolbarItems: [UIBarItem]!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +48,41 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         locationManager.startUpdatingLocation()
         initMap()
         initMarkers()
+        initNavigationBar()
+    }
+    
+    
+    
+    func initNavigationBar() {
+        var frame = self.view.bounds
+        frame.origin.y = frame.height - 30
+        frame.size.height = 30
+        homeToolbar = UIToolbar(frame: frame)
+        homeToolbar!.barStyle = UIBarStyle.Black
+        homeToolbar!.alpha = 0.7
+        self.view.addSubview(homeToolbar!)
+        
+        var homeImage = UIImage(named: "home_icon.png")
+        var destinationSize = CGSize(width: 30, height: 30)
+        UIGraphicsBeginImageContext(destinationSize)
+        homeImage!.drawInRect(CGRectMake(0, 0, destinationSize.width, destinationSize.height))
+        var newHomeImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        var item = UIBarButtonItem(image: newHomeImage, style: UIBarButtonItemStyle.Plain, target: self, action: "homeTapped")
+        item.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        var space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        homeToolbarItems = Array(arrayLiteral: space, item, space)
+        homeToolbar.items = homeToolbarItems
+    }
+    
+    
+    
+    func homeTapped() {
+        if delegate == nil {
+            return
+        }
+        delegate!.dismissGMapViewController()
     }
     
     
@@ -52,21 +97,13 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         var target: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 51.6, longitude: 17.2)
         var camera: GMSCameraPosition = GMSCameraPosition(target: target, zoom: 6, bearing: 0, viewingAngle: 0)
         mapView = GMSMapView(frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
-//        var myOptions = {
-//            zoom: 15,
-//            center: new google.maps.LatLng(53.385873, -1.471471),
-//            mapTypeId: google.maps.MapTypeId.ROADMAP,
-//            styles: style_array_from_above_here
-//        };
-//        
-//        var map = new google.maps.Map(document.getElementById('map'), myOptions);
         if let map = mapView? {
             map.myLocationEnabled = true
             map.camera = camera
             map.delegate = self
             map.settings.myLocationButton = true
             map.settings.compassButton = true
-            map.padding = UIEdgeInsets(top: self.topLayoutGuide.length + 5, left: 0, bottom: 0, right: 0)
+            map.padding = UIEdgeInsets(top: self.topLayoutGuide.length + 5, left: 0, bottom: 30, right: 0)
             
             self.view.addSubview(mapView!)
         }
@@ -78,6 +115,9 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         addMarker(50.491927, 30.336178, 1)
         addMarker(50.421927, 30.436178, 2)
         addMarker(50.471927, 30.406178, 3)
+        //25.797963, -80.189307 - Picture4
+        //25.798237, -80.196991 - Picture5
+        //25.795400, -80.206027 - Picture6
     }
     
     
@@ -188,6 +228,10 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         frame.size.width = mapView!.frame.size.height
         frame.size.height = mapView!.frame.size.width
         mapView!.frame = frame
+        
+        frame = self.view.bounds
+        homeToolbar.frame.origin.y = frame.height - 30
+        homeToolbar.frame.size.width = frame.width
     }
     
     

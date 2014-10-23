@@ -52,6 +52,12 @@
 		B528990B19F7B828000CC9EF /* TMCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B528990419F7B828000CC9EF /* TMCache.framework */; };
 		B528990C19F7B828000CC9EF /* UICKeyChainStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B528990519F7B828000CC9EF /* UICKeyChainStore.framework */; };
 		B528990D19F7B828000CC9EF /* XMLDictionary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B528990619F7B828000CC9EF /* XMLDictionary.framework */; };
+		B5339BE519F97644003B1C88 /* ArtFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BE419F97644003B1C88 /* ArtFeedViewController.swift */; };
+		B5339BE919F97963003B1C88 /* Picture4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5339BE619F97963003B1C88 /* Picture4.jpg */; };
+		B5339BEA19F97963003B1C88 /* Picture5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5339BE719F97963003B1C88 /* Picture5.jpg */; };
+		B5339BEB19F97963003B1C88 /* Picture6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5339BE819F97963003B1C88 /* Picture6.jpg */; };
+		B5339BEE19F9AFB9003B1C88 /* map_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B5339BED19F9AFB9003B1C88 /* map_icon.png */; };
+		B5339BF019F9B8A1003B1C88 /* home_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B5339BEF19F9B8A1003B1C88 /* home_icon.png */; };
 		B57DE42719F5B65700F47A00 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57DE42619F5B65700F47A00 /* CoreLocation.framework */; };
 		B57DE42E19F5C16600F47A00 /* Picture1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42B19F5C16600F47A00 /* Picture1.jpg */; };
 		B57DE42F19F5C16600F47A00 /* Picture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42C19F5C16600F47A00 /* Picture2.jpg */; };
@@ -121,6 +127,12 @@
 		B528990419F7B828000CC9EF /* TMCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TMCache.framework; sourceTree = "<group>"; };
 		B528990519F7B828000CC9EF /* UICKeyChainStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UICKeyChainStore.framework; sourceTree = "<group>"; };
 		B528990619F7B828000CC9EF /* XMLDictionary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XMLDictionary.framework; sourceTree = "<group>"; };
+		B5339BE419F97644003B1C88 /* ArtFeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtFeedViewController.swift; sourceTree = "<group>"; };
+		B5339BE619F97963003B1C88 /* Picture4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Picture4.jpg; path = ../../../../HexagonPicker/iOS/HexagonPicker/HexagonPicker/Resources/Picture4.jpg; sourceTree = "<group>"; };
+		B5339BE719F97963003B1C88 /* Picture5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Picture5.jpg; path = ../../../../HexagonPicker/iOS/HexagonPicker/HexagonPicker/Resources/Picture5.jpg; sourceTree = "<group>"; };
+		B5339BE819F97963003B1C88 /* Picture6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Picture6.jpg; path = ../../../../HexagonPicker/iOS/HexagonPicker/HexagonPicker/Resources/Picture6.jpg; sourceTree = "<group>"; };
+		B5339BED19F9AFB9003B1C88 /* map_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_icon.png; sourceTree = "<group>"; };
+		B5339BEF19F9B8A1003B1C88 /* home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_icon.png; sourceTree = "<group>"; };
 		B57DE42619F5B65700F47A00 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B57DE42B19F5C16600F47A00 /* Picture1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture1.jpg; sourceTree = "<group>"; };
 		B57DE42C19F5C16600F47A00 /* Picture2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture2.jpg; sourceTree = "<group>"; };
@@ -198,6 +210,7 @@
 				B5173DBB19F2726C00B50011 /* Images.xcassets */,
 				B5173DBD19F2726C00B50011 /* LaunchScreen.xib */,
 				B5173DB219F2726C00B50011 /* Supporting Files */,
+				B5339BE419F97644003B1C88 /* ArtFeedViewController.swift */,
 				B5173DB619F2726C00B50011 /* ArtViewController.swift */,
 				B51C979019F907CE00F286C5 /* ArtContentView.swift */,
 				B5173DD619F2765700B50011 /* HexaButton.swift */,
@@ -253,6 +266,15 @@
 			path = ArtContentIcons;
 			sourceTree = "<group>";
 		};
+		B5339BEC19F9AFB9003B1C88 /* ArtFeed */ = {
+			isa = PBXGroup;
+			children = (
+				B5339BED19F9AFB9003B1C88 /* map_icon.png */,
+			);
+			name = ArtFeed;
+			path = ../../../../HexagonPicker/iOS/HexagonPicker/HexagonPicker/Resources/ArtFeed;
+			sourceTree = "<group>";
+		};
 		B57DE42519F5B61A00F47A00 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -287,11 +309,16 @@
 		B57DE42A19F5C16600F47A00 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B5339BEF19F9B8A1003B1C88 /* home_icon.png */,
+				B5339BEC19F9AFB9003B1C88 /* ArtFeed */,
 				B51C979219F9357500F286C5 /* ArtContentIcons */,
 				B57DE43319F64F5700F47A00 /* annotation.png */,
 				B57DE42B19F5C16600F47A00 /* Picture1.jpg */,
 				B57DE42C19F5C16600F47A00 /* Picture2.jpg */,
 				B57DE42D19F5C16600F47A00 /* Picture3.jpg */,
+				B5339BE619F97963003B1C88 /* Picture4.jpg */,
+				B5339BE719F97963003B1C88 /* Picture5.jpg */,
+				B5339BE819F97963003B1C88 /* Picture6.jpg */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -380,6 +407,7 @@
 				B5173DE519F2D30600B50011 /* hexagon_100.png in Resources */,
 				B51C979919F9357500F286C5 /* audio_b.png in Resources */,
 				B5173DBA19F2726C00B50011 /* Main.storyboard in Resources */,
+				B5339BE919F97963003B1C88 /* Picture4.jpg in Resources */,
 				B51C979A19F9357500F286C5 /* audio_w.png in Resources */,
 				B5173DE019F2B0AD00B50011 /* rah.jpg in Resources */,
 				B5173DD919F290CB00B50011 /* user.jpg in Resources */,
@@ -388,7 +416,11 @@
 				B57DE43419F64F5700F47A00 /* annotation.png in Resources */,
 				B5173DE119F2B0AD00B50011 /* ste.jpg in Resources */,
 				B5173DD519F2729B00B50011 /* gemeos.jpg in Resources */,
+				B5339BEA19F97963003B1C88 /* Picture5.jpg in Resources */,
+				B5339BF019F9B8A1003B1C88 /* home_icon.png in Resources */,
+				B5339BEB19F97963003B1C88 /* Picture6.jpg in Resources */,
 				B51C979E19F9357500F286C5 /* video_w.png in Resources */,
+				B5339BEE19F9AFB9003B1C88 /* map_icon.png in Resources */,
 				B5173DDE19F2B0AD00B50011 /* ann.jpg in Resources */,
 				B5173DDF19F2B0AD00B50011 /* gal.jpg in Resources */,
 				B52898E119F7A528000CC9EF /* GoogleMaps.bundle in Resources */,
@@ -415,6 +447,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5339BE519F97644003B1C88 /* ArtFeedViewController.swift in Sources */,
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
 				B5173DEF19F5790700B50011 /* LoginWebViewController.swift in Sources */,
 				B5173DB719F2726C00B50011 /* ArtViewController.swift in Sources */,
