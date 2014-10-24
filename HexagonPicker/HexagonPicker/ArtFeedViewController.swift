@@ -8,15 +8,20 @@
 
 import UIKit
 
-class ArtFeedViewController: UIViewController, GMapViewControllerDelegate {
+class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedScrollViewDelegate {
     let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
     
     var images: [UIImage] = []
     
     let SHOW_MAP_SEGUE_ID = "showMapSegue"
 
-    var scrollView: UIScrollView!
+    var scrollView: FeedScrollView!
+    var upSwipeRecognizer: UISwipeGestureRecognizer?
+    var downSwipeRecognizer: UISwipeGestureRecognizer?
     
+    
+    let buttonsToolbarHeight: CGFloat = 60
+    var buttonsBarDisplayed = true
     var buttonsToolbar: UIToolbar!
     var buttonItems: [UIBarItem] = []
     var homeToolbar: UIToolbar!
@@ -30,6 +35,44 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate {
         initFeed()
         initScrollView()
         initNavigationBar()
+        scrollView.feedDelegate = self
+    }
+    
+    
+    
+    func swipeDown() {
+        if !buttonsBarDisplayed {
+            buttonsBarDisplayed = true
+            let buttonsToolbarY = self.buttonsToolbar!.frame.origin.y
+            var newY = buttonsToolbarY - self.buttonsToolbarHeight
+            UIView.animateWithDuration(0.3, animations: {
+                self.buttonsToolbar!.frame.origin.y = newY
+            })
+            let homeToolbarY = self.homeToolbar!.frame.origin.y
+            newY = homeToolbarY + self.buttonsToolbarHeight / 2
+            UIView.animateWithDuration(0.3, animations: {
+                self.homeToolbar!.frame.origin.y = newY
+            })
+        }
+    }
+    
+    
+    
+    func swipeUp() {
+        if buttonsBarDisplayed {
+            buttonsBarDisplayed = false
+            //            var frame = buttonsToolbar!.frame
+            let buttonsToolbarY = self.buttonsToolbar!.frame.origin.y
+            var newY = buttonsToolbarY + self.buttonsToolbarHeight
+            UIView.animateWithDuration(0.3, animations: {
+                self.buttonsToolbar!.frame.origin.y = newY
+            })
+            let homeToolbarY = self.homeToolbar!.frame.origin.y
+            newY = homeToolbarY - self.buttonsToolbarHeight / 2
+            UIView.animateWithDuration(0.3, animations: {
+                self.homeToolbar!.frame.origin.y = newY
+            })
+        }
     }
     
     
@@ -43,7 +86,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate {
     
     
     func initScrollView() {
-        scrollView = UIScrollView(frame: self.view.bounds)
+        scrollView = FeedScrollView(frame: self.view.bounds)
         let screenWidth = view.bounds.width
         var scrollViewContentHeight: CGFloat = 0
         var frame = CGRect()
@@ -64,7 +107,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate {
             singleTap.numberOfTapsRequired = 1
             imageView.userInteractionEnabled = true
             imageView.addGestureRecognizer(singleTap)
-
+            scrollViewContentHeight += 200
         }
         scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
         self.view.addSubview(scrollView)
@@ -94,14 +137,14 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate {
     func initNavigationBar() {
         var frame = self.view.bounds
         frame.origin.y = frame.height
-        frame.size.height = 20
+        frame.size.height = buttonsToolbarHeight / 2
         homeToolbar = UIToolbar()
         addToolbar(&homeToolbar, frame)
         initHomeToolbar()
         
         println(frame)
-        frame.origin.y = self.view.bounds.height - 40
-        frame.size.height += 20
+        frame.origin.y = self.view.bounds.height - buttonsToolbarHeight
+        frame.size.height += buttonsToolbarHeight / 2
         println(frame)
         buttonsToolbar = UIToolbar()
         addToolbar(&buttonsToolbar, frame)
@@ -140,10 +183,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate {
     
     
     func homeButtonTapped() {
-        var newPosition = self.view.bounds.height
-        UIView.animateWithDuration(0.4, animations: {
-            self.homeToolbar.frame.origin.y = newPosition
-        })
+        swipeDown()
     }
     
     
