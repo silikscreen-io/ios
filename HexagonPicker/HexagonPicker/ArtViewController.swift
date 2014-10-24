@@ -15,6 +15,7 @@ protocol ArtViewControllerDelegate {
 
 
 class ArtViewController: UIViewController {
+    var homeViewController: UIViewController?
     
     let queue = dispatch_queue_create("com.vaisoft.hexagonpicker", nil)
     
@@ -35,12 +36,16 @@ class ArtViewController: UIViewController {
     var tagsOn = true
     var artContentDisplayed = false
 
-    var image: UIImage?
-    @IBOutlet weak var backgroundImage: UIImageView!
-    @IBOutlet weak var tagsOnOffButton: UIButton!
-    @IBOutlet weak var showRouteButton: UIButton!
+    var art: Art?
+    var backgroundImage: UIImageView?
     var screenshotView: UIImageView?
     var screenshot: UIImage?
+    
+    let buttonWidth: CGFloat = 100
+    let buttonHeight: CGFloat = 40
+    let buttonPadding: CGFloat = 20
+    var tagsOnOffButton: UIButton?
+    var showRouteButton: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,17 +61,60 @@ class ArtViewController: UIViewController {
         UIGraphicsEndImageContext();
         maskImage = newImage
         
-        backgroundImage.image = image
-        frameBase = backgroundImage.frame
+        backgroundImage = UIImageView(frame: getFrameForBackgroundImage())
+        backgroundImage!.image = art!.image
+        frameBase = backgroundImage!.frame
         initMotions()
-        self.view.bringSubviewToFront(tagsOnOffButton)
-        backgroundImage.alpha = tagsOn ? 0.8 : 1
-        self.view.bringSubviewToFront(showRouteButton)
         
         let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected")
         singleTap.numberOfTapsRequired = 1
         backgroundImage!.userInteractionEnabled = true
         backgroundImage!.addGestureRecognizer(singleTap)
+        self.view.addSubview(backgroundImage!)
+        initButtons()
+    }
+    
+    
+    
+    func initButtons() {
+        var screenFrame = self.view.bounds
+        var buttonFrame = CGRect(x: buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        tagsOnOffButton = UIButton(frame: buttonFrame)
+        initButton(&tagsOnOffButton!, tagsOn ? "tags off" : "tags on", "tagsOnOffButtonPressed:")
+        buttonFrame = CGRect(x: screenFrame.width - buttonWidth - buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        showRouteButton = UIButton(frame: buttonFrame)
+        initButton(&showRouteButton!, "show route", "showRouteButtonPressed:")
+    }
+    
+    
+    
+    func updateButtons() {
+        var screenFrame = self.view.bounds
+        tagsOnOffButton!.frame = CGRect(x: buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        showRouteButton!.frame = CGRect(x: screenFrame.width - buttonWidth - buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+    }
+    
+    
+    
+    func initButton(inout button: UIButton, _ title: String, _ selector: Selector) {
+        button.setTitle(title, forState: UIControlState.Normal)
+        button.backgroundColor = UIColor.blackColor()
+        button.alpha = 0.7
+        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Highlighted)
+        button.addTarget(self, action: selector, forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(button)
+    }
+    
+    
+    
+    func getFrameForBackgroundImage() -> CGRect {
+        var frame = self.view.bounds
+        frame.origin.x = -maxXMovement
+        frame.origin.y = -maxYMovement
+        frame.size.width += 2 * maxXMovement
+        frame.size.height += 2 * maxYMovement
+        return frame
     }
     
     
@@ -81,8 +129,8 @@ class ArtViewController: UIViewController {
         artContentDisplayed = !artContentDisplayed
         artContent!.show(artContentDisplayed)
         let alpha: CGFloat = artContentDisplayed ? 0 : 0.8
-        UIView.animateWithDuration(0.2, animations: { self.tagsOnOffButton.alpha = alpha })
-        UIView.animateWithDuration(0.2, animations: { self.showRouteButton.alpha = alpha })
+        UIView.animateWithDuration(0.2, animations: { self.tagsOnOffButton!.alpha = alpha })
+        UIView.animateWithDuration(0.2, animations: { self.showRouteButton!.alpha = alpha })
         if artContentDisplayed {
             motionManager.stopAccelerometerUpdates()
         } else {
@@ -123,8 +171,13 @@ class ArtViewController: UIViewController {
     
     
     
-    @IBAction func showRouteButtonPressed(sender: UIButton) {
-        if delegate != nil {
+    func showRouteButtonPressed(sender: UIButton) {
+        if delegate == nil {
+            let mapViewController = GMapViewController()
+            mapViewController.homeViewController = self
+            mapViewController.artForRoute = art
+            self.showViewController(mapViewController, sender: self)
+        } else {
             delegate.dismissArtViewController()
         }
     }
@@ -154,11 +207,11 @@ class ArtViewController: UIViewController {
             gY = -acceleration.x
         }
         if prevGX == nil || fabs(prevGX! - gX) >= minMotion {
-            backgroundImage.frame.origin.x = frameBase!.origin.x + CGFloat(gX) * maxXMovement
+            backgroundImage!.frame.origin.x = frameBase!.origin.x + CGFloat(gX) * maxXMovement
             prevGX = gX
         }
         if prevGY == nil || fabs(prevGY! - gY) >= minMotion {
-            backgroundImage.frame.origin.y = frameBase!.origin.y + CGFloat(gY) * maxYMovement
+            backgroundImage!.frame.origin.y = frameBase!.origin.y + CGFloat(gY) * maxYMovement
             prevGY = gY
         }
     }
@@ -170,7 +223,7 @@ class ArtViewController: UIViewController {
         var motionGroup = UIMotionEffectGroup()
         motionGroup.motionEffects = [getEffect("center.x", UIInterpolatingMotionEffectType.TiltAlongHorizontalAxis, -55, 55),
             getEffect("center.y", UIInterpolatingMotionEffectType.TiltAlongVerticalAxis, -55, 55)]
-        backgroundImage.addMotionEffect(motionGroup)
+        backgroundImage!.addMotionEffect(motionGroup)
     }
     
     
@@ -211,9 +264,9 @@ class ArtViewController: UIViewController {
                 self.fillButtonWithImage("gal.jpg")
                 self.fillButtonWithImage("rah.jpg")
                 self.fillButtonWithImage("ste.jpg")
-                self.view.bringSubviewToFront(self.tagsOnOffButton)
-                self.backgroundImage.alpha = self.tagsOn ? 0.8 : 1
-                self.view.bringSubviewToFront(self.showRouteButton)
+                self.view.bringSubviewToFront(self.tagsOnOffButton!)
+                UIView.animateWithDuration(0.2, animations: { self.backgroundImage!.alpha = self.tagsOn ? 0.6 : 1 })
+                self.view.bringSubviewToFront(self.showRouteButton!)
             })
         })
     }
@@ -279,7 +332,11 @@ class ArtViewController: UIViewController {
             }
             y += r
         }
-        artContent!.updateToFrame(self.view.bounds)
+        backgroundImage!.frame = getFrameForBackgroundImage()
+        updateButtons()
+        if artContent != nil {
+            artContent!.updateToFrame(self.view.bounds)
+        }
     }
     
     
@@ -316,12 +373,12 @@ class ArtViewController: UIViewController {
 
     
     
-    @IBAction func tagsOnOffButtonPressed(sender: UIButton) {
+    func tagsOnOffButtonPressed(sender: UIButton) {
         HexaButton.hideAllButtons(tagsOn)
         tagsOn = !tagsOn
         let alpha: CGFloat = tagsOn ? 0.8 : 1
-        UIView.animateWithDuration(0.2, animations: { self.backgroundImage.alpha = alpha })
-        sender.setTitle(tagsOn ? "tags on" : "tags off", forState: UIControlState.Normal)
+        UIView.animateWithDuration(0.2, animations: { self.backgroundImage!.alpha = alpha })
+        sender.setTitle(tagsOn ? "tags off" : "tags on", forState: UIControlState.Normal)
     }
 }
 

@@ -16,6 +16,9 @@ protocol GMapViewControllerDelegate {
 }
 
 class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, ArtViewControllerDelegate {
+    var homeViewController: UIViewController?
+    var artForRoute: Art?
+    
     var delegate: GMapViewControllerDelegate!
     
     var deviceOrientation: UIDeviceOrientation?
@@ -88,7 +91,12 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
-        performSegueWithIdentifier(SHOW_ART_SEGUE_ID, sender: self)
+        let artViewController = ArtViewController()
+        artViewController.art = tappedMarker!.art
+        artViewController.delegate = self
+        self.showViewController(artViewController, sender: self)
+        //self.presentViewController(artViewController, animated: true, completion: nil)
+        //performSegueWithIdentifier(SHOW_ART_SEGUE_ID, sender: self)
     }
     
     
@@ -196,6 +204,11 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             firstLook = false
             var camera: GMSCameraPosition = GMSCameraPosition(target: currentLocation!, zoom: 14, bearing: 0, viewingAngle: 0)
             mapView!.camera = camera
+            if artForRoute != nil && homeViewController!.isMemberOfClass(ArtViewController.self) {
+                createRoute(currentLocation!, artForRoute!.location!)
+                artForRoute = nil
+                //println("ArtViewController is parent")
+            }
         }
     }
     
@@ -225,7 +238,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == SHOW_ART_SEGUE_ID {
             let artViewController = segue.destinationViewController as ArtViewController
-            artViewController.image = tappedMarker!.art!.image
+            artViewController.art = tappedMarker!.art
             artViewController.delegate = self
         }
     }

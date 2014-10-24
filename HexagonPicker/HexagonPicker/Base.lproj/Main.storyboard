@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Map View Controller-->
@@ -96,68 +95,14 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gemeos.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="NaF-hG-xiw">
-                                <rect key="frame" x="-50" y="-50" width="700" height="700"/>
-                            </imageView>
-                            <button opaque="NO" alpha="0.49999999999999961" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="52c-DV-ew2">
-                                <rect key="frame" x="16" y="562" width="123" height="30"/>
-                                <color key="backgroundColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="123" id="ATK-31-hA7"/>
-                                    <constraint firstAttribute="height" constant="30" id="y4l-AX-meD"/>
-                                </constraints>
-                                <state key="normal" title="tags on">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                </state>
-                                <connections>
-                                    <action selector="tagsOnOffButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gQR-Tx-CjO"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAy-Nq-Zix">
-                                <rect key="frame" x="461" y="562" width="123" height="30"/>
-                                <color key="backgroundColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="123" id="aQF-NI-po2"/>
-                                    <constraint firstAttribute="height" constant="30" id="ydL-52-jIW"/>
-                                </constraints>
-                                <state key="normal" title="show route">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                </state>
-                                <connections>
-                                    <action selector="showRouteButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="psn-UN-6No"/>
-                                    <action selector="tagsOnOffButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zTq-Ss-LHg"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="NaF-hG-xiw" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6EH-pM-iEA"/>
-                            <constraint firstItem="NaF-hG-xiw" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="GbS-nm-IIt"/>
-                            <constraint firstItem="NaF-hG-xiw" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-66" id="GhN-fC-MAF"/>
-                            <constraint firstItem="52c-DV-ew2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Mv3-qj-q1i"/>
-                            <constraint firstItem="NaF-hG-xiw" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="-50" id="Z2X-aw-wXm"/>
-                            <constraint firstItem="xAy-Nq-Zix" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="cZM-Ad-wG7"/>
-                            <constraint firstItem="ZG3-Xv-Ro2" firstAttribute="top" secondItem="52c-DV-ew2" secondAttribute="bottom" constant="8" id="sAh-Mh-qe9"/>
-                            <constraint firstItem="ZG3-Xv-Ro2" firstAttribute="top" secondItem="xAy-Nq-Zix" secondAttribute="bottom" constant="8" id="sNt-gx-O4X"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="backgroundImage" destination="NaF-hG-xiw" id="lgM-dp-TOA"/>
-                        <outlet property="showRouteButton" destination="xAy-Nq-Zix" id="9F2-Oz-hHu"/>
-                        <outlet property="tagsOnOffButton" destination="52c-DV-ew2" id="4Mb-S0-sVb"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="415" y="136"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="gemeos.jpg" width="1280" height="850"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="5lf-Nk-XYR"/>
     </inferredMetricsTieBreakers>

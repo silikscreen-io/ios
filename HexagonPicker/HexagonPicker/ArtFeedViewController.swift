@@ -27,7 +27,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     var homeToolbar: UIToolbar!
     var homeToolbarItems: [UIBarItem]!
     
-    var tappedImage: UIImage?
+    var tappedArt: Art?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +115,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     
     func artTapped(art: Art) {
-        tappedImage = art.image!
+        tappedArt = art
         performSegueWithIdentifier(SHOW_ART_FROM_FEED_SEGUE_ID, sender: self)
     }
     
@@ -124,7 +124,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == SHOW_ART_FROM_FEED_SEGUE_ID {
             let artViewController = segue.destinationViewController as ArtViewController
-            artViewController.image = tappedImage
+            artViewController.art = tappedArt
         } else if segue.identifier == SHOW_MAP_SEGUE_ID {
             let mapViewController = segue.destinationViewController as GMapViewController
             mapViewController.delegate = self
