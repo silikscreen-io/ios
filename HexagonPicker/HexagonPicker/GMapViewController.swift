@@ -25,7 +25,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     let locationManager = CLLocationManager()
     
     var mapView: GMSMapView?
-    var tappedMarker: GMSMarker?
+    var tappedMarker: GMarker?
     var polyline: GMSPolyline?
     
     var firstLook = true
@@ -112,23 +112,9 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func initMarkers() {
-        addMarker(50.491927, 30.336178, 1)
-        addMarker(50.421927, 30.436178, 2)
-        addMarker(50.471927, 30.406178, 3)
-        //25.797963, -80.189307 - Picture4
-        //25.798237, -80.196991 - Picture5
-        //25.795400, -80.206027 - Picture6
-    }
-    
-    
-    
-    func addMarker(latitude: Double, _ longitude: Double, _ pictureNumber: Int) {
-        var marker = GMSMarker(position: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
-        marker.title = "Picture \(pictureNumber)"
-        //marker.snippet = "\(latitude), \(longitude)"
-        marker.snippet = "Tap me"
-        marker.icon = UIImage(named: "annotation.png")
-        marker.map = mapView
+        for art in arts {
+            GMarker.addMarkerForArt(art, mapView!)
+        }
     }
     
     
@@ -150,7 +136,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
-        tappedMarker = marker
+        tappedMarker = marker as? GMarker
 //        createRoute(currentLocation!, marker!.position)
         return false
     }
@@ -239,6 +225,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == SHOW_ART_SEGUE_ID {
             let artViewController = segue.destinationViewController as ArtViewController
+            artViewController.image = tappedMarker!.art!.image
             artViewController.delegate = self
         }
     }

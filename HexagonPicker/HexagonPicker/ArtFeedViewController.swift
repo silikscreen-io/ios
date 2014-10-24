@@ -107,7 +107,6 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
             singleTap.numberOfTapsRequired = 1
             imageView.userInteractionEnabled = true
             imageView.addGestureRecognizer(singleTap)
-            scrollViewContentHeight += 200
         }
         scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
         self.view.addSubview(scrollView)

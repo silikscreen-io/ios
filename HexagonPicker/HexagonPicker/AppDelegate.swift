@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         println(NSBundle.mainBundle().bundleIdentifier)
         GMSServices.provideAPIKey("AIzaSyAVpKvbAoNl3qQUiUkdUM9kMKO4rl2SJUM");
+        Art.initArts()
         return true
     }
 

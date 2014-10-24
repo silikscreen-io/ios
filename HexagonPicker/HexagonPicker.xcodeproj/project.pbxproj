@@ -59,6 +59,8 @@
 		B5339BEE19F9AFB9003B1C88 /* map_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B5339BED19F9AFB9003B1C88 /* map_icon.png */; };
 		B5339BF019F9B8A1003B1C88 /* home_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B5339BEF19F9B8A1003B1C88 /* home_icon.png */; };
 		B5339BF219FA4EDB003B1C88 /* FeedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF119FA4EDA003B1C88 /* FeedScrollView.swift */; };
+		B5339BF419FA66E4003B1C88 /* Art.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF319FA66E4003B1C88 /* Art.swift */; };
+		B5339BF619FA6B8F003B1C88 /* GMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF519FA6B8F003B1C88 /* GMarker.swift */; };
 		B57DE42719F5B65700F47A00 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57DE42619F5B65700F47A00 /* CoreLocation.framework */; };
 		B57DE42E19F5C16600F47A00 /* Picture1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42B19F5C16600F47A00 /* Picture1.jpg */; };
 		B57DE42F19F5C16600F47A00 /* Picture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42C19F5C16600F47A00 /* Picture2.jpg */; };
@@ -135,6 +137,8 @@
 		B5339BED19F9AFB9003B1C88 /* map_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_icon.png; sourceTree = "<group>"; };
 		B5339BEF19F9B8A1003B1C88 /* home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_icon.png; sourceTree = "<group>"; };
 		B5339BF119FA4EDA003B1C88 /* FeedScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedScrollView.swift; sourceTree = "<group>"; };
+		B5339BF319FA66E4003B1C88 /* Art.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Art.swift; sourceTree = "<group>"; };
+		B5339BF519FA6B8F003B1C88 /* GMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMarker.swift; sourceTree = "<group>"; };
 		B57DE42619F5B65700F47A00 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B57DE42B19F5C16600F47A00 /* Picture1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture1.jpg; sourceTree = "<group>"; };
 		B57DE42C19F5C16600F47A00 /* Picture2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture2.jpg; sourceTree = "<group>"; };
@@ -212,6 +216,7 @@
 				B5173DBB19F2726C00B50011 /* Images.xcassets */,
 				B5173DBD19F2726C00B50011 /* LaunchScreen.xib */,
 				B5173DB219F2726C00B50011 /* Supporting Files */,
+				B5339BF319FA66E4003B1C88 /* Art.swift */,
 				B5339BE419F97644003B1C88 /* ArtFeedViewController.swift */,
 				B5339BF119FA4EDA003B1C88 /* FeedScrollView.swift */,
 				B5173DB619F2726C00B50011 /* ArtViewController.swift */,
@@ -219,6 +224,7 @@
 				B5173DD619F2765700B50011 /* HexaButton.swift */,
 				B5173DEE19F5790700B50011 /* LoginWebViewController.swift */,
 				B52898FC19F7A859000CC9EF /* GMapViewController.swift */,
+				B5339BF519FA6B8F003B1C88 /* GMarker.swift */,
 				B52898F819F7A75C000CC9EF /* HexagonPicker-Bridging-Header.h */,
 			);
 			path = HexagonPicker;
@@ -452,10 +458,12 @@
 			files = (
 				B5339BE519F97644003B1C88 /* ArtFeedViewController.swift in Sources */,
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
+				B5339BF419FA66E4003B1C88 /* Art.swift in Sources */,
 				B5173DEF19F5790700B50011 /* LoginWebViewController.swift in Sources */,
 				B5173DB719F2726C00B50011 /* ArtViewController.swift in Sources */,
 				B5173DB519F2726C00B50011 /* AppDelegate.swift in Sources */,
 				B5339BF219FA4EDB003B1C88 /* FeedScrollView.swift in Sources */,
+				B5339BF619FA6B8F003B1C88 /* GMarker.swift in Sources */,
 				B51C979119F907CE00F286C5 /* ArtContentView.swift in Sources */,
 				B52898FD19F7A85A000CC9EF /* GMapViewController.swift in Sources */,
 			);
