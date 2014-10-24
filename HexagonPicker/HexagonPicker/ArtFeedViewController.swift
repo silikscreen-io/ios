@@ -124,6 +124,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == SHOW_ART_FROM_FEED_SEGUE_ID {
             let artViewController = segue.destinationViewController as ArtViewController
+            artViewController.homeViewController = self
             artViewController.art = tappedArt
         } else if segue.identifier == SHOW_MAP_SEGUE_ID {
             let mapViewController = segue.destinationViewController as GMapViewController
@@ -194,6 +195,12 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     
     func dismissGMapViewController() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    
+    func dismissArtViewController() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     

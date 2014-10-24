@@ -83,9 +83,12 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     func homeTapped() {
         if delegate == nil {
-            return
+            if homeViewController != nil {
+                (homeViewController as ArtViewController).dismissMap()
+            }
+        } else {
+            delegate!.dismissGMapViewController()
         }
-        delegate!.dismissGMapViewController()
     }
     
     
@@ -95,8 +98,6 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         artViewController.art = tappedMarker!.art
         artViewController.delegate = self
         self.showViewController(artViewController, sender: self)
-        //self.presentViewController(artViewController, animated: true, completion: nil)
-        //performSegueWithIdentifier(SHOW_ART_SEGUE_ID, sender: self)
     }
     
     
@@ -145,7 +146,6 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
         tappedMarker = marker as? GMarker
-//        createRoute(currentLocation!, marker!.position)
         return false
     }
     

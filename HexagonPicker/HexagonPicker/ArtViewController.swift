@@ -49,6 +49,7 @@ class ArtViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor.whiteColor()
         
         //initParallaxEffect()
         
@@ -180,6 +181,16 @@ class ArtViewController: UIViewController {
         } else {
             delegate.dismissArtViewController()
         }
+    }
+    
+    
+    
+    func dismissMap() {
+        self.dismissViewControllerAnimated(true, completion: {
+        })
+            if self.homeViewController != nil {
+                (self.homeViewController as ArtFeedViewController).dismissArtViewController()
+            }
     }
     
     
