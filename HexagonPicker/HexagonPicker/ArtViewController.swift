@@ -39,6 +39,8 @@ class ArtViewController: UIViewController {
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var tagsOnOffButton: UIButton!
     @IBOutlet weak var showRouteButton: UIButton!
+    var screenshotView: UIImageView?
+    var screenshot: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,20 +67,17 @@ class ArtViewController: UIViewController {
         singleTap.numberOfTapsRequired = 1
         backgroundImage!.userInteractionEnabled = true
         backgroundImage!.addGestureRecognizer(singleTap)
-        
-        var frame = self.view.bounds
-        frame.origin.x = 50
-        frame.origin.y = 50
-        artContent = ArtContentView(backgroundImage!, frame, artContentDisplayed)
-        artContent!.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
-        for _ in 0...Int(arc4random_uniform(4)) {
-            artContent!.addButton(ArtContentView.CONTENT_ID)
-        }
     }
     
     
     
     func tapDetected() {
+        if tagsOn {
+            return
+        }
+        if !artContentDisplayed {
+            initContentView()
+        }
         artContentDisplayed = !artContentDisplayed
         artContent!.show(artContentDisplayed)
         let alpha: CGFloat = artContentDisplayed ? 0 : 0.8
@@ -95,6 +94,31 @@ class ArtViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         deviceOrientation = UIDevice.currentDevice().orientation
+        //initContentView()
+    }
+    
+    
+    
+    func initContentView() {
+        createScreenshot()
+        println(screenshotView!.frame)
+        artContent = ArtContentView(screenshotView!, screenshotView!.frame, artContentDisplayed)
+        artContent!.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
+        for _ in 0...Int(arc4random_uniform(4)) {
+            artContent!.addButton(ArtContentView.CONTENT_ID)
+        }
+        
+    }
+    
+    
+    
+    func createScreenshot() {
+        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, 1)
+        self.view.drawViewHierarchyInRect(self.view.bounds, afterScreenUpdates: true)
+        screenshot = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        screenshotView = UIImageView(image: screenshot)
+        self.view.addSubview(screenshotView!)
     }
     
     
@@ -255,10 +279,7 @@ class ArtViewController: UIViewController {
             }
             y += r
         }
-        var frame = self.view.bounds
-        frame.origin.x = 50
-        frame.origin.y = 50
-        artContent!.updateToFrame(frame)
+        artContent!.updateToFrame(self.view.bounds)
     }
     
     

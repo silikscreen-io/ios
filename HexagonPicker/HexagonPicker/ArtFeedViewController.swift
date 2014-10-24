@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedScrollViewDelegate {
+class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedScrollViewDelegate, ArtDelegate {
     let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
     
     var images: [UIImage] = []
@@ -90,7 +90,8 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
         let screenWidth = view.bounds.width
         var scrollViewContentHeight: CGFloat = 0
         var frame = CGRect()
-        for image in images {
+        for art in arts {
+            let image = art.image!
             let imageWidth = image.size.width
             let imageHeight = image.size.height
             let scaleFactor = image.size.width / screenWidth
@@ -102,20 +103,19 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
             scrollView.addSubview(imageView)
             scrollViewContentHeight += imageViewHeight
             
-            
-            let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected:")
+            let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
             singleTap.numberOfTapsRequired = 1
             imageView.userInteractionEnabled = true
             imageView.addGestureRecognizer(singleTap)
+            art.delegate = self
         }
         scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
         self.view.addSubview(scrollView)
     }
     
     
-    
-    func tapDetected(gestureRecognizer: UITapGestureRecognizer) {
-        tappedImage = (gestureRecognizer.view as UIImageView).image
+    func artTapped(art: Art) {
+        tappedImage = art.image!
         performSegueWithIdentifier(SHOW_ART_FROM_FEED_SEGUE_ID, sender: self)
     }
     

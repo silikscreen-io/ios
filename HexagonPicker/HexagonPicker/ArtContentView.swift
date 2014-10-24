@@ -12,6 +12,8 @@ class ArtContentView: UIVisualEffectView {
     class var CONTENT_ID: String { get { return "content" } }
     class var SOCIAL_ID: String { get { return "social" } }
     
+    let backgroundView: UIView?
+    
     let buttonSize: CGSize = CGSize(width: 40, height: 40)
     let buttonsDescription = ["audio", "video", "email"]
     var buttons: [String: [UIButton]] = [ArtContentView.CONTENT_ID : [], ArtContentView.SOCIAL_ID : []]
@@ -31,6 +33,7 @@ class ArtContentView: UIVisualEffectView {
         hidden = !displayed
         alpha = hidden ? 0 : 1
         backgroundView.addSubview(self)
+        self.backgroundView = backgroundView
     }
     
     
@@ -38,10 +41,12 @@ class ArtContentView: UIVisualEffectView {
     func show(displayed: Bool) {
         let alpha: CGFloat = displayed ? 1 : 0
         UIView.animateWithDuration(0.4, animations: { self.alpha = alpha })
+        backgroundView!.hidden = !displayed
         if self.hidden && displayed{
             self.hidden = !displayed
         }
     }
+    
     
     
     func addDescription(description: String) {
@@ -120,6 +125,7 @@ class ArtContentView: UIVisualEffectView {
     
     func updateToFrame(frame: CGRect) {
         self.frame = frame
+        backgroundView!.frame = frame
         updateSubviews()
     }
     

@@ -10,7 +10,15 @@ import UIKit
 
 var arts: [Art] = []
 
+
+protocol ArtDelegate {
+    func artTapped(art: Art)
+}
+
+
 class Art: NSObject {
+    
+    var delegate: ArtDelegate?
    
     var image: UIImage?
     var artDescription: String = "Description"
@@ -56,5 +64,11 @@ class Art: NSObject {
         let art = Art(imageName, location)
         art.artDescription = imageName
         arts.append(art)
+    }
+    
+    
+    
+    func tapDetected(gestureRecognizer: UITapGestureRecognizer) {
+        delegate!.artTapped(self)
     }
 }
