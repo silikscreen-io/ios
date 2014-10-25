@@ -9,6 +9,7 @@
 import UIKit
 
 var deviceOrientation: UIDeviceOrientation?
+let ORIENTATION_CHANGED_NOTIFICATION = "orientationChangedNotification"
 
 class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedScrollViewDelegate, ArtDelegate {
     let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
@@ -58,7 +59,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
         }
         deviceOrientation = orientation;
         let devOrientation =  ((UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait) || (UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
-        NSNotificationCenter.defaultCenter().postNotificationName("orientationChangedNotification", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName(ORIENTATION_CHANGED_NOTIFICATION, object: nil)
     }
     
     

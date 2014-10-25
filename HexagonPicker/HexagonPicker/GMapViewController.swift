@@ -21,8 +21,6 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     var delegate: GMapViewControllerDelegate!
     
-    var deviceOrientation: UIDeviceOrientation?
-    
     let SHOW_ART_SEGUE_ID = "showArtSegue"
     
     let locationManager = CLLocationManager()
@@ -37,10 +35,16 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     var homeToolbar: UIToolbar!
     var homeToolbarItems: [UIBarItem]!
     
+    var screenSize: CGRect?
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        screenSize = self.view.bounds
+        updateScreenSize()
         
         locationManager.delegate = self
         locationManager.distanceFilter = 10
@@ -57,7 +61,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func initNavigationBar() {
-        var frame = self.view.bounds
+        var frame = screenSize!
         frame.origin.y = frame.height - 30
         frame.size.height = 30
         homeToolbar = UIToolbar(frame: frame)
@@ -77,6 +81,26 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         var space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         homeToolbarItems = Array(arrayLiteral: space, item, space)
         homeToolbar.items = homeToolbarItems
+    }
+    
+    
+    
+    func updateScreenSize() -> Bool {
+        let deviceOrientationPortrait =  ((deviceOrientation == UIDeviceOrientation.Portrait) || (deviceOrientation == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
+        let minSize = screenSize!.size.width < screenSize!.height ? screenSize!.size.width : screenSize!.height
+        let maxSize = screenSize!.size.width > screenSize!.height ? screenSize!.size.width : screenSize!.height
+        if deviceOrientationPortrait {
+            if minSize == screenSize!.size.width {
+                return false
+            }
+            screenSize!.size = CGSize(width: minSize, height: maxSize)
+        } else {
+            if maxSize == screenSize!.size.width {
+                return false
+            }
+            screenSize!.size = CGSize(width: maxSize, height: minSize)
+        }
+        return true
     }
     
     
@@ -105,7 +129,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     func initMap() {
         var target: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 51.6, longitude: 17.2)
         var camera: GMSCameraPosition = GMSCameraPosition(target: target, zoom: 6, bearing: 0, viewingAngle: 0)
-        mapView = GMSMapView(frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
+        mapView = GMSMapView(frame: CGRectMake(0, 0, screenSize!.width, screenSize!.height))
         if let map = mapView? {
             map.myLocationEnabled = true
             map.camera = camera
@@ -128,18 +152,26 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     
-    override func viewDidAppear(animated: Bool) {
-        deviceOrientation = UIDevice.currentDevice().orientation
+    func dismissArtViewController() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        createRouteAndAppropriateZoom(currentLocation, tappedMarker!.position)
     }
     
     
     
-    func dismissArtViewController() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        createRoute(currentLocation!, tappedMarker!.position)
-        let bounds = GMSCoordinateBounds(coordinate: currentLocation!, coordinate: tappedMarker!.position)
-        let boundsCameraUpdate = GMSCameraUpdate.fitBounds(bounds, withPadding: 30)
-        mapView!.animateWithCameraUpdate(boundsCameraUpdate)
+    func createRouteAndAppropriateZoom(firstLocation: CLLocationCoordinate2D?, _ secondLocation: CLLocationCoordinate2D) {
+        if let location = firstLocation {
+            createRoute(location, secondLocation)
+            let bounds = GMSCoordinateBounds(coordinate: location, coordinate: secondLocation)
+            let boundsCameraUpdate = GMSCameraUpdate.fitBounds(bounds, withPadding: 30)
+            mapView!.animateWithCameraUpdate(boundsCameraUpdate)
+        } else {
+            mapView!.camera = GMSCameraPosition(target: secondLocation, zoom: 14, bearing: 0, viewingAngle: 0)
+            let title = "Warning"
+            let message = "Sorry, can't create route!"
+            let alertDialog = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "OK")
+            alertDialog.show()
+        }
     }
     
     
@@ -205,22 +237,16 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             var camera: GMSCameraPosition = GMSCameraPosition(target: currentLocation!, zoom: 14, bearing: 0, viewingAngle: 0)
             mapView!.camera = camera
             if artForRoute != nil && homeViewController!.isMemberOfClass(ArtViewController.self) {
-                createRoute(currentLocation!, artForRoute!.location!)
+                createRouteAndAppropriateZoom(currentLocation, artForRoute!.location!)
                 artForRoute = nil
-                //println("ArtViewController is parent")
             }
         }
     }
     
     
     
-    override func viewWillLayoutSubviews() {
-        if deviceOrientation == nil {
-            return
-        }
-        let previousOrientation = deviceOrientation
-        deviceOrientation = UIDevice.currentDevice().orientation
-        if previousOrientation == deviceOrientation {
+    func orientationChanged() {
+        if !updateScreenSize() {
             return
         }
         var frame = mapView!.frame
@@ -228,7 +254,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         frame.size.height = mapView!.frame.size.width
         mapView!.frame = frame
         
-        frame = self.view.bounds
+        frame = screenSize!
         homeToolbar.frame.origin.y = frame.height - 30
         homeToolbar.frame.size.width = frame.width
     }

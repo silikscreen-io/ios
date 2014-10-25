@@ -54,15 +54,10 @@ class ArtViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: "orientationChangedNotification", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         screenSize = self.view.bounds
         updateScreenSize()
-//        let interfaceOrientationPortrait = UIApplication.sharedApplication().statusBarOrientation == UIInterfaceOrientation.Portrait ? true : false
-//        rightOrientation = deviceOrientationPortrait == interfaceOrientationPortrait
-//        println("deviceOrientation: " + orD)
-//        println("statusBarOrientation: " + or)
-//        println("statusBar: \(UIApplication.sharedApplication().statusBarFrame)")
-//        println("view.bounds: \(self.view.bounds)")
+        
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.None)
         fillViewWithButtons()
         
@@ -89,7 +84,7 @@ class ArtViewController: UIViewController {
     
     
     func updateScreenSize() -> Bool {
-        let deviceOrientationPortrait =  ((UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait) || (UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
+        let deviceOrientationPortrait =  ((deviceOrientation == UIDeviceOrientation.Portrait) || (deviceOrientation == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
         let minSize = screenSize!.size.width < screenSize!.height ? screenSize!.size.width : screenSize!.height
         let maxSize = screenSize!.size.width > screenSize!.height ? screenSize!.size.width : screenSize!.height
         if deviceOrientationPortrait {
@@ -350,7 +345,7 @@ class ArtViewController: UIViewController {
         backgroundImage!.frame = getFrameForBackgroundImage()
         updateButtons()
         if artContent != nil {
-            artContent!.updateToFrame(self.view.bounds)
+            artContent!.updateToFrame(screenSize!)
         }
         let maxX = screenSize!.width
         let maxY = screenSize!.height
