@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println(NSBundle.mainBundle().bundleIdentifier)
         GMSServices.provideAPIKey("AIzaSyAVpKvbAoNl3qQUiUkdUM9kMKO4rl2SJUM");
         Art.initArts()
+        UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
         return true
     }
 

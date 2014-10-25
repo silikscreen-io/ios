@@ -8,6 +8,8 @@
 
 import UIKit
 
+var deviceOrientation: UIDeviceOrientation?
+
 class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedScrollViewDelegate, ArtDelegate {
     let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
     
@@ -29,13 +31,34 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     var tappedArt: Art?
     
+    var screenSize: CGRect?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.None)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceOrientationDidChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+        screenSize = self.view.bounds
+        if screenSize!.width > screenSize!.height {
+            let width = screenSize!.size.width
+            screenSize!.size.width = screenSize!.size.height
+            screenSize!.size.height = width
+        }
         initFeed()
         initScrollView()
         initNavigationBar()
         scrollView.feedDelegate = self
+    }
+    
+    
+    
+    func deviceOrientationDidChange(notification: NSNotification) {
+        let orientation = UIDevice.currentDevice().orientation
+        
+        if orientation == UIDeviceOrientation.PortraitUpsideDown || orientation == UIDeviceOrientation.FaceUp || orientation == UIDeviceOrientation.FaceDown || orientation == UIDeviceOrientation.Unknown || deviceOrientation == orientation {
+            return;
+        }
+        deviceOrientation = orientation;
+        let devOrientation =  ((UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait) || (UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
+        NSNotificationCenter.defaultCenter().postNotificationName("orientationChangedNotification", object: nil)
     }
     
     
@@ -86,10 +109,11 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     
     func initScrollView() {
-        scrollView = FeedScrollView(frame: self.view.bounds)
-        let screenWidth = view.bounds.width
+        var frame = screenSize!
+        scrollView = FeedScrollView(frame: frame)
+        let screenWidth = frame.width
         var scrollViewContentHeight: CGFloat = 0
-        var frame = CGRect()
+        frame = CGRect()
         for art in arts {
             let image = art.image!
             let imageWidth = image.size.width
@@ -135,7 +159,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     
     func initNavigationBar() {
-        var frame = self.view.bounds
+        var frame = screenSize!
         frame.origin.y = frame.height
         frame.size.height = buttonsToolbarHeight / 2
         homeToolbar = UIToolbar()
@@ -143,7 +167,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
         initHomeToolbar()
         
         println(frame)
-        frame.origin.y = self.view.bounds.height - buttonsToolbarHeight
+        frame.origin.y = screenSize!.height - buttonsToolbarHeight
         frame.size.height += buttonsToolbarHeight / 2
         println(frame)
         buttonsToolbar = UIToolbar()
@@ -207,7 +231,19 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
 
 
     override func shouldAutorotate() -> Bool {
-        return false
+        return true
+    }
+    
+    
+    
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    }
+    
+    
+    
+    override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
+        return UIInterfaceOrientation.Portrait
     }
 
 }

@@ -31,7 +31,6 @@ class ArtViewController: UIViewController {
     var prevGX: Double?
     var prevGY: Double?
     var frameBase: CGRect?
-    var deviceOrientation: UIDeviceOrientation?
     
     var tagsOn = true
     var artContentDisplayed = false
@@ -47,12 +46,24 @@ class ArtViewController: UIViewController {
     var tagsOnOffButton: UIButton?
     var showRouteButton: UIButton?
     
+    var screenSize: CGRect?
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
         
-        //initParallaxEffect()
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: "orientationChangedNotification", object: nil)
+        screenSize = self.view.bounds
+        updateScreenSize()
+//        let interfaceOrientationPortrait = UIApplication.sharedApplication().statusBarOrientation == UIInterfaceOrientation.Portrait ? true : false
+//        rightOrientation = deviceOrientationPortrait == interfaceOrientationPortrait
+//        println("deviceOrientation: " + orD)
+//        println("statusBarOrientation: " + or)
+//        println("statusBar: \(UIApplication.sharedApplication().statusBarFrame)")
+//        println("view.bounds: \(self.view.bounds)")
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.None)
         fillViewWithButtons()
         
         var mask = UIImage(named: "hexagon_100.png")!
@@ -77,8 +88,28 @@ class ArtViewController: UIViewController {
     
     
     
+    func updateScreenSize() -> Bool {
+        let deviceOrientationPortrait =  ((UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait) || (UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
+        let minSize = screenSize!.size.width < screenSize!.height ? screenSize!.size.width : screenSize!.height
+        let maxSize = screenSize!.size.width > screenSize!.height ? screenSize!.size.width : screenSize!.height
+        if deviceOrientationPortrait {
+            if minSize == screenSize!.size.width {
+                return false
+            }
+            screenSize!.size = CGSize(width: minSize, height: maxSize)
+        } else {
+            if maxSize == screenSize!.size.width {
+                return false
+            }
+            screenSize!.size = CGSize(width: maxSize, height: minSize)
+        }
+        return true
+    }
+    
+    
+    
     func initButtons() {
-        var screenFrame = self.view.bounds
+        var screenFrame = screenSize!
         var buttonFrame = CGRect(x: buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         tagsOnOffButton = UIButton(frame: buttonFrame)
         initButton(&tagsOnOffButton!, tagsOn ? "tags off" : "tags on", "tagsOnOffButtonPressed:")
@@ -90,7 +121,7 @@ class ArtViewController: UIViewController {
     
     
     func updateButtons() {
-        var screenFrame = self.view.bounds
+        var screenFrame = screenSize!
         tagsOnOffButton!.frame = CGRect(x: buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         showRouteButton!.frame = CGRect(x: screenFrame.width - buttonWidth - buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
     }
@@ -110,7 +141,7 @@ class ArtViewController: UIViewController {
     
     
     func getFrameForBackgroundImage() -> CGRect {
-        var frame = self.view.bounds
+        var frame = screenSize!
         frame.origin.x = -maxXMovement
         frame.origin.y = -maxYMovement
         frame.size.width += 2 * maxXMovement
@@ -142,7 +173,7 @@ class ArtViewController: UIViewController {
     
     
     override func viewDidAppear(animated: Bool) {
-        deviceOrientation = UIDevice.currentDevice().orientation
+        //deviceOrientation = UIDevice.currentDevice().orientation
         //initContentView()
     }
     
@@ -251,7 +282,7 @@ class ArtViewController: UIViewController {
     func fillViewWithButtons() {
         dispatch_async(queue, {
             self.optimizeHexagonWidth()
-            let screenSize = self.view.bounds
+            let screenSize = self.screenSize!
             let maxX = screenSize.width
             let maxY = screenSize.height
             var firstLine = true
@@ -285,7 +316,7 @@ class ArtViewController: UIViewController {
     
     
     func optimizeHexagonWidth() {
-        let screenWidth = self.view.bounds.width
+        let screenWidth = screenSize!.width
         println(screenWidth)
         var x: CGFloat = 0
         var currentWidth: CGFloat = width
@@ -311,17 +342,18 @@ class ArtViewController: UIViewController {
     
     
     
-    override func viewWillLayoutSubviews() {
-        if deviceOrientation == nil {
+    func orientationChanged() {
+        if !updateScreenSize() {
             return
         }
-        let previousOrientation = deviceOrientation
-        deviceOrientation = UIDevice.currentDevice().orientation
-        if previousOrientation == deviceOrientation {
-            return
+
+        backgroundImage!.frame = getFrameForBackgroundImage()
+        updateButtons()
+        if artContent != nil {
+            artContent!.updateToFrame(self.view.bounds)
         }
-        let maxX = self.view.frame.width
-        let maxY = self.view.frame.height
+        let maxX = screenSize!.width
+        let maxY = screenSize!.height
         var firstLine = true
         var x: CGFloat = 0
         var y: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
@@ -342,11 +374,6 @@ class ArtViewController: UIViewController {
                 x = width - xStep
             }
             y += r
-        }
-        backgroundImage!.frame = getFrameForBackgroundImage()
-        updateButtons()
-        if artContent != nil {
-            artContent!.updateToFrame(self.view.bounds)
         }
     }
     
