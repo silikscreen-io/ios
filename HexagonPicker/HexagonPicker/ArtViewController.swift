@@ -14,7 +14,7 @@ protocol ArtViewControllerDelegate {
 }
 
 
-class ArtViewController: UIViewController {
+class ArtViewController: UIViewController, UIScrollViewDelegate {
     var homeViewController: UIViewController?
     
     let queue = dispatch_queue_create("com.vaisoft.hexagonpicker", nil)
@@ -25,8 +25,8 @@ class ArtViewController: UIViewController {
     var artContent: ArtContentView?
     var visualEffectView: UIVisualEffectView?
     
-    let maxXMovement: CGFloat = 20
-    let maxYMovement: CGFloat = 20
+    let maxXMovement: CGFloat = 10
+    let maxYMovement: CGFloat = 10
     let minMotion: Double = 0.005
     var prevGX: Double?
     var prevGY: Double?
@@ -35,8 +35,9 @@ class ArtViewController: UIViewController {
     var tagsOn = true
     var artContentDisplayed = false
 
+    var scrollView: UIScrollView?
     var art: Art?
-    var backgroundImage: UIImageView?
+    var backgroundImageView: UIImageView?
     var screenshotView: UIImageView?
     var screenshot: UIImage?
     
@@ -52,7 +53,7 @@ class ArtViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor(red: 15 / 255, green: 108 / 255, blue: 74 / 255, alpha: 1)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         screenSize = self.view.bounds
@@ -68,17 +69,105 @@ class ArtViewController: UIViewController {
         UIGraphicsEndImageContext();
         maskImage = newImage
         
-        backgroundImage = UIImageView(frame: getFrameForBackgroundImage())
-        backgroundImage!.image = art!.image
-        frameBase = backgroundImage!.frame
+        initScrollView()
+        
+        initbackgroundImageView()
+        
+        setupScrollViewWithArt()
+        
         initMotions()
+
+        initButtons()
+    }
+    
+    
+    
+    func getScrollViewHeight() -> CGRect {
+        var frame = screenSize!
+        let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
+        frame.origin.y = statusBarHeight
+        frame.size.height -= statusBarHeight
+        return frame
+    }
+    
+    
+    
+    func initScrollView() {
+        scrollView = UIScrollView(frame: getScrollViewHeight())
+        scrollView!.delegate = self
+        self.view.addSubview(scrollView!)
+    }
+    
+    
+    
+    func setupScrollViewWithArt() {
+        let imageSize = art!.image!.size
+        scrollView!.contentSize = imageSize
+        var scrollViewFrame = scrollView!.frame
+        let scaleWidth = scrollViewFrame.width / imageSize.width
+        let scaleHeight = scrollViewFrame.height / imageSize.height
+        let minScale = min(scaleWidth, scaleHeight)
+        scrollView!.minimumZoomScale = minScale
+        scrollView!.maximumZoomScale = 1.0
+        scrollView!.zoomScale = minScale
+        frameBase = backgroundImageView!.frame
+        centerScrollViewContent()
+    }
+    
+    
+    
+    func updateScrollView() {
+        scrollView!.frame = getScrollViewHeight()
+        let imageSize = art!.image!.size
+        var scrollViewFrame = scrollView!.frame
+        let scaleWidth = scrollViewFrame.width / imageSize.width
+        let scaleHeight = scrollViewFrame.height / imageSize.height
+        let minScale = min(scaleWidth, scaleHeight)
+        scrollView!.minimumZoomScale = minScale
+        scrollView!.maximumZoomScale = 1.0
+        if scrollView!.zoomScale < minScale {
+            scrollView!.zoomScale = minScale
+        }
+        centerScrollViewContent()
+    }
+    
+    
+    
+    func centerScrollViewContent() {
+        let boundsSize = scrollView!.bounds.size
+        var contentsFrame = backgroundImageView!.frame
+        
+        if contentsFrame.size.width < boundsSize.width {
+            contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0
+        } else {
+            contentsFrame.origin.x = 0.0
+        }
+        
+        if contentsFrame.size.height < boundsSize.height {
+            contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0
+        } else {
+            contentsFrame.origin.y = 0.0
+        }
+        
+        backgroundImageView!.frame = contentsFrame
+        frameBase = backgroundImageView!.frame
+    }
+    
+    
+    
+    func initbackgroundImageView() {
+        //backgroundImageView = UIImageView(frame: getFrameForbackgroundImageView())
+        let imageSize = art!.image!.size
+        backgroundImageView = UIImageView(frame: CGRect(origin: CGPoint(), size: imageSize))
+        backgroundImageView!.image = art!.image
+        frameBase = backgroundImageView!.frame
         
         let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected")
         singleTap.numberOfTapsRequired = 1
-        backgroundImage!.userInteractionEnabled = true
-        backgroundImage!.addGestureRecognizer(singleTap)
-        self.view.addSubview(backgroundImage!)
-        initButtons()
+        backgroundImageView!.userInteractionEnabled = true
+        backgroundImageView!.addGestureRecognizer(singleTap)
+        //self.view.addSubview(backgroundImageView!)
+        scrollView!.addSubview(backgroundImageView!)
     }
     
     
@@ -135,7 +224,7 @@ class ArtViewController: UIViewController {
     
     
     
-    func getFrameForBackgroundImage() -> CGRect {
+    func getFrameForbackgroundImageView() -> CGRect {
         var frame = screenSize!
         frame.origin.x = -maxXMovement
         frame.origin.y = -maxYMovement
@@ -158,11 +247,11 @@ class ArtViewController: UIViewController {
         let alpha: CGFloat = artContentDisplayed ? 0 : 0.8
         UIView.animateWithDuration(0.2, animations: { self.tagsOnOffButton!.alpha = alpha })
         UIView.animateWithDuration(0.2, animations: { self.showRouteButton!.alpha = alpha })
-        if artContentDisplayed {
-            motionManager.stopAccelerometerUpdates()
-        } else {
-            initMotions()
-        }
+//        if artContentDisplayed {
+//            motionManager.stopAccelerometerUpdates()
+//        } else {
+//            initMotions()
+//        }
     }
 
     
@@ -244,11 +333,11 @@ class ArtViewController: UIViewController {
             gY = -acceleration.x
         }
         if prevGX == nil || fabs(prevGX! - gX) >= minMotion {
-            backgroundImage!.frame.origin.x = frameBase!.origin.x + CGFloat(gX) * maxXMovement
+            backgroundImageView!.frame.origin.x = frameBase!.origin.x + CGFloat(gX) * maxXMovement
             prevGX = gX
         }
         if prevGY == nil || fabs(prevGY! - gY) >= minMotion {
-            backgroundImage!.frame.origin.y = frameBase!.origin.y + CGFloat(gY) * maxYMovement
+            backgroundImageView!.frame.origin.y = frameBase!.origin.y + CGFloat(gY) * maxYMovement
             prevGY = gY
         }
     }
@@ -260,7 +349,7 @@ class ArtViewController: UIViewController {
         var motionGroup = UIMotionEffectGroup()
         motionGroup.motionEffects = [getEffect("center.x", UIInterpolatingMotionEffectType.TiltAlongHorizontalAxis, -55, 55),
             getEffect("center.y", UIInterpolatingMotionEffectType.TiltAlongVerticalAxis, -55, 55)]
-        backgroundImage!.addMotionEffect(motionGroup)
+        backgroundImageView!.addMotionEffect(motionGroup)
     }
     
     
@@ -302,7 +391,7 @@ class ArtViewController: UIViewController {
                 self.fillButtonWithImage("rah.jpg")
                 self.fillButtonWithImage("ste.jpg")
                 self.view.bringSubviewToFront(self.tagsOnOffButton!)
-                UIView.animateWithDuration(0.2, animations: { self.backgroundImage!.alpha = self.tagsOn ? 0.6 : 1 })
+                UIView.animateWithDuration(0.2, animations: { self.backgroundImageView!.alpha = self.tagsOn ? 0.6 : 1 })
                 self.view.bringSubviewToFront(self.showRouteButton!)
             })
         })
@@ -342,7 +431,8 @@ class ArtViewController: UIViewController {
             return
         }
 
-        backgroundImage!.frame = getFrameForBackgroundImage()
+        //backgroundImageView!.frame = getFrameForbackgroundImageView()
+        updateScrollView()
         updateButtons()
         if artContent != nil {
             artContent!.updateToFrame(screenSize!)
@@ -410,8 +500,28 @@ class ArtViewController: UIViewController {
         HexaButton.hideAllButtons(tagsOn)
         tagsOn = !tagsOn
         let alpha: CGFloat = tagsOn ? 0.8 : 1
-        UIView.animateWithDuration(0.2, animations: { self.backgroundImage!.alpha = alpha })
+        UIView.animateWithDuration(0.2, animations: { self.backgroundImageView!.alpha = alpha })
         sender.setTitle(tagsOn ? "tags off" : "tags on", forState: UIControlState.Normal)
+        if tagsOn {
+            initMotions()
+        } else {
+            motionManager.stopAccelerometerUpdates()
+            backgroundImageView!.frame.origin.x = frameBase!.origin.x
+            backgroundImageView!.frame.origin.y = frameBase!.origin.y
+        }
     }
+    
+    
+    
+    func viewForZoomingInScrollView(scrollView: UIScrollView!) -> UIView! {
+        return backgroundImageView
+    }
+
+    
+    
+    func scrollViewDidZoom(scrollView: UIScrollView!) {
+        centerScrollViewContent()
+    }
+
 }
 
