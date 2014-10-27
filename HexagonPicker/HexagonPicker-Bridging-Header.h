@@ -3,6 +3,7 @@
 //
 
 #import <GoogleMaps/GoogleMaps.h>
+#import "UIImage+ImageEffects.h"
 
 #import <AWSiOSSDKv2/S3.h>
 #import <AWSiOSSDKv2/DynamoDB.h>

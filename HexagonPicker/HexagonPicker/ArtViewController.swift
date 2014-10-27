@@ -22,7 +22,11 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var delegate: ArtViewControllerDelegate!
     
     let motionManager = CMMotionManager()
+#if iOS8Delta
     var artContent: ArtContentView?
+#else
+    var artContent: ArtContentImageView?
+#endif
     var visualEffectView: UIVisualEffectView?
     
     let maxXMovement: CGFloat = 10
@@ -48,11 +52,13 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var showRouteButton: UIButton?
     
     var screenSize: CGRect?
-    
+    var statusBarHeight: CGFloat?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let statusBarFrame = UIApplication.sharedApplication().statusBarFrame
+        statusBarHeight = statusBarFrame.height < statusBarFrame.width ? statusBarFrame.height : statusBarFrame.width
         self.view.backgroundColor = UIColor(red: 15 / 255, green: 108 / 255, blue: 74 / 255, alpha: 1)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
@@ -84,9 +90,8 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func getScrollViewHeight() -> CGRect {
         var frame = screenSize!
-        let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
-        frame.origin.y = statusBarHeight
-        frame.size.height -= statusBarHeight
+        frame.origin.y = statusBarHeight!
+        frame.size.height -= statusBarHeight!
         return frame
     }
     
@@ -159,6 +164,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         //backgroundImageView = UIImageView(frame: getFrameForbackgroundImageView())
         let imageSize = art!.image!.size
         backgroundImageView = UIImageView(frame: CGRect(origin: CGPoint(), size: imageSize))
+        
         backgroundImageView!.image = art!.image
         frameBase = backgroundImageView!.frame
         
@@ -265,11 +271,18 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func initContentView() {
         createScreenshot()
-        println(screenshotView!.frame)
-        artContent = ArtContentView(screenshotView!, screenshotView!.frame, artContentDisplayed)
+        #if iOS8Delta
+            artContent = ArtContentView(screenshotView!, screenshotView!.frame, artContentDisplayed)
+            #else
+            artContent = ArtContentImageView(screenshot!, view.bounds, artContentDisplayed, view)
+        #endif
         artContent!.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
         for _ in 0...Int(arc4random_uniform(4)) {
-            artContent!.addButton(ArtContentView.CONTENT_ID)
+            #if iOS8Delta
+                artContent!.addButton(ArtContentView.CONTENT_ID)
+                #else
+                artContent!.addButton(ArtContentImageView.CONTENT_ID)
+            #endif
         }
         
     }
@@ -281,8 +294,10 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         self.view.drawViewHierarchyInRect(self.view.bounds, afterScreenUpdates: true)
         screenshot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        screenshotView = UIImageView(image: screenshot)
-        self.view.addSubview(screenshotView!)
+        #if iOS8Delta
+            screenshotView = UIImageView(image: screenshot)
+            self.view.addSubview(screenshotView!)
+        #endif
     }
     
     
@@ -292,7 +307,11 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             let mapViewController = GMapViewController()
             mapViewController.homeViewController = self
             mapViewController.artForRoute = art
-            self.showViewController(mapViewController, sender: self)
+            if iOS8Delta {
+                showViewController(mapViewController, sender: self)
+            } else {
+                presentViewController(mapViewController, animated: true, completion: nil)
+            }
         } else {
             delegate.dismissArtViewController()
         }
@@ -302,10 +321,10 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func dismissMap() {
         self.dismissViewControllerAnimated(true, completion: {
-        })
             if self.homeViewController != nil {
                 (self.homeViewController as ArtFeedViewController).dismissArtViewController()
             }
+        })
     }
     
     
@@ -371,7 +390,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             let maxY = screenSize.height
             var firstLine = true
             var x: CGFloat = 0
-            var y: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+            var y: CGFloat = self.statusBarHeight!
             while trunc(y + height) <= maxY {
                 while trunc(x + width) <= maxX {
                     HexaButton.addButton(x, y: y, target: self, action: "buttonPressed:", view: self.view)
@@ -441,7 +460,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         let maxY = screenSize!.height
         var firstLine = true
         var x: CGFloat = 0
-        var y: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+        var y: CGFloat = statusBarHeight!
         var index: Int = 0
         while trunc(y + height) <= maxY {
             while trunc(x + width) <= maxX {

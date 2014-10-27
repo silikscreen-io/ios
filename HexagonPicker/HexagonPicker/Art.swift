@@ -40,16 +40,25 @@ class Art: NSObject {
     
     class func initArts() {
         let locations = [
-            CLLocationCoordinate2D(latitude: 50.491927, longitude: 30.336178),
-            CLLocationCoordinate2D(latitude: 50.421927, longitude: 30.436178),
-            CLLocationCoordinate2D(latitude: 50.471927, longitude: 30.406178),
-            CLLocationCoordinate2D(latitude: 50.431927, longitude: 30.486178),
-            CLLocationCoordinate2D(latitude: 50.441927, longitude: 30.456178),
-            CLLocationCoordinate2D(latitude: 50.461927, longitude: 30.416178),
+//            CLLocationCoordinate2D(latitude: 50.491927, longitude: 30.336178),
+//            CLLocationCoordinate2D(latitude: 50.421927, longitude: 30.436178),
+//            CLLocationCoordinate2D(latitude: 50.471927, longitude: 30.406178),
+//            CLLocationCoordinate2D(latitude: 50.431927, longitude: 30.486178),
+//            CLLocationCoordinate2D(latitude: 50.441927, longitude: 30.456178),
+//            CLLocationCoordinate2D(latitude: 50.461927, longitude: 30.416178),
+            CLLocationCoordinate2D(latitude: 25.810941, longitude: -80.195838),
+            CLLocationCoordinate2D(latitude: 25.813176, longitude: -80.195365),
+            CLLocationCoordinate2D(latitude: 25.811619, longitude: -80.191840),
+            CLLocationCoordinate2D(latitude: 25.797963, longitude: -80.189307),
+            CLLocationCoordinate2D(latitude: 25.798237, longitude: -80.196991),
+            CLLocationCoordinate2D(latitude: 25.795400, longitude: -80.206027),
         ]
         for index in 1...6 {
             Art.addArt("Picture\(index).jpg", locations[index - 1])
         }
+//        Picture1(25.810941, -80.195838).JPG
+//        Picture2(25.813176, -80.195365).jpg
+//        Picture3(25.811619, -80.191840).JPG
 //        addMarker(50.491927, 30.336178, 1)
 //        addMarker(50.421927, 30.436178, 2)
 //        addMarker(50.471927, 30.406178, 3)

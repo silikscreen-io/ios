@@ -61,6 +61,8 @@
 		B5339BF219FA4EDB003B1C88 /* FeedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF119FA4EDA003B1C88 /* FeedScrollView.swift */; };
 		B5339BF419FA66E4003B1C88 /* Art.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF319FA66E4003B1C88 /* Art.swift */; };
 		B5339BF619FA6B8F003B1C88 /* GMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF519FA6B8F003B1C88 /* GMarker.swift */; };
+		B558EB7719FEA04A00C98904 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */; };
+		B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B558EB7819FEA49800C98904 /* ArtContentImageView.swift */; };
 		B57DE42719F5B65700F47A00 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57DE42619F5B65700F47A00 /* CoreLocation.framework */; };
 		B57DE42E19F5C16600F47A00 /* Picture1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42B19F5C16600F47A00 /* Picture1.jpg */; };
 		B57DE42F19F5C16600F47A00 /* Picture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42C19F5C16600F47A00 /* Picture2.jpg */; };
@@ -139,6 +141,9 @@
 		B5339BF119FA4EDA003B1C88 /* FeedScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedScrollView.swift; sourceTree = "<group>"; };
 		B5339BF319FA66E4003B1C88 /* Art.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Art.swift; sourceTree = "<group>"; };
 		B5339BF519FA6B8F003B1C88 /* GMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMarker.swift; sourceTree = "<group>"; };
+		B558EB7519FEA04A00C98904 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		B558EB7819FEA49800C98904 /* ArtContentImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtContentImageView.swift; sourceTree = "<group>"; };
 		B57DE42619F5B65700F47A00 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B57DE42B19F5C16600F47A00 /* Picture1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture1.jpg; sourceTree = "<group>"; };
 		B57DE42C19F5C16600F47A00 /* Picture2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture2.jpg; sourceTree = "<group>"; };
@@ -221,11 +226,14 @@
 				B5339BF119FA4EDA003B1C88 /* FeedScrollView.swift */,
 				B5173DB619F2726C00B50011 /* ArtViewController.swift */,
 				B51C979019F907CE00F286C5 /* ArtContentView.swift */,
+				B558EB7819FEA49800C98904 /* ArtContentImageView.swift */,
 				B5173DD619F2765700B50011 /* HexaButton.swift */,
 				B5173DEE19F5790700B50011 /* LoginWebViewController.swift */,
 				B52898FC19F7A859000CC9EF /* GMapViewController.swift */,
 				B5339BF519FA6B8F003B1C88 /* GMarker.swift */,
 				B52898F819F7A75C000CC9EF /* HexagonPicker-Bridging-Header.h */,
+				B558EB7519FEA04A00C98904 /* UIImage+ImageEffects.h */,
+				B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */,
 			);
 			path = HexagonPicker;
 			sourceTree = "<group>";
@@ -460,6 +468,8 @@
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
 				B5339BF419FA66E4003B1C88 /* Art.swift in Sources */,
 				B5173DEF19F5790700B50011 /* LoginWebViewController.swift in Sources */,
+				B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */,
+				B558EB7719FEA04A00C98904 /* UIImage+ImageEffects.m in Sources */,
 				B5173DB719F2726C00B50011 /* ArtViewController.swift in Sources */,
 				B5173DB519F2726C00B50011 /* AppDelegate.swift in Sources */,
 				B5339BF219FA4EDB003B1C88 /* FeedScrollView.swift in Sources */,

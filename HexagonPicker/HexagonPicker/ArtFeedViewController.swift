@@ -58,7 +58,8 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
             return;
         }
         deviceOrientation = orientation;
-        let devOrientation =  ((UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait) || (UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
+        let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
+        println("deviceOrientationChanged: " + devOrientation)
         NSNotificationCenter.defaultCenter().postNotificationName(ORIENTATION_CHANGED_NOTIFICATION, object: nil)
     }
     

@@ -121,7 +121,11 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         let artViewController = ArtViewController()
         artViewController.art = tappedMarker!.art
         artViewController.delegate = self
-        self.showViewController(artViewController, sender: self)
+        if iOS8Delta {
+            self.showViewController(artViewController, sender: self)
+        } else {
+            presentViewController(artViewController, animated: true, completion: nil)
+        }
     }
     
     
@@ -167,11 +171,17 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             mapView!.animateWithCameraUpdate(boundsCameraUpdate)
         } else {
             mapView!.camera = GMSCameraPosition(target: secondLocation, zoom: 14, bearing: 0, viewingAngle: 0)
-            let title = "Warning"
-            let message = "Sorry, can't create route!"
-            let alertDialog = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "OK")
-            alertDialog.show()
+            cantCreateRouteAlert()
         }
+    }
+    
+    
+    
+    func cantCreateRouteAlert() {
+        let title = "Warning"
+        let message = "Sorry, can't create route!"
+        let alertDialog = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "OK")
+        alertDialog.show()
     }
     
     
@@ -210,10 +220,12 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     
-    func createPolyline(data: NSData!) -> [CLLocationCoordinate2D] {
+    func createPolyline(data: NSData!) {
         let jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
         let routes: [NSDictionary] = jsonResult["routes"] as [NSDictionary]
-        var locations: [CLLocationCoordinate2D] = []
+        if routes.count == 0 {
+            return
+        }
         let overviewPolyline = (routes[0] as NSDictionary)["overview_polyline"] as NSDictionary
         let points = overviewPolyline["points"] as String
         let path = GMSPath(fromEncodedPath: points)
@@ -225,7 +237,6 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         polyline!.strokeWidth = 5
         polyline!.strokeColor = UIColor.blueColor()
         polyline!.map = mapView
-        return locations
     }
     
     
