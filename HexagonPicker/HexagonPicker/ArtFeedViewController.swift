@@ -38,11 +38,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceOrientationDidChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
         screenSize = self.view.bounds
-        if screenSize!.width > screenSize!.height {
-            let width = screenSize!.size.width
-            screenSize!.size.width = screenSize!.size.height
-            screenSize!.size.height = width
-        }
+        //updateScreenSize()
         initFeed()
         initScrollView()
         initNavigationBar()
@@ -54,13 +50,45 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     func deviceOrientationDidChange(notification: NSNotification) {
         let orientation = UIDevice.currentDevice().orientation
         
-        if orientation == UIDeviceOrientation.PortraitUpsideDown || orientation == UIDeviceOrientation.FaceUp || orientation == UIDeviceOrientation.FaceDown || orientation == UIDeviceOrientation.Unknown || deviceOrientation == orientation {
+        if orientation == UIDeviceOrientation.PortraitUpsideDown || orientation == UIDeviceOrientation.FaceUp || orientation == UIDeviceOrientation.FaceDown || orientation == UIDeviceOrientation.Unknown || deviceOrientation == orientation || deviceOrientation == nil {
+            deviceOrientation = orientation;
             return;
         }
         deviceOrientation = orientation;
         let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
         println("deviceOrientationChanged: " + devOrientation)
         NSNotificationCenter.defaultCenter().postNotificationName(ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        updateView()
+    }
+    
+    
+    
+    func updateView() {
+        if !updateScreenSize() {
+            return
+        }
+        updateScrollView()
+        updateNavigationBar()
+    }
+    
+    
+    
+    func updateScreenSize() -> Bool {
+        let deviceOrientationPortrait =  ((deviceOrientation == UIDeviceOrientation.Portrait) || (deviceOrientation == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
+        let minSize = screenSize!.size.width < screenSize!.height ? screenSize!.size.width : screenSize!.height
+        let maxSize = screenSize!.size.width > screenSize!.height ? screenSize!.size.width : screenSize!.height
+        if deviceOrientationPortrait {
+            if minSize == screenSize!.size.width {
+                return false
+            }
+            screenSize!.size = CGSize(width: minSize, height: maxSize)
+        } else {
+            if maxSize == screenSize!.size.width {
+                return false
+            }
+            screenSize!.size = CGSize(width: maxSize, height: minSize)
+        }
+        return true
     }
     
     
@@ -111,8 +139,9 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     
     func initScrollView() {
+        scrollView = FeedScrollView()
         var frame = screenSize!
-        scrollView = FeedScrollView(frame: frame)
+        scrollView!.frame = frame
         let screenWidth = frame.width
         var scrollViewContentHeight: CGFloat = 0
         frame = CGRect()
@@ -140,6 +169,37 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     }
     
     
+    
+    func updateScrollView() {
+        scrollView!.subviews.map{ $0.removeFromSuperview() }
+        var frame = screenSize!
+        scrollView!.frame = frame
+        let screenWidth = frame.width
+        var scrollViewContentHeight: CGFloat = 0
+        frame = CGRect()
+        for art in arts {
+            let image = art.image!
+            let imageWidth = image.size.width
+            let imageHeight = image.size.height
+            let scaleFactor = image.size.width / screenWidth
+            let imageViewHeight = imageHeight / scaleFactor
+            frame.origin.y = scrollViewContentHeight
+            frame.size = CGSize(width: screenWidth, height: imageViewHeight)
+            let imageView = UIImageView(frame: frame)
+            imageView.image = image
+            scrollView.addSubview(imageView)
+            scrollViewContentHeight += imageViewHeight
+            
+            let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
+            singleTap.numberOfTapsRequired = 1
+            imageView.userInteractionEnabled = true
+            imageView.addGestureRecognizer(singleTap)
+            art.delegate = self
+        }
+        scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
+    }
+    
+    
     func artTapped(art: Art) {
         tappedArt = art
         performSegueWithIdentifier(SHOW_ART_FROM_FEED_SEGUE_ID, sender: self)
@@ -160,21 +220,46 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     
     
+    func updateNavigationBar() {
+        var frame = screenSize!
+        if buttonsBarDisplayed {
+            frame.origin.y = frame.height
+            frame.size.height = buttonsToolbarHeight / 2
+            homeToolbar!.frame = frame
+            frame.origin.y = screenSize!.height - buttonsToolbarHeight
+            frame.size.height += buttonsToolbarHeight / 2
+            buttonsToolbar!.frame = frame
+        } else {
+            frame.origin.y = frame.height - buttonsToolbarHeight / 2
+            frame.size.height = buttonsToolbarHeight / 2
+            homeToolbar!.frame = frame
+            frame.origin.y = screenSize!.height
+            frame.size.height += buttonsToolbarHeight / 2
+            buttonsToolbar!.frame = frame
+        }
+        view.bringSubviewToFront(buttonsToolbar)
+        view.bringSubviewToFront(homeToolbar)
+    }
+    
+    
+    
     func initNavigationBar() {
+        println("initNavigationBar")
         var frame = screenSize!
         frame.origin.y = frame.height
         frame.size.height = buttonsToolbarHeight / 2
         homeToolbar = UIToolbar()
         addToolbar(&homeToolbar, frame)
         initHomeToolbar()
-        
         println(frame)
+        
         frame.origin.y = screenSize!.height - buttonsToolbarHeight
         frame.size.height += buttonsToolbarHeight / 2
         println(frame)
         buttonsToolbar = UIToolbar()
         addToolbar(&buttonsToolbar, frame)
         initButtonsToolbar()
+        println(frame)
     }
     
     
@@ -228,24 +313,6 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     func dismissArtViewController() {
         self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-
-
-    override func shouldAutorotate() -> Bool {
-        return true
-    }
-    
-    
-    
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
-    }
-    
-    
-    
-    override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
-        return UIInterfaceOrientation.Portrait
     }
 
 }
