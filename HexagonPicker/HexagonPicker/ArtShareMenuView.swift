@@ -72,7 +72,7 @@ class ArtShareMenuView: UIView {
         } else {
             if currentY > panY {
                 hide()
-                println("panRecognized Hide")
+                //println("panRecognized Hide")
                 panY = nil
                 removeGestureRecognizer(panRecognizer)
             }

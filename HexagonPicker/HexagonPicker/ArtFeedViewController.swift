@@ -11,14 +11,16 @@ import UIKit
 var deviceOrientation: UIDeviceOrientation?
 let ORIENTATION_CHANGED_NOTIFICATION = "orientationChangedNotification"
 
-class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedScrollViewDelegate, ArtDelegate {
+class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScrollViewDelegate, ArtDelegate {
     let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
     
     var images: [UIImage] = []
     
     let SHOW_MAP_SEGUE_ID = "showMapSegue"
 
-    var scrollView: FeedScrollView!
+    var scrollView: UIScrollView!
+    var contentOffset: CGPoint?
+    var scrollingStarted = false
     var upSwipeRecognizer: UISwipeGestureRecognizer?
     var downSwipeRecognizer: UISwipeGestureRecognizer?
     
@@ -42,7 +44,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
         initFeed()
         initScrollView()
         initNavigationBar()
-        scrollView.feedDelegate = self
+        scrollView.delegate = self
     }
     
     
@@ -56,7 +58,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
         }
         deviceOrientation = orientation;
         let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
-        println("deviceOrientationChanged: " + devOrientation)
+        //println("deviceOrientationChanged: " + devOrientation)
         NSNotificationCenter.defaultCenter().postNotificationName(ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         updateView()
     }
@@ -139,7 +141,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     
     func initScrollView() {
-        scrollView = FeedScrollView()
+        scrollView = UIScrollView()
         var frame = screenSize!
         scrollView!.frame = frame
         let screenWidth = frame.width
@@ -166,6 +168,8 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
         }
         scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
         self.view.addSubview(scrollView)
+        contentOffset = scrollView!.contentOffset
+        println(contentOffset)
     }
     
     
@@ -244,22 +248,19 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     
     func initNavigationBar() {
-        println("initNavigationBar")
+        //println("initNavigationBar")
         var frame = screenSize!
         frame.origin.y = frame.height
         frame.size.height = buttonsToolbarHeight / 2
         homeToolbar = UIToolbar()
         addToolbar(&homeToolbar, frame)
         initHomeToolbar()
-        println(frame)
         
         frame.origin.y = screenSize!.height - buttonsToolbarHeight
         frame.size.height += buttonsToolbarHeight / 2
-        println(frame)
         buttonsToolbar = UIToolbar()
         addToolbar(&buttonsToolbar, frame)
         initButtonsToolbar()
-        println(frame)
     }
     
     
@@ -313,6 +314,70 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, FeedS
     
     func dismissArtViewController() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        scrollingStarted = true
+    }
+
+    
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if buttonsBarDisplayed {
+            if screenSize!.height - homeToolbar.frame.origin.y >= homeToolbar.frame.height / 2 {
+                homeToolbar.frame.origin.y = screenSize!.height - homeToolbar.frame.height
+                buttonsToolbar.frame.origin.y = screenSize!.height
+                buttonsBarDisplayed = false
+            } else {
+                buttonsToolbar.frame.origin.y = screenSize!.height - buttonsToolbar.frame.height
+                homeToolbar.frame.origin.y = screenSize!.height
+            }
+        }
+        scrollingStarted = false
+    }
+    
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if scrollingStarted {
+            if buttonsBarDisplayed {
+                let deltaY = scrollView.contentOffset.y - contentOffset!.y
+                if scrollView.contentOffset.y > contentOffset!.y {
+                    buttonsToolbar.frame.origin.y += deltaY
+                    homeToolbar.frame.origin.y -= deltaY / 2
+                    if homeToolbar.frame.origin.y <= screenSize!.height - homeToolbar.frame.height {
+                        homeToolbar.frame.origin.y = screenSize!.height - homeToolbar.frame.height
+                        buttonsToolbar.frame.origin.y = screenSize!.height
+                        buttonsBarDisplayed = false
+                    }
+                } else {
+                    buttonsToolbar.frame.origin.y += deltaY
+                    homeToolbar.frame.origin.y -= deltaY / 2
+                    if buttonsToolbar.frame.origin.y <= screenSize!.height - buttonsToolbar.frame.height {
+                        buttonsToolbar.frame.origin.y = screenSize!.height - buttonsToolbar.frame.height
+                        homeToolbar.frame.origin.y = screenSize!.height
+                    }
+                }
+            } else {
+                var speedY = scrollView.contentOffset.y - contentOffset!.y
+                if speedY < -20 {
+                    showHomeToolbar()
+                    buttonsBarDisplayed = true
+                }
+            }
+        }
+        contentOffset = scrollView.contentOffset
+    }
+    
+    
+    
+    func showHomeToolbar() {
+        buttonsBarDisplayed = true
+        UIView.animateWithDuration(0.2, animations: {
+            self.buttonsToolbar!.frame.origin.y = self.buttonsToolbar!.frame.origin.y - self.buttonsToolbarHeight
+            self.homeToolbar!.frame.origin.y = self.homeToolbar!.frame.origin.y + self.buttonsToolbarHeight / 2
+        })
     }
 
 }

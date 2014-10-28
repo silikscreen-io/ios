@@ -450,7 +450,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func optimizeHexagonWidth() {
         let screenWidth = screenSize!.width
-        println(screenWidth)
+        //println(screenWidth)
         var x: CGFloat = 0
         var currentWidth: CGFloat = width
         var firstHexagon = true
