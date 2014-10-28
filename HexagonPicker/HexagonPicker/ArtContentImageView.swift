@@ -144,4 +144,15 @@ class ArtContentImageView: UIImageView {
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    
+    override func drawRect(rect: CGRect) {
+        let color = UIColor(red: 0.8, green: 1, blue: 1, alpha: 1)
+        
+        //// Rounded Rectangle Drawing
+        let roundedRectanglePath = UIBezierPath(roundedRect: CGRectMake(19.5, 5.5, 97, 108), cornerRadius: 4);
+        color.setFill()
+        roundedRectanglePath.fill()
+    }
 }

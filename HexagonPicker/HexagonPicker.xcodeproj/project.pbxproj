@@ -23,6 +23,7 @@
 		B5173DE519F2D30600B50011 /* hexagon_100.png in Resources */ = {isa = PBXBuildFile; fileRef = B5173DE419F2D30600B50011 /* hexagon_100.png */; };
 		B5173DED19F5147400B50011 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5173DEC19F5147400B50011 /* CoreMotion.framework */; };
 		B5173DEF19F5790700B50011 /* LoginWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5173DEE19F5790700B50011 /* LoginWebViewController.swift */; };
+		B51856E419FFBC2F009800CE /* ArtShareMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51856E319FFBC2F009800CE /* ArtShareMenuView.swift */; };
 		B51C979119F907CE00F286C5 /* ArtContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51C979019F907CE00F286C5 /* ArtContentView.swift */; };
 		B51C979919F9357500F286C5 /* audio_b.png in Resources */ = {isa = PBXBuildFile; fileRef = B51C979319F9357500F286C5 /* audio_b.png */; };
 		B51C979A19F9357500F286C5 /* audio_w.png in Resources */ = {isa = PBXBuildFile; fileRef = B51C979419F9357500F286C5 /* audio_w.png */; };
@@ -102,6 +103,7 @@
 		B5173DE419F2D30600B50011 /* hexagon_100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hexagon_100.png; sourceTree = "<group>"; };
 		B5173DEC19F5147400B50011 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		B5173DEE19F5790700B50011 /* LoginWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginWebViewController.swift; sourceTree = "<group>"; };
+		B51856E319FFBC2F009800CE /* ArtShareMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtShareMenuView.swift; sourceTree = "<group>"; };
 		B51C979019F907CE00F286C5 /* ArtContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtContentView.swift; sourceTree = "<group>"; };
 		B51C979319F9357500F286C5 /* audio_b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = audio_b.png; sourceTree = "<group>"; };
 		B51C979419F9357500F286C5 /* audio_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = audio_w.png; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				B5173DB619F2726C00B50011 /* ArtViewController.swift */,
 				B51C979019F907CE00F286C5 /* ArtContentView.swift */,
 				B558EB7819FEA49800C98904 /* ArtContentImageView.swift */,
+				B51856E319FFBC2F009800CE /* ArtShareMenuView.swift */,
 				B5173DD619F2765700B50011 /* HexaButton.swift */,
 				B5173DEE19F5790700B50011 /* LoginWebViewController.swift */,
 				B52898FC19F7A859000CC9EF /* GMapViewController.swift */,
@@ -471,6 +474,7 @@
 				B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */,
 				B558EB7719FEA04A00C98904 /* UIImage+ImageEffects.m in Sources */,
 				B5173DB719F2726C00B50011 /* ArtViewController.swift in Sources */,
+				B51856E419FFBC2F009800CE /* ArtShareMenuView.swift in Sources */,
 				B5173DB519F2726C00B50011 /* AppDelegate.swift in Sources */,
 				B5339BF219FA4EDB003B1C88 /* FeedScrollView.swift in Sources */,
 				B5339BF619FA6B8F003B1C88 /* GMarker.swift in Sources */,

@@ -21,13 +21,11 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     var delegate: ArtViewControllerDelegate!
     
+    
     let motionManager = CMMotionManager()
-#if iOS8Delta
-    var artContent: ArtContentView?
-#else
-    var artContent: ArtContentImageView?
-#endif
-    var visualEffectView: UIVisualEffectView?
+    var artContentView: UIView?
+    var artShareView: UIView?
+    var artShareMenuView: ArtShareMenuView?
     
     let maxXMovement: CGFloat = 10
     let maxYMovement: CGFloat = 10
@@ -47,12 +45,15 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     let buttonWidth: CGFloat = 100
     let buttonHeight: CGFloat = 40
-    let buttonPadding: CGFloat = 20
+    let buttonPadding: CGFloat = 10
     var tagsOnOffButton: UIButton?
     var showRouteButton: UIButton?
+    var shareButton: UIButton?
     
     var screenSize: CGRect?
     var statusBarHeight: CGFloat?
+    
+    var homeToolbar: UIToolbar!
     
     
     override func viewDidLoad() {
@@ -84,6 +85,27 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         initMotions()
 
         initButtons()
+        
+        artShareMenuView = ArtShareMenuView(self.view)
+        
+        //initNavigationBar()
+    }
+    
+    
+    
+    func initNavigationBar() {
+        var frame = screenSize!
+        frame.origin.y = frame.height - 300
+        frame.size.height = 300
+        homeToolbar = UIToolbar()
+        homeToolbar!.frame = frame
+        //homeToolbar!.barStyle = UIBarStyle.Black
+        //homeToolbar!.alpha = 0.7
+        var button = UIButton(frame: CGRect(x: 20, y: 20, width: 100, height: 100))
+        button.setImage(UIImage(named: "ann.jpg"), forState: UIControlState.Normal)
+        button.setImage(UIImage(named: "gal.jpg"), forState: UIControlState.Highlighted)
+        homeToolbar.addSubview(button)
+        self.view.addSubview(homeToolbar!)
     }
     
     
@@ -206,6 +228,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         buttonFrame = CGRect(x: screenFrame.width - buttonWidth - buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         showRouteButton = UIButton(frame: buttonFrame)
         initButton(&showRouteButton!, "show route", "showRouteButtonPressed:")
+        buttonFrame = CGRect(x: (screenFrame.width - buttonWidth) / 2, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        shareButton = UIButton(frame: buttonFrame)
+        initButton(&shareButton!, "share", "shareButtonPressed:")
     }
     
     
@@ -214,6 +239,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         var screenFrame = screenSize!
         tagsOnOffButton!.frame = CGRect(x: buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         showRouteButton!.frame = CGRect(x: screenFrame.width - buttonWidth - buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        shareButton!.frame = CGRect(x: (screenFrame.width - buttonWidth) / 2, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
     }
     
     
@@ -249,42 +275,37 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             initContentView()
         }
         artContentDisplayed = !artContentDisplayed
-        artContent!.show(artContentDisplayed)
+//        artContentView!.show(artContentDisplayed)
+        if iOS8Delta {
+            (artContentView! as ArtContentView).show(artContentDisplayed)
+        } else {
+            (artContentView! as ArtContentImageView).show(artContentDisplayed)
+        }
         let alpha: CGFloat = artContentDisplayed ? 0 : 0.8
         UIView.animateWithDuration(0.2, animations: { self.tagsOnOffButton!.alpha = alpha })
         UIView.animateWithDuration(0.2, animations: { self.showRouteButton!.alpha = alpha })
-//        if artContentDisplayed {
-//            motionManager.stopAccelerometerUpdates()
-//        } else {
-//            initMotions()
-//        }
-    }
-
-    
-    
-    override func viewDidAppear(animated: Bool) {
-        //deviceOrientation = UIDevice.currentDevice().orientation
-        //initContentView()
     }
     
     
     
     func initContentView() {
         createScreenshot()
-        #if iOS8Delta
-            artContent = ArtContentView(screenshotView!, screenshotView!.frame, artContentDisplayed)
-            #else
-            artContent = ArtContentImageView(screenshot!, view.bounds, artContentDisplayed, view)
-        #endif
-        artContent!.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
-        for _ in 0...Int(arc4random_uniform(4)) {
-            #if iOS8Delta
-                artContent!.addButton(ArtContentView.CONTENT_ID)
-                #else
-                artContent!.addButton(ArtContentImageView.CONTENT_ID)
-            #endif
+        if iOS8Delta {
+//            let artContentView = ArtContentView(screenshotView!, screenshotView!.frame, artContentDisplayed)
+            let artContentView = ArtContentView(self.view, screenshotView!.frame, artContentDisplayed)
+            artContentView.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
+            for _ in 0...Int(arc4random_uniform(4)) {
+                artContentView.addButton(ArtContentView.CONTENT_ID)
+            }
+            self.artContentView = artContentView
+        } else {
+            let artContentView = ArtContentImageView(screenshot!, view.bounds, artContentDisplayed, view)
+            artContentView.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
+            for _ in 0...Int(arc4random_uniform(4)) {
+                artContentView.addButton(ArtContentImageView.CONTENT_ID)
+            }
+            self.artContentView = artContentView
         }
-        
     }
     
     
@@ -294,10 +315,10 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         self.view.drawViewHierarchyInRect(self.view.bounds, afterScreenUpdates: true)
         screenshot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        #if iOS8Delta
+        if iOS8Delta {
             screenshotView = UIImageView(image: screenshot)
             self.view.addSubview(screenshotView!)
-        #endif
+        }
     }
     
     
@@ -315,6 +336,12 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         } else {
             delegate.dismissArtViewController()
         }
+    }
+    
+    
+    
+    func shareButtonPressed(sender: UIButton) {
+        artShareMenuView!.show()
     }
     
     
@@ -412,6 +439,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 self.view.bringSubviewToFront(self.tagsOnOffButton!)
                 UIView.animateWithDuration(0.2, animations: { self.backgroundImageView!.alpha = self.tagsOn ? 0.6 : 1 })
                 self.view.bringSubviewToFront(self.showRouteButton!)
+                self.view.bringSubviewToFront(self.shareButton!)
+                self.view.bringSubviewToFront(self.artShareMenuView!)
+                //self.view.bringSubviewToFront(self.homeToolbar!)
             })
         })
     }
@@ -453,9 +483,15 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         //backgroundImageView!.frame = getFrameForbackgroundImageView()
         updateScrollView()
         updateButtons()
-        if artContent != nil {
-            artContent!.updateToFrame(screenSize!)
+        if artContentView != nil {
+//            artContentView!.updateToFrame(screenSize!)
+            if iOS8Delta {
+                (artContentView! as ArtContentView).updateToFrame(screenSize!)
+            } else {
+                (artContentView! as ArtContentImageView).updateToFrame(screenSize!)
+            }
         }
+        artShareMenuView!.update(screenSize!)
         let maxX = screenSize!.width
         let maxY = screenSize!.height
         var firstLine = true
