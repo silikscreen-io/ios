@@ -68,6 +68,7 @@
 		B57DE42F19F5C16600F47A00 /* Picture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42C19F5C16600F47A00 /* Picture2.jpg */; };
 		B57DE43019F5C16600F47A00 /* Picture3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42D19F5C16600F47A00 /* Picture3.jpg */; };
 		B57DE43419F64F5700F47A00 /* annotation.png in Resources */ = {isa = PBXBuildFile; fileRef = B57DE43319F64F5700F47A00 /* annotation.png */; };
+		B57E9B461A00654B00BCAA35 /* ArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57E9B451A00654B00BCAA35 /* ArtView.swift */; };
 		B5B9119619F9615400A8806C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B9119519F9615400A8806C /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -149,6 +150,7 @@
 		B57DE42C19F5C16600F47A00 /* Picture2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture2.jpg; sourceTree = "<group>"; };
 		B57DE42D19F5C16600F47A00 /* Picture3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture3.jpg; sourceTree = "<group>"; };
 		B57DE43319F64F5700F47A00 /* annotation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = annotation.png; sourceTree = "<group>"; };
+		B57E9B451A00654B00BCAA35 /* ArtView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtView.swift; sourceTree = "<group>"; };
 		B5B9119519F9615400A8806C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -222,6 +224,7 @@
 				B5173DBD19F2726C00B50011 /* LaunchScreen.xib */,
 				B5173DB219F2726C00B50011 /* Supporting Files */,
 				B5339BF319FA66E4003B1C88 /* Art.swift */,
+				B57E9B451A00654B00BCAA35 /* ArtView.swift */,
 				B5339BE419F97644003B1C88 /* ArtFeedViewController.swift */,
 				B5173DB619F2726C00B50011 /* ArtViewController.swift */,
 				B51C979019F907CE00F286C5 /* ArtContentView.swift */,
@@ -475,6 +478,7 @@
 				B5173DB519F2726C00B50011 /* AppDelegate.swift in Sources */,
 				B5339BF619FA6B8F003B1C88 /* GMarker.swift in Sources */,
 				B51C979119F907CE00F286C5 /* ArtContentView.swift in Sources */,
+				B57E9B461A00654B00BCAA35 /* ArtView.swift in Sources */,
 				B52898FD19F7A85A000CC9EF /* GMapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

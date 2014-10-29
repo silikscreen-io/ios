@@ -15,6 +15,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
     
     var images: [UIImage] = []
+    var artViews: [ArtView] = []
     
     let SHOW_MAP_SEGUE_ID = "showMapSegue"
 
@@ -148,23 +149,11 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         var scrollViewContentHeight: CGFloat = 0
         frame = CGRect()
         for art in arts {
-            let image = art.image!
-            let imageWidth = image.size.width
-            let imageHeight = image.size.height
-            let scaleFactor = image.size.width / screenWidth
-            let imageViewHeight = imageHeight / scaleFactor
-            frame.origin.y = scrollViewContentHeight
-            frame.size = CGSize(width: screenWidth, height: imageViewHeight)
-            let imageView = UIImageView(frame: frame)
-            imageView.image = image
-            scrollView.addSubview(imageView)
-            scrollViewContentHeight += imageViewHeight
-            
-            let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
-            singleTap.numberOfTapsRequired = 1
-            imageView.userInteractionEnabled = true
-            imageView.addGestureRecognizer(singleTap)
+            let artView = ArtView(art, scrollViewContentHeight, screenWidth)
+            scrollView.addSubview(artView)
+            scrollViewContentHeight += artView.frame.height
             art.delegate = self
+            artViews.append(artView)
         }
         scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
         self.view.addSubview(scrollView)
@@ -175,6 +164,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func updateScrollView() {
+        artViews.removeAll(keepCapacity: false)
         scrollView!.subviews.map{ $0.removeFromSuperview() }
         var frame = screenSize!
         scrollView!.frame = frame
@@ -182,23 +172,11 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         var scrollViewContentHeight: CGFloat = 0
         frame = CGRect()
         for art in arts {
-            let image = art.image!
-            let imageWidth = image.size.width
-            let imageHeight = image.size.height
-            let scaleFactor = image.size.width / screenWidth
-            let imageViewHeight = imageHeight / scaleFactor
-            frame.origin.y = scrollViewContentHeight
-            frame.size = CGSize(width: screenWidth, height: imageViewHeight)
-            let imageView = UIImageView(frame: frame)
-            imageView.image = image
-            scrollView.addSubview(imageView)
-            scrollViewContentHeight += imageViewHeight
-            
-            let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
-            singleTap.numberOfTapsRequired = 1
-            imageView.userInteractionEnabled = true
-            imageView.addGestureRecognizer(singleTap)
+            let artView = ArtView(art, scrollViewContentHeight, screenWidth)
+            scrollView.addSubview(artView)
+            scrollViewContentHeight += artView.frame.height
             art.delegate = self
+            artViews.append(artView)
         }
         scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
     }
@@ -318,8 +296,17 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
+    
+    
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         scrollingStarted = true
+        for artView in artViews {
+            artView.hideStatistic()
+        }
     }
 
     
@@ -336,6 +323,19 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             }
         }
         scrollingStarted = false
+        if !decelerate {
+            for artView in artViews {
+                artView.showStatistic()
+            }
+        }
+    }
+    
+    
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        for artView in artViews {
+            artView.showStatistic()
+        }
     }
     
     
