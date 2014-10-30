@@ -23,7 +23,7 @@ class GMarker: GMSMarker {
         position = art.location!
         title = art.artDescription
         snippet = "Tap me"
-        icon = UIImage(named: "annotation.png")
+        icon = art.iconImage//UIImage(named: "annotation.png")
         self.map = map
         self.art = art
     }

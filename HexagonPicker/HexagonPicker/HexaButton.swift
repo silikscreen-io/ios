@@ -46,7 +46,6 @@ class HexaButton: UIButton {
         height = 2 * r!
         xStep =  0.5 * R!
         super.init(frame: CGRectMake(x, y, width, height!))
-        println(frame)
     }
     
     
