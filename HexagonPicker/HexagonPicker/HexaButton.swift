@@ -8,25 +8,45 @@
 
 import UIKit
 
-var R: CGFloat = 18
-var width: CGFloat = 2 * R
-var r: CGFloat = 0.86603 * R
-var height: CGFloat = 2 * r
-var xStep: CGFloat = 0.5 * R
+var gBigRadius: CGFloat = 18
+var gWidth: CGFloat = 2 * gBigRadius
+var gSmallRadiusr: CGFloat = 0.86603 * gBigRadius
+var gHeight: CGFloat = 2 * gSmallRadiusr
+var gXStep: CGFloat = 0.5 * gBigRadius
 var maskImage: UIImage?
 
 var buttons: [Int: HexaButton] = [:]
 
 class HexaButton: UIButton {
+    var R: CGFloat?
+    var width: CGFloat?
+    var r: CGFloat?
+    var height: CGFloat?
+    var xStep: CGFloat?
 
-    var index: Int
+    var index: Int?
     var color = UIColor(red: 1, green: 0.3, blue: 1, alpha: 0)
     var image: UIImage?
     
     
     override init(frame: CGRect) {
-        index = 0
         super.init(frame: frame)
+    }
+    
+    
+    override init() {
+        super.init()
+    }
+    
+    
+    init(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat) {
+        R = width / 2
+        self.width = 2 * R!
+        r = 0.86603 * R!
+        height = 2 * r!
+        xStep =  0.5 * R!
+        super.init(frame: CGRectMake(x, y, width, height!))
+        println(frame)
     }
     
     
@@ -38,13 +58,18 @@ class HexaButton: UIButton {
     
     
     class func addButton(x: CGFloat, y: CGFloat, target: AnyObject?, action: Selector, view: UIView) {
-        var button = HexaButton(frame: CGRectMake(x, y, width, height))
+        var button = HexaButton(frame: CGRectMake(x, y, gWidth, gHeight))
+        button.R = gBigRadius
+        button.width = gWidth
+        button.r = gSmallRadiusr
+        button.height = gHeight
+        button.xStep = gXStep
         button.index = buttons.count
         button.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
         dispatch_async(dispatch_get_main_queue(), {
             view.addSubview(button)
         })
-        buttons[button.index] = button
+        buttons[button.index!] = button
     }
     
     
@@ -113,12 +138,12 @@ class HexaButton: UIButton {
         
         //// Polygon Drawing
         var polygonPath = UIBezierPath()
-        polygonPath.moveToPoint(CGPointMake(xStep, 0))
-        polygonPath.addLineToPoint(CGPointMake(xStep + R, 0))
-        polygonPath.addLineToPoint(CGPointMake(width, r))
-        polygonPath.addLineToPoint(CGPointMake(xStep + R, height))
-        polygonPath.addLineToPoint(CGPointMake(xStep, height))
-        polygonPath.addLineToPoint(CGPointMake(0, r))
+        polygonPath.moveToPoint(CGPointMake(self.xStep!, 0))
+        polygonPath.addLineToPoint(CGPointMake(self.xStep! + self.R!, 0))
+        polygonPath.addLineToPoint(CGPointMake(self.width!, self.r!))
+        polygonPath.addLineToPoint(CGPointMake(self.xStep! + self.R!, self.height!))
+        polygonPath.addLineToPoint(CGPointMake(self.xStep!, self.height!))
+        polygonPath.addLineToPoint(CGPointMake(0, self.r!))
         polygonPath.closePath()
         
         if image != nil {

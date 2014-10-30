@@ -149,7 +149,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         var scrollViewContentHeight: CGFloat = 0
         frame = CGRect()
         for art in arts {
-            let artView = ArtView(art, scrollViewContentHeight, screenWidth)
+            let artView = ArtView(art, scrollViewContentHeight, screenWidth, self)
             scrollView.addSubview(artView)
             scrollViewContentHeight += artView.frame.height
             art.delegate = self
@@ -172,7 +172,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         var scrollViewContentHeight: CGFloat = 0
         frame = CGRect()
         for art in arts {
-            let artView = ArtView(art, scrollViewContentHeight, screenWidth)
+            let artView = ArtView(art, scrollViewContentHeight, screenWidth, self)
             scrollView.addSubview(artView)
             scrollViewContentHeight += artView.frame.height
             art.delegate = self

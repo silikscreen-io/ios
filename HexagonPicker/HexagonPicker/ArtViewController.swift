@@ -58,7 +58,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(red: 15 / 255, green: 108 / 255, blue: 74 / 255, alpha: 1)
+        self.view.backgroundColor = UIColor.blackColor()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         screenSize = self.view.bounds
@@ -67,8 +67,8 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         fillViewWithButtons()
         
         var mask = UIImage(named: "hexagon_100.png")!
-        UIGraphicsBeginImageContext(CGSize(width: width, height: height))
-        mask.drawInRect(CGRectMake(0, 0, width, height))
+        UIGraphicsBeginImageContext(CGSize(width: gWidth, height: gHeight))
+        mask.drawInRect(CGRectMake(0, 0, gWidth, gHeight))
         var newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         maskImage = newImage
@@ -419,18 +419,18 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             var firstLine = true
             var x: CGFloat = 0
             var y: CGFloat = 0
-            while trunc(y + height) <= maxY {
-                while trunc(x + width) <= maxX {
+            while trunc(y + gHeight) <= maxY {
+                while trunc(x + gWidth) <= maxX {
                     HexaButton.addButton(x, y: y, target: self, action: "buttonPressed:", view: self.view)
-                    x += width + R
+                    x += gWidth + gBigRadius
                 }
                 firstLine = !firstLine
                 if firstLine {
                     x = 0
                 } else {
-                    x = width - xStep
+                    x = gWidth - gXStep
                 }
-                y += r
+                y += gSmallRadiusr
             }
             dispatch_async(dispatch_get_main_queue(), {
                 self.fillButtonWithImage("ann.jpg")
@@ -454,7 +454,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         let screenWidth = screenSize!.width
         //println(screenWidth)
         var x: CGFloat = 0
-        var currentWidth: CGFloat = width
+        var currentWidth: CGFloat = gWidth
         var firstHexagon = true
         var numberOfFullHexagones: CGFloat = 0
         var numberOfHalfHexagones: CGFloat = 0
@@ -466,7 +466,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 numberOfHalfHexagones++
             }
             firstHexagon = !firstHexagon
-            currentWidth = firstHexagon ? width : R
+            currentWidth = firstHexagon ? gWidth : gBigRadius
         }
         if firstHexagon {
             numberOfFullHexagones++
@@ -500,33 +500,33 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         var x: CGFloat = 0
         var y: CGFloat = 0
         var index: Int = 0
-        while trunc(y + height) <= maxY {
-            while trunc(x + width) <= maxX {
+        while trunc(y + gHeight) <= maxY {
+            while trunc(x + gWidth) <= maxX {
                 if index >= buttons.count {
                     return
                 }
                 buttons[index]!.frame.origin = CGPoint(x: x, y: y)
-                x += width + R
+                x += gWidth + gBigRadius
                 ++index
             }
             firstLine = !firstLine
             if firstLine {
                 x = 0
             } else {
-                x = width - xStep
+                x = gWidth - gXStep
             }
-            y += r
+            y += gSmallRadiusr
         }
     }
     
     
     
     func initHexagonWithRadius(radius: CGFloat) {
-        R = radius
-        width = 2 * R
-        r = 0.86603 * R
-        height = 2 * r
-        xStep = 0.5 * R
+        gBigRadius = 18
+        gWidth = 2 * gBigRadius
+        gSmallRadiusr = 0.86603 * gBigRadius
+        gHeight = 2 * gSmallRadiusr
+        gXStep = 0.5 * gBigRadius
     }
     
     

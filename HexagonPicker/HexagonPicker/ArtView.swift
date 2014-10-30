@@ -9,14 +9,18 @@
 import UIKit
 
 class ArtView: UIImageView {
+    let users = ["ann.jpg", "gal.jpg", "rah.jpg", "ste.jpg"]
     
-    let labelPadding: CGFloat = 10
+    let padding: CGFloat = 10
     
+    let buttonWidth: CGFloat = 40
+    var userButton: HexaButton?
     var statisticLabel: UILabel?
+    var parentViewController: UIViewController?
 
-    init(_ art: Art, _ y: CGFloat,_ width: CGFloat) {
+    init(_ art: Art, _ y: CGFloat,_ width: CGFloat, _ parentViewController: UIViewController) {
         super.init()
-        
+        self.parentViewController = parentViewController
         
         let imageSize = art.image!.size
         let imageWidth = imageSize.width
@@ -34,12 +38,24 @@ class ArtView: UIImageView {
         addGestureRecognizer(singleTap)
         
         statisticLabel = UILabel(frame: bounds)
-        statisticLabel!.frame.origin.x += labelPadding
-        statisticLabel!.frame.origin.y += labelPadding
+        statisticLabel!.frame.origin.x += padding
+        statisticLabel!.frame.origin.y += padding
         statisticLabel!.frame.size.height = 20
         statisticLabel!.text = "Location: \(art.location!.latitude), \(art.location!.longitude)"
         statisticLabel!.textColor = UIColor.magentaColor()
         addSubview(statisticLabel!)
+        userButton = HexaButton(width - buttonWidth - padding, padding, buttonWidth)
+        userButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(4))]))
+        userButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        addSubview(userButton!)
+    }
+    
+    
+    
+    func userButtonPressed(button: UIButton) {
+        let userDetailViewController = UserDetailViewController()
+        userDetailViewController.homeViewController = parentViewController!
+        parentViewController!.presentViewController(userDetailViewController, animated: true, completion: nil)
     }
     
     
@@ -47,6 +63,7 @@ class ArtView: UIImageView {
     func hideStatistic() {
         UIView.animateWithDuration(0.2, animations: {
             self.statisticLabel!.alpha = 0
+            self.userButton!.alpha = 0
         })
     }
     
@@ -55,6 +72,7 @@ class ArtView: UIImageView {
     func showStatistic() {
         UIView.animateWithDuration(0.2, animations: {
             self.statisticLabel!.alpha = 1
+            self.userButton!.alpha = 1
         })
     }
     
