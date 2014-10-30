@@ -120,6 +120,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
         let artViewController = ArtViewController()
         artViewController.art = tappedMarker!.art
+        artViewController.homeViewController = self
         artViewController.delegate = self
         if iOS8Delta {
             self.showViewController(artViewController, sender: self)
@@ -159,6 +160,12 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     func dismissArtViewController() {
         self.dismissViewControllerAnimated(true, completion: nil)
         createRouteAndAppropriateZoom(currentLocation, tappedMarker!.position)
+    }
+    
+    
+    
+    func dismissArtViewControllerWithowtShowingRout() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     

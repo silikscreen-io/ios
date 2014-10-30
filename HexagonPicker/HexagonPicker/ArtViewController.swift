@@ -49,24 +49,21 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var tagsOnOffButton: UIButton?
     var showRouteButton: UIButton?
     var shareButton: UIButton?
+    var backButton: UIButton?
     
     var screenSize: CGRect?
-    var statusBarHeight: CGFloat?
     
     var homeToolbar: UIToolbar!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let statusBarFrame = UIApplication.sharedApplication().statusBarFrame
-        statusBarHeight = statusBarFrame.height < statusBarFrame.width ? statusBarFrame.height : statusBarFrame.width
         self.view.backgroundColor = UIColor(red: 15 / 255, green: 108 / 255, blue: 74 / 255, alpha: 1)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         screenSize = self.view.bounds
         updateScreenSize()
         
-        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.None)
         fillViewWithButtons()
         
         var mask = UIImage(named: "hexagon_100.png")!
@@ -110,17 +107,8 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     
-    func getScrollViewHeight() -> CGRect {
-        var frame = screenSize!
-        frame.origin.y = statusBarHeight!
-        frame.size.height -= statusBarHeight!
-        return frame
-    }
-    
-    
-    
     func initScrollView() {
-        scrollView = UIScrollView(frame: getScrollViewHeight())
+        scrollView = UIScrollView(frame: screenSize!)
         scrollView!.delegate = self
         self.view.addSubview(scrollView!)
     }
@@ -144,7 +132,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func updateScrollView() {
-        scrollView!.frame = getScrollViewHeight()
+        scrollView!.frame = screenSize!
         let imageSize = art!.image!.size
         var scrollViewFrame = scrollView!.frame
         let scaleWidth = scrollViewFrame.width / imageSize.width
@@ -231,6 +219,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         buttonFrame = CGRect(x: (screenFrame.width - buttonWidth) / 2, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         shareButton = UIButton(frame: buttonFrame)
         initButton(&shareButton!, "share", "shareButtonPressed:")
+        buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: buttonWidth / 2, height: buttonHeight)
+        backButton = UIButton(frame: buttonFrame)
+        initButton(&backButton!, "back", "backButtonPressed:")
     }
     
     
@@ -346,6 +337,16 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     
+    func backButtonPressed(sender: UIButton) {
+        if homeViewController!.isMemberOfClass(GMapViewController.self) {
+            (homeViewController as GMapViewController).dismissArtViewControllerWithowtShowingRout()
+        } else if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
+            (homeViewController as ArtFeedViewController).dismissArtViewController()
+        }
+    }
+    
+    
+    
     func dismissMap() {
         self.dismissViewControllerAnimated(true, completion: {
             if self.homeViewController != nil {
@@ -417,7 +418,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             let maxY = screenSize.height
             var firstLine = true
             var x: CGFloat = 0
-            var y: CGFloat = self.statusBarHeight!
+            var y: CGFloat = 0
             while trunc(y + height) <= maxY {
                 while trunc(x + width) <= maxX {
                     HexaButton.addButton(x, y: y, target: self, action: "buttonPressed:", view: self.view)
@@ -441,6 +442,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 self.view.bringSubviewToFront(self.showRouteButton!)
                 self.view.bringSubviewToFront(self.shareButton!)
                 self.view.bringSubviewToFront(self.artShareMenuView!)
+                self.view.bringSubviewToFront(self.backButton!)
                 //self.view.bringSubviewToFront(self.homeToolbar!)
             })
         })
@@ -496,7 +498,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         let maxY = screenSize!.height
         var firstLine = true
         var x: CGFloat = 0
-        var y: CGFloat = statusBarHeight!
+        var y: CGFloat = 0
         var index: Int = 0
         while trunc(y + height) <= maxY {
             while trunc(x + width) <= maxX {
@@ -576,6 +578,12 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidZoom(scrollView: UIScrollView!) {
         centerScrollViewContent()
+    }
+    
+    
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
 
 }

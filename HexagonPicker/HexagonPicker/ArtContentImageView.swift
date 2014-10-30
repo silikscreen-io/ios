@@ -16,8 +16,6 @@ class ArtContentImageView: UIImageView {
     let buttonsDescription = ["audio", "video", "email"]
     var buttons: [String: [UIButton]] = [ArtContentImageView.CONTENT_ID : [], ArtContentImageView.SOCIAL_ID : []]
     
-    let topPadding = UIApplication.sharedApplication().statusBarFrame.size.height < UIApplication.sharedApplication().statusBarFrame.size.width ?
-    UIApplication.sharedApplication().statusBarFrame.size.height : UIApplication.sharedApplication().statusBarFrame.size.width
     let xPadding: CGFloat = 10
     let yPadding: CGFloat = 5
     
@@ -59,7 +57,7 @@ class ArtContentImageView: UIImageView {
     
     
     func alignDescription() {
-        descriptionLabel.frame = CGRect(origin: CGPoint(x: bounds.origin.x + xPadding, y: bounds.origin.y + yPadding + topPadding), size: CGSize(width: bounds.width - 2 * xPadding, height: bounds.height - 2 * yPadding))
+        descriptionLabel.frame = CGRect(origin: CGPoint(x: bounds.origin.x + xPadding, y: bounds.origin.y + yPadding), size: CGSize(width: bounds.width - 2 * xPadding, height: bounds.height - 2 * yPadding))
         descriptionLabel.textAlignment = NSTextAlignment.Center
         descriptionLabel.numberOfLines = 0
         descriptionLabel.sizeToFit()
@@ -87,7 +85,7 @@ class ArtContentImageView: UIImageView {
     
     
     func addButton(type: String) {
-        var yPadding = bounds.origin.y + self.yPadding + topPadding
+        var yPadding = bounds.origin.y + self.yPadding
         var frame = CGRect(origin: CGPoint(x: bounds.origin.x + xPadding, y: yPadding), size: buttonSize)
         let index = Int(arc4random_uniform(2))
         let imageName = buttonsDescription[index]
@@ -130,7 +128,7 @@ class ArtContentImageView: UIImageView {
     
     
     func updateSubviews() {
-        var yPadding = bounds.origin.y + self.yPadding + topPadding
+        var yPadding = bounds.origin.y + self.yPadding
         if descriptionLabel != nil {
             alignDescription()
             setLinePosition(lineViews[0], descriptionLabel.frame.origin.y + descriptionLabel.frame.height + yPadding)
