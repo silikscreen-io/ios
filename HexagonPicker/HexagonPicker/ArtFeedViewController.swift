@@ -40,6 +40,11 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     var screenSize: CGRect?
     var deviceOrientationLandscape = false
     
+    var artistTopButtonPrevious: HexaButton?
+    var artistTopButton: HexaButton?
+    var artistTopButtonNext: HexaButton?
+    var artTopButtonIndex = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.blackColor()
@@ -163,7 +168,8 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         fillScrollView()
         self.view.addSubview(scrollView)
         contentOffset = scrollView!.contentOffset
-        println(contentOffset)
+//        println(contentOffset)
+        view.bringSubviewToFront(artistTopButton!)
     }
     
     
@@ -172,6 +178,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         artViews.removeAll(keepCapacity: false)
         scrollView!.subviews.map{ $0.removeFromSuperview() }
         fillScrollView()
+        view.bringSubviewToFront(artistTopButton!)
     }
     
     
@@ -189,6 +196,13 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             scrollViewLength += (deviceOrientationLandscape ? artView.frame.width : artView.frame.height)
             art.delegate = self
             artViews.append(artView)
+            if artistTopButton == nil {
+                artistTopButton = artView.artistButton
+                artistTopButton!.removeFromSuperview()
+                view.addSubview(artistTopButton!)
+            } else if artistTopButtonNext == nil {
+                artistTopButtonNext = artView.artistButton
+            }
         }
         scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
     }
@@ -352,9 +366,9 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         scrollingStarted = true
-        for artView in artViews {
-            artView.hideStatistic()
-        }
+//        for artView in artViews {
+//            artView.hideStatistic()
+//        }
     }
 
     
@@ -384,79 +398,143 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             }
         }
         scrollingStarted = false
-        if !decelerate {
-            for artView in artViews {
-                artView.showStatistic()
-            }
-        }
+//        if !decelerate {
+//            for artView in artViews {
+//                artView.showStatistic()
+//            }
+//        }
     }
     
     
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        for artView in artViews {
-            artView.showStatistic()
-        }
+//        for artView in artViews {
+//            artView.showStatistic()
+//        }
     }
     
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if scrollingStarted {
-            if deviceOrientationLandscape {
-                if buttonsBarDisplayed {
-                    let deltaX = scrollView.contentOffset.x - contentOffset!.x
-                    if scrollView.contentOffset.x > contentOffset!.x {
-                        buttonsToolbar.frame.origin.x -= deltaX
-                        homeToolbar.frame.origin.x += deltaX / 2
-                        if homeToolbar.frame.origin.x >= 0 {
-                            homeToolbar.frame.origin.x = 0
-                            buttonsToolbar.frame.origin.x = -buttonsToolbar.frame.width
-                            buttonsBarDisplayed = false
-                        }
-                    } else {
-                        buttonsToolbar.frame.origin.x -= deltaX
-                        homeToolbar.frame.origin.x += deltaX / 2
-                        if buttonsToolbar.frame.origin.x >= 0 {
-                            homeToolbar.frame.origin.x = -homeToolbar.frame.width
-                            buttonsToolbar.frame.origin.x = 0
-                        }
-                    }
-                } else {
-                    var speedX = scrollView.contentOffset.x - contentOffset!.x
-                    if speedX < -20 {
-                        showHomeToolbar()
-                        buttonsBarDisplayed = true
-                    }
+        if deviceOrientationLandscape {
+            scrollViewDidScrollLandscape(scrollView)
+        } else {
+            scrollViewDidScrollPortrait(scrollView)
+        }
+        contentOffset = scrollView.contentOffset
+    }
+    
+    
+    
+    func scrollViewDidScrollLandscape(scrollView: UIScrollView) {
+        if !scrollingStarted {
+            return
+        }
+        if buttonsBarDisplayed {
+            let deltaX = scrollView.contentOffset.x - contentOffset!.x
+            if scrollView.contentOffset.x > contentOffset!.x {
+                buttonsToolbar.frame.origin.x -= deltaX
+                homeToolbar.frame.origin.x += deltaX / 2
+                if homeToolbar.frame.origin.x >= 0 {
+                    homeToolbar.frame.origin.x = 0
+                    buttonsToolbar.frame.origin.x = -buttonsToolbar.frame.width
+                    buttonsBarDisplayed = false
                 }
             } else {
-                if buttonsBarDisplayed {
-                    let deltaY = scrollView.contentOffset.y - contentOffset!.y
-                    if scrollView.contentOffset.y > contentOffset!.y {
-                        buttonsToolbar.frame.origin.y += deltaY
-                        homeToolbar.frame.origin.y -= deltaY / 2
-                        if homeToolbar.frame.origin.y <= screenSize!.height - homeToolbar.frame.height {
-                            homeToolbar.frame.origin.y = screenSize!.height - homeToolbar.frame.height
-                            buttonsToolbar.frame.origin.y = screenSize!.height
-                            buttonsBarDisplayed = false
-                        }
-                    } else {
-                        buttonsToolbar.frame.origin.y += deltaY
-                        homeToolbar.frame.origin.y -= deltaY / 2
-                        if buttonsToolbar.frame.origin.y <= screenSize!.height - buttonsToolbar.frame.height {
-                            buttonsToolbar.frame.origin.y = screenSize!.height - buttonsToolbar.frame.height
-                            homeToolbar.frame.origin.y = screenSize!.height
-                        }
-                    }
-                } else {
-                    var speedY = scrollView.contentOffset.y - contentOffset!.y
-                    if speedY < -20 {
-                        showHomeToolbar()
-                        buttonsBarDisplayed = true
-                    }
+                buttonsToolbar.frame.origin.x -= deltaX
+                homeToolbar.frame.origin.x += deltaX / 2
+                if buttonsToolbar.frame.origin.x >= 0 {
+                    homeToolbar.frame.origin.x = -homeToolbar.frame.width
+                    buttonsToolbar.frame.origin.x = 0
+                }
+            }
+        } else {
+            var speedX = scrollView.contentOffset.x - contentOffset!.x
+            if speedX < -20 {
+                showHomeToolbar()
+                buttonsBarDisplayed = true
+            }
+        }
+    }
+    
+    
+    
+    func scrollViewDidScrollPortrait(scrollView: UIScrollView) {
+        scrollViewDidScrollPortraitArtistButton(scrollView)
+        if !scrollingStarted {
+            return
+        }
+        if buttonsBarDisplayed {
+            let deltaY = scrollView.contentOffset.y - contentOffset!.y
+            let scrolledDown = scrollView.contentOffset.y > contentOffset!.y
+            if scrolledDown {
+                buttonsToolbar.frame.origin.y += deltaY
+                homeToolbar.frame.origin.y -= deltaY / 2
+                if homeToolbar.frame.origin.y <= screenSize!.height - homeToolbar.frame.height {
+                    homeToolbar.frame.origin.y = screenSize!.height - homeToolbar.frame.height
+                    buttonsToolbar.frame.origin.y = screenSize!.height
+                    buttonsBarDisplayed = false
+                }
+            } else {
+                buttonsToolbar.frame.origin.y += deltaY
+                homeToolbar.frame.origin.y -= deltaY / 2
+                if buttonsToolbar.frame.origin.y <= screenSize!.height - buttonsToolbar.frame.height {
+                    buttonsToolbar.frame.origin.y = screenSize!.height - buttonsToolbar.frame.height
+                    homeToolbar.frame.origin.y = screenSize!.height
+                }
+            }
+        } else {
+            var speedY = scrollView.contentOffset.y - contentOffset!.y
+            if speedY < -20 {
+                showHomeToolbar()
+                buttonsBarDisplayed = true
+            }
+        }
+    }
+    
+    
+    
+    func scrollViewDidScrollPortraitArtistButton(scrollView: UIScrollView) {
+        let scrolledDown = scrollView.contentOffset.y > contentOffset!.y
+        if scrolledDown {
+            let nextArt = artViews[artTopButtonIndex + 1]
+            let rect = scrollView.convertRect(nextArt.frame, toView: view)
+            if rect.origin.y <= nextArt.artistButton!.frame.height + nextArt.padding * 2 {
+                //                println(rect.origin.y - nextArt.artistButton!.height! - nextArt.padding * 2)
+                artistTopButton!.frame.origin.y = rect.origin.y - artistTopButton!.frame.height - nextArt.padding
+                if artistTopButton!.frame.origin.y + artistTopButton!.frame.height + nextArt.padding <= 0 {
+                    artistTopButton!.removeFromSuperview()
+                    let currentTopArt = artViews[artTopButtonIndex]
+                    currentTopArt.artistButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.frame.width - artistTopButton!.frame.width - currentTopArt.padding, y: currentTopArt.frame.height - artistTopButton!.frame.height - currentTopArt.padding), size: artistTopButton!.frame.size)
+                    currentTopArt.artistButton = artistTopButton
+                    currentTopArt.addSubview(artistTopButton!)
+                    
+                    artistTopButton = nextArt.artistButton
+                    artistTopButton!.removeFromSuperview()
+                    view.addSubview(artistTopButton!)
+                    artTopButtonIndex++
+                }
+            }
+        } else if (artTopButtonIndex > 0) {
+            let previousArt = artViews[artTopButtonIndex - 1]
+            let rect = scrollView.convertRect(previousArt.frame, toView: view)
+            let newY = rect.origin.y + rect.height
+            if rect.origin.y + rect.height > 0 {
+                artistTopButton!.frame.origin.y = newY + previousArt.padding
+                if newY >= artistTopButton!.frame.height + previousArt.padding * 2 {
+                    artistTopButton!.removeFromSuperview()
+                    let currentTopArt = artViews[artTopButtonIndex]
+                    currentTopArt.artistButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.frame.width - artistTopButton!.frame.width - currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
+                    currentTopArt.artistButton = artistTopButton
+                    currentTopArt.addSubview(artistTopButton!)
+                    
+                    artistTopButton = previousArt.artistButton
+                    artistTopButton!.removeFromSuperview()
+                    artistTopButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.frame.width - artistTopButton!.frame.width - currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
+                    view.addSubview(artistTopButton!)
+                    artTopButtonIndex--
                 }
             }
         }
-        contentOffset = scrollView.contentOffset
     }
     
     

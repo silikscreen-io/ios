@@ -54,6 +54,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var screenSize: CGRect?
     
     var homeToolbar: UIToolbar!
+    var firstLayout = true;
     
     
     override func viewDidLoad() {
@@ -61,6 +62,15 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         self.view.backgroundColor = UIColor.blackColor()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+    }
+    
+    
+    
+    override func viewWillLayoutSubviews() {
+        if !firstLayout {
+            return
+        }
+        firstLayout = false
         screenSize = self.view.bounds
         println("before: \(screenSize)")
         //updateScreenSize()
@@ -81,7 +91,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         setupScrollViewWithArt()
         
         initMotions()
-
+        
         initButtons()
         
         artShareMenuView = ArtShareMenuView(self.view)

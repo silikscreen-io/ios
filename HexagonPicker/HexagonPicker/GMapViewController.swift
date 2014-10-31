@@ -36,6 +36,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     var homeToolbarItems: [UIBarItem]!
     
     var screenSize: CGRect?
+    var firstLayout = true
     
     
     
@@ -43,6 +44,15 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+    }
+    
+    
+    
+    override func viewWillLayoutSubviews() {
+        if !firstLayout {
+            return
+        }
+        firstLayout = false
         screenSize = self.view.bounds
         updateScreenSize()
         

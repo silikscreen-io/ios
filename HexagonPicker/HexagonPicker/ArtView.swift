@@ -14,8 +14,7 @@ class ArtView: UIImageView {
     let padding: CGFloat = 10
     
     let buttonWidth: CGFloat = 40
-    var userButton: HexaButton?
-//    var statisticLabel: UILabel?
+    var artistButton: HexaButton?
     var parentViewController: UIViewController?
 
     init(_ art: Art, _ length: CGFloat, _ width: CGFloat, _ heigth: CGFloat, _ parentViewController: UIViewController, _ deviceOrientationLandscape: Bool) {
@@ -41,17 +40,10 @@ class ArtView: UIImageView {
         userInteractionEnabled = true
         addGestureRecognizer(singleTap)
         
-//        statisticLabel = UILabel(frame: bounds)
-//        statisticLabel!.frame.origin.x += padding
-//        statisticLabel!.frame.origin.y += padding
-//        statisticLabel!.frame.size.height = 20
-//        statisticLabel!.text = "Location: \(art.location!.latitude), \(art.location!.longitude)"
-//        statisticLabel!.textColor = UIColor.magentaColor()
-//        addSubview(statisticLabel!)
-        userButton = HexaButton(width - buttonWidth - padding, padding, buttonWidth)
-        userButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(4))]))
-        userButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        addSubview(userButton!)
+        artistButton = HexaButton(width - buttonWidth - padding, padding, buttonWidth)
+        artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(4))]))
+        artistButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        addSubview(artistButton!)
     }
     
     
@@ -66,8 +58,7 @@ class ArtView: UIImageView {
     
     func hideStatistic() {
         UIView.animateWithDuration(0.2, animations: {
-//            self.statisticLabel!.alpha = 0
-            self.userButton!.alpha = 0
+            self.artistButton!.alpha = 0
         })
     }
     
@@ -75,8 +66,7 @@ class ArtView: UIImageView {
     
     func showStatistic() {
         UIView.animateWithDuration(0.2, animations: {
-//            self.statisticLabel!.alpha = 1
-            self.userButton!.alpha = 1
+            self.artistButton!.alpha = 1
         })
     }
     
