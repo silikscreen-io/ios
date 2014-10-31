@@ -54,7 +54,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         }
         firstLayout = false
         screenSize = self.view.bounds
-        updateScreenSize()
+        //updateScreenSize()
         
         locationManager.delegate = self
         locationManager.distanceFilter = 10

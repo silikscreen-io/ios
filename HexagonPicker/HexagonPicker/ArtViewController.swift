@@ -72,9 +72,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         }
         firstLayout = false
         screenSize = self.view.bounds
-        println("before: \(screenSize)")
         //updateScreenSize()
-        println("after: \(screenSize)")
         fillViewWithButtons()
         
         var mask = UIImage(named: "hexagon_100.png")!
@@ -343,7 +341,27 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func shareButtonPressed(sender: UIButton) {
-        artShareMenuView!.show()
+//        artShareMenuView!.show()
+        shareTextImageAndURL(sharingText: "HHHHHHH", sharingImage: art!.image, sharingURL: NSURL(string: "https://www.cocoacontrols.com/"))
+    }
+    
+    
+    
+    func shareTextImageAndURL(#sharingText: String?, sharingImage: UIImage?, sharingURL: NSURL?) {
+        var sharingItems = [AnyObject]()
+        
+        if let text = sharingText {
+            sharingItems.append(text)
+        }
+        if let image = sharingImage {
+            sharingItems.append(image)
+        }
+        if let url = sharingURL {
+            sharingItems.append(url)
+        }
+        
+        let activityViewController = UIActivityViewController(activityItems: sharingItems, applicationActivities: nil)
+        self.presentViewController(activityViewController, animated: true, completion: nil)
     }
     
     
