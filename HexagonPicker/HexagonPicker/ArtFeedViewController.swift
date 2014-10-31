@@ -168,7 +168,6 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         fillScrollView()
         self.view.addSubview(scrollView)
         contentOffset = scrollView!.contentOffset
-//        println(contentOffset)
         view.bringSubviewToFront(artistTopButton!)
     }
     
@@ -184,6 +183,11 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func fillScrollView() {
+        if artistTopButton != nil {
+            artistTopButton!.removeFromSuperview()
+            artistTopButton = nil
+            artTopButtonIndex = 0
+        }
         var frame = screenSize!
         scrollView!.frame = frame
         let screenWidth = frame.width
@@ -426,6 +430,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func scrollViewDidScrollLandscape(scrollView: UIScrollView) {
+        scrollViewDidScrollLandscapeArtistButton(scrollView)
         if !scrollingStarted {
             return
         }
@@ -530,6 +535,51 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton = previousArt.artistButton
                     artistTopButton!.removeFromSuperview()
                     artistTopButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.frame.width - artistTopButton!.frame.width - currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
+                    view.addSubview(artistTopButton!)
+                    artTopButtonIndex--
+                }
+            }
+        }
+    }
+    
+    
+    
+    func scrollViewDidScrollLandscapeArtistButton(scrollView: UIScrollView) {
+        let scrolledLeft = scrollView.contentOffset.x > contentOffset!.x
+        if scrolledLeft {
+            let nextArt = artViews[artTopButtonIndex + 1]
+            let rect = scrollView.convertRect(nextArt.frame, toView: view)
+            if rect.origin.x <= nextArt.artistButton!.width! + nextArt.padding * 2 {
+                artistTopButton!.frame.origin.x = rect.origin.x - artistTopButton!.frame.width - nextArt.padding
+                if artistTopButton!.frame.origin.x + artistTopButton!.frame.width + nextArt.padding <= 0 {
+                    artistTopButton!.removeFromSuperview()
+                    let currentTopArt = artViews[artTopButtonIndex]
+                    currentTopArt.artistButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.frame.width - artistTopButton!.frame.width - currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
+                    currentTopArt.artistButton = artistTopButton
+                    currentTopArt.addSubview(artistTopButton!)
+                    
+                    artistTopButton = nextArt.artistButton
+                    artistTopButton!.removeFromSuperview()
+                    view.addSubview(artistTopButton!)
+                    artTopButtonIndex++
+                }
+            }
+        } else if (artTopButtonIndex > 0) {
+            let previousArt = artViews[artTopButtonIndex - 1]
+            let rect = scrollView.convertRect(previousArt.frame, toView: view)
+            let newX = rect.origin.x + rect.width
+            if rect.origin.x + rect.width > 0 {
+                artistTopButton!.frame.origin.x = newX + previousArt.padding
+                if newX >= artistTopButton!.frame.width + previousArt.padding * 2 {
+                    artistTopButton!.removeFromSuperview()
+                    let currentTopArt = artViews[artTopButtonIndex]
+                    currentTopArt.artistButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
+                    currentTopArt.artistButton = artistTopButton
+                    currentTopArt.addSubview(artistTopButton!)
+                    
+                    artistTopButton = previousArt.artistButton
+                    artistTopButton!.removeFromSuperview()
+                    artistTopButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex--
                 }

@@ -40,7 +40,8 @@ class ArtView: UIImageView {
         userInteractionEnabled = true
         addGestureRecognizer(singleTap)
         
-        artistButton = HexaButton(width - buttonWidth - padding, padding, buttonWidth)
+        let x = (width < heigth ? bounds.width - buttonWidth - padding : padding)
+        artistButton = HexaButton(x, padding, buttonWidth)
         artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(4))]))
         artistButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(artistButton!)
