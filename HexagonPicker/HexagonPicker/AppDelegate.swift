@@ -10,6 +10,10 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    let ARTISTS_CLASS_NAME = "artists"
+    
+    let parseApplicationId = "CHd4NrA6zIzEIvYXUKcsOKvo3rLmRNwwt9LV3DwA"
+    let parseClientKey = "Fy6hMPkvDVoif4oVXTep04gVi726t22VQdbGdmVW"
 
     var window: UIWindow?
 
@@ -20,6 +24,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey("AIzaSyAVpKvbAoNl3qQUiUkdUM9kMKO4rl2SJUM");
         Art.initArts()
         UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
+        Parse.setApplicationId(parseApplicationId, clientKey: parseClientKey)
+        PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+
+//        var query = PFQuery(className: ARTISTS_CLASS_NAME)
+//        query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+//            if error == nil {
+//                var allObjects = objects as [PFObject]
+//                for object in allObjects {
+//                    Artist.addArtist(object)
+//                }
+//            } else {
+//            }
+//        }
+        deviceOrientation = UIDevice.currentDevice().orientation
+        let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
+        println("deviceOrientation " + devOrientation)
         return true
     }
 

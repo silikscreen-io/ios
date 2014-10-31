@@ -69,8 +69,17 @@
 		B57DE43019F5C16600F47A00 /* Picture3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42D19F5C16600F47A00 /* Picture3.jpg */; };
 		B57DE43419F64F5700F47A00 /* annotation.png in Resources */ = {isa = PBXBuildFile; fileRef = B57DE43319F64F5700F47A00 /* annotation.png */; };
 		B57E9B461A00654B00BCAA35 /* ArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57E9B451A00654B00BCAA35 /* ArtView.swift */; };
-		B57E9B481A026FB500BCAA35 /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57E9B471A026FB500BCAA35 /* UserDetailViewController.swift */; };
+		B57E9B481A026FB500BCAA35 /* ArtistDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57E9B471A026FB500BCAA35 /* ArtistDetailViewController.swift */; };
+		B57E9B4A1A02B5B500BCAA35 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B491A02B5B500BCAA35 /* Parse.framework */; };
+		B57E9B4C1A02B5E900BCAA35 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B4B1A02B5E900BCAA35 /* AudioToolbox.framework */; };
+		B57E9B4E1A02B5F500BCAA35 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B4D1A02B5F500BCAA35 /* CFNetwork.framework */; };
+		B57E9B501A02B60900BCAA35 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B4F1A02B60900BCAA35 /* CoreGraphics.framework */; };
+		B57E9B521A02B62F00BCAA35 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B511A02B62E00BCAA35 /* MobileCoreServices.framework */; };
+		B57E9B541A02B64200BCAA35 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B531A02B64200BCAA35 /* Security.framework */; };
+		B57E9B561A02B65000BCAA35 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B551A02B65000BCAA35 /* StoreKit.framework */; };
+		B57E9B581A02BA9700BCAA35 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57E9B571A02BA9700BCAA35 /* Artist.swift */; };
 		B5B9119619F9615400A8806C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B9119519F9615400A8806C /* Foundation.framework */; };
+		B5BA1EF31A038BF600C99A99 /* arrowUp_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B5BA1EF21A038BF500C99A99 /* arrowUp_icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,8 +161,17 @@
 		B57DE42D19F5C16600F47A00 /* Picture3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture3.jpg; sourceTree = "<group>"; };
 		B57DE43319F64F5700F47A00 /* annotation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = annotation.png; sourceTree = "<group>"; };
 		B57E9B451A00654B00BCAA35 /* ArtView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtView.swift; sourceTree = "<group>"; };
-		B57E9B471A026FB500BCAA35 /* UserDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
+		B57E9B471A026FB500BCAA35 /* ArtistDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistDetailViewController.swift; sourceTree = "<group>"; };
+		B57E9B491A02B5B500BCAA35 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		B57E9B4B1A02B5E900BCAA35 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		B57E9B4D1A02B5F500BCAA35 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		B57E9B4F1A02B60900BCAA35 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		B57E9B511A02B62E00BCAA35 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		B57E9B531A02B64200BCAA35 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		B57E9B551A02B65000BCAA35 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		B57E9B571A02BA9700BCAA35 /* Artist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		B5B9119519F9615400A8806C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		B5BA1EF21A038BF500C99A99 /* arrowUp_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowUp_icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +179,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B57E9B561A02B65000BCAA35 /* StoreKit.framework in Frameworks */,
+				B57E9B541A02B64200BCAA35 /* Security.framework in Frameworks */,
+				B57E9B521A02B62F00BCAA35 /* MobileCoreServices.framework in Frameworks */,
+				B57DE42719F5B65700F47A00 /* CoreLocation.framework in Frameworks */,
+				B57E9B501A02B60900BCAA35 /* CoreGraphics.framework in Frameworks */,
+				B57E9B4E1A02B5F500BCAA35 /* CFNetwork.framework in Frameworks */,
+				B57E9B4C1A02B5E900BCAA35 /* AudioToolbox.framework in Frameworks */,
 				B5B9119619F9615400A8806C /* Foundation.framework in Frameworks */,
 				B52898F719F7A636000CC9EF /* SystemConfiguration.framework in Frameworks */,
 				B52898F519F7A627000CC9EF /* QuartzCore.framework in Frameworks */,
@@ -174,7 +199,6 @@
 				B528990819F7B828000CC9EF /* GZIP.framework in Frameworks */,
 				B52898E919F7A5D3000CC9EF /* GLKit.framework in Frameworks */,
 				B52898E719F7A5C9000CC9EF /* CoreText.framework in Frameworks */,
-				B57DE42719F5B65700F47A00 /* CoreLocation.framework in Frameworks */,
 				B52898E519F7A5B4000CC9EF /* CoreData.framework in Frameworks */,
 				B52898E319F7A5A7000CC9EF /* AVFoundation.framework in Frameworks */,
 				B528990B19F7B828000CC9EF /* TMCache.framework in Frameworks */,
@@ -183,6 +207,7 @@
 				B5173DED19F5147400B50011 /* CoreMotion.framework in Frameworks */,
 				B52898FF19F7B741000CC9EF /* AWSiOSSDKv2.framework in Frameworks */,
 				B528990D19F7B828000CC9EF /* XMLDictionary.framework in Frameworks */,
+				B57E9B4A1A02B5B500BCAA35 /* Parse.framework in Frameworks */,
 				B528990719F7B828000CC9EF /* Bolts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,6 +251,8 @@
 				B5173DBD19F2726C00B50011 /* LaunchScreen.xib */,
 				B5173DB219F2726C00B50011 /* Supporting Files */,
 				B5339BF319FA66E4003B1C88 /* Art.swift */,
+				B57E9B571A02BA9700BCAA35 /* Artist.swift */,
+				B57E9B471A026FB500BCAA35 /* ArtistDetailViewController.swift */,
 				B57E9B451A00654B00BCAA35 /* ArtView.swift */,
 				B5339BE419F97644003B1C88 /* ArtFeedViewController.swift */,
 				B5173DB619F2726C00B50011 /* ArtViewController.swift */,
@@ -236,7 +263,6 @@
 				B5173DEE19F5790700B50011 /* LoginWebViewController.swift */,
 				B52898FC19F7A859000CC9EF /* GMapViewController.swift */,
 				B5339BF519FA6B8F003B1C88 /* GMarker.swift */,
-				B57E9B471A026FB500BCAA35 /* UserDetailViewController.swift */,
 				B52898F819F7A75C000CC9EF /* HexagonPicker-Bridging-Header.h */,
 				B558EB7519FEA04A00C98904 /* UIImage+ImageEffects.h */,
 				B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */,
@@ -292,6 +318,7 @@
 		B5339BEC19F9AFB9003B1C88 /* ArtFeed */ = {
 			isa = PBXGroup;
 			children = (
+				B5BA1EF21A038BF500C99A99 /* arrowUp_icon.png */,
 				B5339BED19F9AFB9003B1C88 /* map_icon.png */,
 			);
 			name = ArtFeed;
@@ -301,6 +328,13 @@
 		B57DE42519F5B61A00F47A00 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B57E9B551A02B65000BCAA35 /* StoreKit.framework */,
+				B57E9B531A02B64200BCAA35 /* Security.framework */,
+				B57E9B511A02B62E00BCAA35 /* MobileCoreServices.framework */,
+				B57E9B4F1A02B60900BCAA35 /* CoreGraphics.framework */,
+				B57E9B4D1A02B5F500BCAA35 /* CFNetwork.framework */,
+				B57E9B4B1A02B5E900BCAA35 /* AudioToolbox.framework */,
+				B57E9B491A02B5B500BCAA35 /* Parse.framework */,
 				B5B9119519F9615400A8806C /* Foundation.framework */,
 				B528990019F7B828000CC9EF /* Bolts.framework */,
 				B528990119F7B828000CC9EF /* GZIP.framework */,
@@ -428,6 +462,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5173DE519F2D30600B50011 /* hexagon_100.png in Resources */,
+				B5BA1EF31A038BF600C99A99 /* arrowUp_icon.png in Resources */,
 				B51C979919F9357500F286C5 /* audio_b.png in Resources */,
 				B5173DBA19F2726C00B50011 /* Main.storyboard in Resources */,
 				B5339BE919F97963003B1C88 /* Picture4.jpg in Resources */,
@@ -470,9 +505,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B57E9B481A026FB500BCAA35 /* UserDetailViewController.swift in Sources */,
+				B57E9B481A026FB500BCAA35 /* ArtistDetailViewController.swift in Sources */,
 				B5339BE519F97644003B1C88 /* ArtFeedViewController.swift in Sources */,
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
+				B57E9B581A02BA9700BCAA35 /* Artist.swift in Sources */,
 				B5339BF419FA66E4003B1C88 /* Art.swift in Sources */,
 				B5173DEF19F5790700B50011 /* LoginWebViewController.swift in Sources */,
 				B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */,

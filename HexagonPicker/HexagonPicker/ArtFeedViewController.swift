@@ -27,18 +27,22 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     let buttonsToolbarHeight: CGFloat = 60
+    var buttonsToolbarImageView: UIImageView!
     var buttonsBarDisplayed = true
     var buttonsToolbar: UIToolbar!
     var buttonItems: [UIBarItem] = []
     var homeToolbar: UIToolbar!
+    var homeToolbarImageView: UIImageView!
     var homeToolbarItems: [UIBarItem]!
     
     var tappedArt: Art?
     
     var screenSize: CGRect?
+    var deviceOrientationLandscape = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.blackColor()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceOrientationDidChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
         screenSize = self.view.bounds
         //updateScreenSize()
@@ -54,12 +58,15 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         let orientation = UIDevice.currentDevice().orientation
         
         if orientation == UIDeviceOrientation.PortraitUpsideDown || orientation == UIDeviceOrientation.FaceUp || orientation == UIDeviceOrientation.FaceDown || orientation == UIDeviceOrientation.Unknown || deviceOrientation == orientation || deviceOrientation == nil {
+            let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
+            println("deviceOrientationChanged: " + devOrientation)
             deviceOrientation = orientation;
             return;
         }
         deviceOrientation = orientation;
+        deviceOrientationLandscape = (deviceOrientation! != UIDeviceOrientation.Portrait) && (deviceOrientation! != UIDeviceOrientation.PortraitUpsideDown)
         let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
-        //println("deviceOrientationChanged: " + devOrientation)
+        println("deviceOrientationChanged: " + devOrientation)
         NSNotificationCenter.defaultCenter().postNotificationName(ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         updateView()
     }
@@ -96,19 +103,29 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     
-    func swipeDown() {
-        if !buttonsBarDisplayed {
-            buttonsBarDisplayed = true
-            let buttonsToolbarY = self.buttonsToolbar!.frame.origin.y
-            var newY = buttonsToolbarY - self.buttonsToolbarHeight
-            UIView.animateWithDuration(0.3, animations: {
-                self.buttonsToolbar!.frame.origin.y = newY
-            })
-            let homeToolbarY = self.homeToolbar!.frame.origin.y
-            newY = homeToolbarY + self.buttonsToolbarHeight / 2
-            UIView.animateWithDuration(0.3, animations: {
-                self.homeToolbar!.frame.origin.y = newY
-            })
+    func showButtonsBar() {
+        if deviceOrientationLandscape {
+            if !buttonsBarDisplayed {
+                buttonsBarDisplayed = true
+                UIView.animateWithDuration(0.3, animations: {
+                    self.buttonsToolbar!.frame.origin.x = 0
+                    self.homeToolbar!.frame.origin.x = -self.buttonsToolbarHeight / 2
+                })
+            }
+        } else {
+            if !buttonsBarDisplayed {
+                buttonsBarDisplayed = true
+                let buttonsToolbarY = self.buttonsToolbar!.frame.origin.y
+                var newY = buttonsToolbarY - self.buttonsToolbarHeight
+                UIView.animateWithDuration(0.3, animations: {
+                    self.buttonsToolbar!.frame.origin.y = newY
+                })
+                let homeToolbarY = self.homeToolbar!.frame.origin.y
+                newY = homeToolbarY + self.buttonsToolbarHeight / 2
+                UIView.animateWithDuration(0.3, animations: {
+                    self.homeToolbar!.frame.origin.y = newY
+                })
+            }
         }
     }
     
@@ -143,19 +160,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func initScrollView() {
         scrollView = UIScrollView()
-        var frame = screenSize!
-        scrollView!.frame = frame
-        let screenWidth = frame.width
-        var scrollViewContentHeight: CGFloat = 0
-        frame = CGRect()
-        for art in arts {
-            let artView = ArtView(art, scrollViewContentHeight, screenWidth, self)
-            scrollView.addSubview(artView)
-            scrollViewContentHeight += artView.frame.height
-            art.delegate = self
-            artViews.append(artView)
-        }
-        scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
+        fillScrollView()
         self.view.addSubview(scrollView)
         contentOffset = scrollView!.contentOffset
         println(contentOffset)
@@ -166,20 +171,28 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     func updateScrollView() {
         artViews.removeAll(keepCapacity: false)
         scrollView!.subviews.map{ $0.removeFromSuperview() }
+        fillScrollView()
+    }
+    
+    
+    
+    func fillScrollView() {
         var frame = screenSize!
         scrollView!.frame = frame
         let screenWidth = frame.width
-        var scrollViewContentHeight: CGFloat = 0
+        let screenHeigth = frame.height
+        var scrollViewLength: CGFloat = 0
         frame = CGRect()
         for art in arts {
-            let artView = ArtView(art, scrollViewContentHeight, screenWidth, self)
+            let artView = ArtView(art, scrollViewLength, screenWidth, screenHeigth, self, deviceOrientationLandscape)
             scrollView.addSubview(artView)
-            scrollViewContentHeight += artView.frame.height
+            scrollViewLength += (deviceOrientationLandscape ? artView.frame.width : artView.frame.height)
             art.delegate = self
             artViews.append(artView)
         }
-        scrollView.contentSize = CGSize(width: screenWidth, height: scrollViewContentHeight)
+        scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
     }
+    
     
     
     func artTapped(art: Art) {
@@ -203,21 +216,43 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func updateNavigationBar() {
-        var frame = screenSize!
-        if buttonsBarDisplayed {
-            frame.origin.y = frame.height
-            frame.size.height = buttonsToolbarHeight / 2
-            homeToolbar!.frame = frame
-            frame.origin.y = screenSize!.height - buttonsToolbarHeight
-            frame.size.height += buttonsToolbarHeight / 2
-            buttonsToolbar!.frame = frame
+        var screenSize = self.screenSize!
+        var frame = self.screenSize!
+        var origin = frame.origin
+        if deviceOrientationLandscape {
+            if buttonsBarDisplayed {
+                frame.size.width = buttonsToolbarHeight
+                buttonsToolbar!.frame = frame
+                frame.origin.x = origin.x - buttonsToolbarHeight / 2
+                frame.size.width = buttonsToolbarHeight / 2
+                homeToolbar!.frame = frame
+            } else {
+                frame.size.width = buttonsToolbarHeight / 2
+                homeToolbar!.frame = frame
+                frame.size.width = buttonsToolbarHeight
+                frame.origin.x = origin.x - buttonsToolbarHeight
+                buttonsToolbar!.frame = frame
+            }
+            homeToolbarImageView.transform = CGAffineTransformMakeRotation(90.0 / 180.0 * CGFloat(M_PI))
+            buttonsToolbarImageView.transform = CGAffineTransformMakeRotation(90.0 / 180.0 * CGFloat(M_PI))
         } else {
-            frame.origin.y = frame.height - buttonsToolbarHeight / 2
-            frame.size.height = buttonsToolbarHeight / 2
-            homeToolbar!.frame = frame
-            frame.origin.y = screenSize!.height
-            frame.size.height += buttonsToolbarHeight / 2
-            buttonsToolbar!.frame = frame
+            if buttonsBarDisplayed {
+                frame.origin.y = screenSize.height
+                frame.size.height = buttonsToolbarHeight / 2
+                homeToolbar!.frame = frame
+                frame.origin.y = screenSize.height - buttonsToolbarHeight
+                frame.size.height = buttonsToolbarHeight
+                buttonsToolbar!.frame = frame
+            } else {
+                frame.origin.y = frame.height - buttonsToolbarHeight / 2
+                frame.size.height = buttonsToolbarHeight / 2
+                homeToolbar!.frame = frame
+                frame.origin.y = screenSize.height
+                frame.size.height = buttonsToolbarHeight
+                buttonsToolbar!.frame = frame
+            }
+            homeToolbarImageView.transform = CGAffineTransformMakeRotation(0)
+            buttonsToolbarImageView.transform = CGAffineTransformMakeRotation(0)
         }
         view.bringSubviewToFront(buttonsToolbar)
         view.bringSubviewToFront(homeToolbar)
@@ -252,10 +287,23 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     
+    func getButtonForToolbar(inout imageView: UIImageView, _ action: Selector) -> UIButton {
+        imageView.autoresizingMask = UIViewAutoresizing.None
+        imageView.contentMode = UIViewContentMode.Center
+        let button = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        button.frame = CGRectMake(0, 0, 30, 30);
+        button.addSubview(imageView)
+        button.addTarget(self, action: action, forControlEvents: UIControlEvents.TouchUpInside)
+        imageView.center = button.center
+        return button
+    }
+    
+    
+    
     func initHomeToolbar() {
-        var item = UIBarButtonItem(title: "Home", style: UIBarButtonItemStyle.Plain, target: self, action: "homeButtonTapped")
-        item.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
-        var space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        homeToolbarImageView = UIImageView(image: UIImage(named: "arrowUp_icon.png"))
+        let item = UIBarButtonItem(customView: getButtonForToolbar(&homeToolbarImageView!, "homeButtonTapped"))
+        var space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: self, action: "homeButtonTapped")
         homeToolbarItems = Array(arrayLiteral: space, item, space)
         homeToolbar.items = homeToolbarItems
     }
@@ -263,8 +311,8 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func initButtonsToolbar() {
-        var item = UIBarButtonItem(image: UIImage(named: "map_icon.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "mapButtonTapped")
-        item.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        buttonsToolbarImageView = UIImageView(image: UIImage(named: "map_icon.png"))
+        let item = UIBarButtonItem(customView: getButtonForToolbar(&buttonsToolbarImageView!, "mapButtonTapped"))
         var space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         buttonItems = Array(arrayLiteral: space, item, space)
         buttonsToolbar.items = buttonItems
@@ -273,7 +321,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func homeButtonTapped() {
-        swipeDown()
+        showButtonsBar()
     }
     
     
@@ -312,14 +360,27 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if buttonsBarDisplayed {
-            if screenSize!.height - homeToolbar.frame.origin.y >= homeToolbar.frame.height / 2 {
-                homeToolbar.frame.origin.y = screenSize!.height - homeToolbar.frame.height
-                buttonsToolbar.frame.origin.y = screenSize!.height
-                buttonsBarDisplayed = false
-            } else {
-                buttonsToolbar.frame.origin.y = screenSize!.height - buttonsToolbar.frame.height
-                homeToolbar.frame.origin.y = screenSize!.height
+        if deviceOrientationLandscape {
+            if buttonsBarDisplayed {
+                if homeToolbar.frame.origin.x >= -homeToolbar.frame.width / 2 {
+                    homeToolbar.frame.origin.x = 0
+                    buttonsToolbar.frame.origin.x = -buttonsToolbar.frame.width
+                    buttonsBarDisplayed = false
+                } else {
+                    buttonsToolbar.frame.origin.x = 0
+                    homeToolbar.frame.origin.x = -homeToolbar.frame.width
+                }
+            }
+        } else {
+            if buttonsBarDisplayed {
+                if screenSize!.height - homeToolbar.frame.origin.y >= homeToolbar.frame.height / 2 {
+                    homeToolbar.frame.origin.y = screenSize!.height - homeToolbar.frame.height
+                    buttonsToolbar.frame.origin.y = screenSize!.height
+                    buttonsBarDisplayed = false
+                } else {
+                    buttonsToolbar.frame.origin.y = screenSize!.height - buttonsToolbar.frame.height
+                    homeToolbar.frame.origin.y = screenSize!.height
+                }
             }
         }
         scrollingStarted = false
@@ -341,29 +402,57 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if scrollingStarted {
-            if buttonsBarDisplayed {
-                let deltaY = scrollView.contentOffset.y - contentOffset!.y
-                if scrollView.contentOffset.y > contentOffset!.y {
-                    buttonsToolbar.frame.origin.y += deltaY
-                    homeToolbar.frame.origin.y -= deltaY / 2
-                    if homeToolbar.frame.origin.y <= screenSize!.height - homeToolbar.frame.height {
-                        homeToolbar.frame.origin.y = screenSize!.height - homeToolbar.frame.height
-                        buttonsToolbar.frame.origin.y = screenSize!.height
-                        buttonsBarDisplayed = false
+            if deviceOrientationLandscape {
+                if buttonsBarDisplayed {
+                    let deltaX = scrollView.contentOffset.x - contentOffset!.x
+                    if scrollView.contentOffset.x > contentOffset!.x {
+                        buttonsToolbar.frame.origin.x -= deltaX
+                        homeToolbar.frame.origin.x += deltaX / 2
+                        if homeToolbar.frame.origin.x >= 0 {
+                            homeToolbar.frame.origin.x = 0
+                            buttonsToolbar.frame.origin.x = -buttonsToolbar.frame.width
+                            buttonsBarDisplayed = false
+                        }
+                    } else {
+                        buttonsToolbar.frame.origin.x -= deltaX
+                        homeToolbar.frame.origin.x += deltaX / 2
+                        if buttonsToolbar.frame.origin.x >= 0 {
+                            homeToolbar.frame.origin.x = -homeToolbar.frame.width
+                            buttonsToolbar.frame.origin.x = 0
+                        }
                     }
                 } else {
-                    buttonsToolbar.frame.origin.y += deltaY
-                    homeToolbar.frame.origin.y -= deltaY / 2
-                    if buttonsToolbar.frame.origin.y <= screenSize!.height - buttonsToolbar.frame.height {
-                        buttonsToolbar.frame.origin.y = screenSize!.height - buttonsToolbar.frame.height
-                        homeToolbar.frame.origin.y = screenSize!.height
+                    var speedX = scrollView.contentOffset.x - contentOffset!.x
+                    if speedX < -20 {
+                        showHomeToolbar()
+                        buttonsBarDisplayed = true
                     }
                 }
             } else {
-                var speedY = scrollView.contentOffset.y - contentOffset!.y
-                if speedY < -20 {
-                    showHomeToolbar()
-                    buttonsBarDisplayed = true
+                if buttonsBarDisplayed {
+                    let deltaY = scrollView.contentOffset.y - contentOffset!.y
+                    if scrollView.contentOffset.y > contentOffset!.y {
+                        buttonsToolbar.frame.origin.y += deltaY
+                        homeToolbar.frame.origin.y -= deltaY / 2
+                        if homeToolbar.frame.origin.y <= screenSize!.height - homeToolbar.frame.height {
+                            homeToolbar.frame.origin.y = screenSize!.height - homeToolbar.frame.height
+                            buttonsToolbar.frame.origin.y = screenSize!.height
+                            buttonsBarDisplayed = false
+                        }
+                    } else {
+                        buttonsToolbar.frame.origin.y += deltaY
+                        homeToolbar.frame.origin.y -= deltaY / 2
+                        if buttonsToolbar.frame.origin.y <= screenSize!.height - buttonsToolbar.frame.height {
+                            buttonsToolbar.frame.origin.y = screenSize!.height - buttonsToolbar.frame.height
+                            homeToolbar.frame.origin.y = screenSize!.height
+                        }
+                    }
+                } else {
+                    var speedY = scrollView.contentOffset.y - contentOffset!.y
+                    if speedY < -20 {
+                        showHomeToolbar()
+                        buttonsBarDisplayed = true
+                    }
                 }
             }
         }
@@ -374,10 +463,17 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func showHomeToolbar() {
         buttonsBarDisplayed = true
-        UIView.animateWithDuration(0.2, animations: {
-            self.buttonsToolbar!.frame.origin.y = self.buttonsToolbar!.frame.origin.y - self.buttonsToolbarHeight
-            self.homeToolbar!.frame.origin.y = self.homeToolbar!.frame.origin.y + self.buttonsToolbarHeight / 2
-        })
+        if deviceOrientationLandscape {
+            UIView.animateWithDuration(0.2, animations: {
+                self.buttonsToolbar!.frame.origin.x = -self.buttonsToolbar!.frame.width
+                self.homeToolbar!.frame.origin.x = 0
+            })
+        } else {
+            UIView.animateWithDuration(0.2, animations: {
+                self.buttonsToolbar!.frame.origin.y = self.buttonsToolbar!.frame.origin.y - self.buttonsToolbarHeight
+                self.homeToolbar!.frame.origin.y = self.homeToolbar!.frame.origin.y + self.buttonsToolbarHeight / 2
+            })
+        }
     }
 
 }

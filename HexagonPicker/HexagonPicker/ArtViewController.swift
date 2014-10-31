@@ -62,8 +62,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         screenSize = self.view.bounds
-        updateScreenSize()
-        
+        println("before: \(screenSize)")
+        //updateScreenSize()
+        println("after: \(screenSize)")
         fillViewWithButtons()
         
         var mask = UIImage(named: "hexagon_100.png")!
@@ -189,7 +190,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func updateScreenSize() -> Bool {
-        let deviceOrientationPortrait =  ((deviceOrientation == UIDeviceOrientation.Portrait) || (deviceOrientation == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
+        let deviceOrientationPortrait = ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
         let minSize = screenSize!.size.width < screenSize!.height ? screenSize!.size.width : screenSize!.height
         let maxSize = screenSize!.size.width > screenSize!.height ? screenSize!.size.width : screenSize!.height
         if deviceOrientationPortrait {

@@ -9,3 +9,5 @@
 #import <AWSiOSSDKv2/DynamoDB.h>
 #import <AWSiOSSDKv2/SQS.h>
 #import <AWSiOSSDKv2/SNS.h>
+
+#import <Parse/Parse.h>
