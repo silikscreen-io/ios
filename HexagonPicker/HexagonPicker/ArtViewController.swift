@@ -368,7 +368,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         }
         
         let activityViewController = UIActivityViewController(activityItems: sharingItems, applicationActivities: nil)
-        if iOS8Delta {
+        if iOS8Delta && UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             activityViewController.popoverPresentationController!.sourceView = shareButton
         }
         self.presentViewController(activityViewController, animated: true, completion: nil)

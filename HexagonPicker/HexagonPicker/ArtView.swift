@@ -13,9 +13,8 @@ class ArtView: UIImageView {
     
     let padding: CGFloat = 10
     
-    let buttonWidth: CGFloat = 50
+    let buttonWidth: CGFloat = 34
     var artistButton: HexaButton?
-    var shareButton: UIButton?
     var parentViewController: UIViewController?
 
     init(_ art: Art, _ length: CGFloat, _ width: CGFloat, _ heigth: CGFloat, _ parentViewController: UIViewController, _ deviceOrientationLandscape: Bool) {
@@ -51,17 +50,6 @@ class ArtView: UIImageView {
         artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(4))]))
         artistButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(artistButton!)
-        
-        shareButton = UIButton()
-        shareButton!.setTitle("...", forState: UIControlState.Normal)
-        shareButton!.titleLabel!.font = UIFont(name: "Superclarendon-Bold", size: 35)
-        shareButton!.titleLabel!.textColor = UIColor.whiteColor()
-        shareButton!.sizeToFit()
-        let newSize = CGSize(width: shareButton!.frame.width + padding * 2, height: shareButton!.frame.height)
-        shareButton!.frame.size = newSize
-        shareButton!.frame = CGRect(origin: CGPoint(x: self.bounds.width - shareButton!.frame.width, y: self.bounds.height - shareButton!.frame.height), size: shareButton!.frame.size)
-        shareButton!.addTarget(self, action: "shareButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        addSubview(shareButton!)
     }
     
     
@@ -70,34 +58,6 @@ class ArtView: UIImageView {
         let userDetailViewController = ArtistDetailViewController()
         userDetailViewController.homeViewController = parentViewController!
         parentViewController!.presentViewController(userDetailViewController, animated: true, completion: nil)
-    }
-    
-    
-    
-    func shareButtonPressed(button: UIButton) {
-        shareTextImageAndURL(sharingText: "HHHHHHH", sharingImage: image, sharingURL: NSURL(string: "https://www.cocoacontrols.com/"))
-    }
-    
-    
-    
-    func shareTextImageAndURL(#sharingText: String?, sharingImage: UIImage?, sharingURL: NSURL?) {
-        var sharingItems = [AnyObject]()
-        
-        if let text = sharingText {
-            sharingItems.append(text)
-        }
-        if let image = sharingImage {
-            sharingItems.append(image)
-        }
-        if let url = sharingURL {
-            sharingItems.append(url)
-        }
-        
-        let activityViewController = UIActivityViewController(activityItems: sharingItems, applicationActivities: nil)
-        if iOS8Delta {
-            activityViewController.popoverPresentationController!.sourceView = shareButton
-        }
-        parentViewController!.presentViewController(activityViewController, animated: true, completion: nil)
     }
     
     
