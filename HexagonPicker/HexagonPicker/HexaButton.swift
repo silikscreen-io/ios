@@ -14,6 +14,7 @@ var gSmallRadiusr: CGFloat = 0.86603 * gBigRadius
 var gHeight: CGFloat = 2 * gSmallRadiusr
 var gXStep: CGFloat = 0.5 * gBigRadius
 var maskImage: UIImage?
+var maskImages: [Int: UIImage] = [:]
 
 var buttons: [Int: HexaButton] = [:]
 
@@ -45,7 +46,7 @@ class HexaButton: UIButton {
         r = 0.86603 * R!
         height = 2 * r!
         xStep =  0.5 * R!
-        super.init(frame: CGRectMake(x, y, width, height!))
+        super.init(frame: CGRectMake(x, y, height!, width))
     }
     
     
@@ -57,7 +58,7 @@ class HexaButton: UIButton {
     
     
     class func addButton(x: CGFloat, y: CGFloat, target: AnyObject?, action: Selector, view: UIView) {
-        var button = HexaButton(frame: CGRectMake(x, y, gWidth, gHeight))
+        var button = HexaButton(frame: CGRectMake(x, y, gHeight, gWidth))
         button.R = gBigRadius
         button.width = gWidth
         button.r = gSmallRadiusr
@@ -137,12 +138,12 @@ class HexaButton: UIButton {
         
         //// Polygon Drawing
         var polygonPath = UIBezierPath()
-        polygonPath.moveToPoint(CGPointMake(self.xStep!, 0))
-        polygonPath.addLineToPoint(CGPointMake(self.xStep! + self.R!, 0))
-        polygonPath.addLineToPoint(CGPointMake(self.width!, self.r!))
-        polygonPath.addLineToPoint(CGPointMake(self.xStep! + self.R!, self.height!))
-        polygonPath.addLineToPoint(CGPointMake(self.xStep!, self.height!))
-        polygonPath.addLineToPoint(CGPointMake(0, self.r!))
+        polygonPath.moveToPoint(CGPointMake(self.r!, 0))
+        polygonPath.addLineToPoint(CGPointMake(self.height!, self.xStep!))
+        polygonPath.addLineToPoint(CGPointMake(self.height!, self.xStep! + self.R!))
+        polygonPath.addLineToPoint(CGPointMake(self.r!, self.width!))
+        polygonPath.addLineToPoint(CGPointMake(0, self.width! - self.xStep!))
+        polygonPath.addLineToPoint(CGPointMake(0, self.xStep!))
         polygonPath.closePath()
         
         if image != nil {

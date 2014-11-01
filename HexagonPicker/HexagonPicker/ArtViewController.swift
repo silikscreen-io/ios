@@ -54,7 +54,8 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var screenSize: CGRect?
     
     var homeToolbar: UIToolbar!
-    var firstLayout = true;
+    var firstLayout = true
+    var orientationUpdated = false
     
     
     override func viewDidLoad() {
@@ -62,6 +63,18 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         self.view.backgroundColor = UIColor.blackColor()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        initMaskImageForHexaButton()
+    }
+    
+    
+    
+    func initMaskImageForHexaButton() {
+        var mask = UIImage(named: "hexagon_100_r.png")!
+        UIGraphicsBeginImageContext(CGSize(width: gHeight, height: gWidth))
+        mask.drawInRect(CGRectMake(0, 0, gHeight, gWidth))
+        var newImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        maskImage = newImage
     }
     
     
@@ -74,13 +87,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         screenSize = self.view.bounds
         //updateScreenSize()
         fillViewWithButtons()
-        
-        var mask = UIImage(named: "hexagon_100.png")!
-        UIGraphicsBeginImageContext(CGSize(width: gWidth, height: gHeight))
-        mask.drawInRect(CGRectMake(0, 0, gWidth, gHeight))
-        var newImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        maskImage = newImage
         
         initScrollView()
         
@@ -334,6 +340,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 presentViewController(mapViewController, animated: true, completion: nil)
             }
         } else {
+            buttons.removeAll(keepCapacity: false)
             delegate.dismissArtViewController()
         }
     }
@@ -375,6 +382,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         } else if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
             (homeViewController as ArtFeedViewController).dismissArtViewController()
         }
+        buttons.removeAll(keepCapacity: false)
     }
     
     
@@ -382,6 +390,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     func dismissMap() {
         self.dismissViewControllerAnimated(true, completion: {
             if self.homeViewController != nil {
+                buttons.removeAll(keepCapacity: false)
                 (self.homeViewController as ArtFeedViewController).dismissArtViewController()
             }
         })
@@ -451,18 +460,18 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             var firstLine = true
             var x: CGFloat = 0
             var y: CGFloat = 0
-            while trunc(y + gHeight) <= maxY {
-                while trunc(x + gWidth) <= maxX {
+            while trunc(y + gWidth) <= maxY {
+                while trunc(x + gHeight) <= maxX {
                     HexaButton.addButton(x, y: y, target: self, action: "buttonPressed:", view: self.view)
-                    x += gWidth + gBigRadius
+                    x += gHeight
                 }
                 firstLine = !firstLine
                 if firstLine {
                     x = 0
                 } else {
-                    x = gWidth - gXStep
+                    x = gSmallRadiusr
                 }
-                y += gSmallRadiusr
+                y += gBigRadius + gXStep
             }
             dispatch_async(dispatch_get_main_queue(), {
                 self.fillButtonWithImage("ann.jpg")
@@ -484,27 +493,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func optimizeHexagonWidth() {
         let screenWidth = screenSize!.width
-        //println(screenWidth)
-        var x: CGFloat = 0
-        var currentWidth: CGFloat = gWidth
-        var firstHexagon = true
-        var numberOfFullHexagones: CGFloat = 0
-        var numberOfHalfHexagones: CGFloat = 0
-        while (x + currentWidth) <= screenWidth {
-            x += currentWidth
-            if firstHexagon {
-                numberOfFullHexagones++
-            } else {
-                numberOfHalfHexagones++
-            }
-            firstHexagon = !firstHexagon
-            currentWidth = firstHexagon ? gWidth : gBigRadius
-        }
-        if firstHexagon {
-            numberOfFullHexagones++
-        }
-        var radius = screenWidth / (2 * numberOfFullHexagones + numberOfHalfHexagones)
-        initHexagonWithRadius(radius)
+        let numberOfHexagones = trunc(screenWidth / (gSmallRadiusr * 2))
+        var radius = screenWidth / (numberOfHexagones * 2)
+        initHexagonWithSmallRadius(radius)
     }
     
     
@@ -513,6 +504,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         if !updateScreenSize() {
             return
         }
+        orientationUpdated = true
 
         //backgroundImageView!.frame = getFrameForbackgroundImageView()
         updateScrollView()
@@ -532,22 +524,22 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         var x: CGFloat = 0
         var y: CGFloat = 0
         var index: Int = 0
-        while trunc(y + gHeight) <= maxY {
-            while trunc(x + gWidth) <= maxX {
+        while trunc(y + gWidth) <= maxY {
+            while trunc(x + gHeight) <= maxX {
                 if index >= buttons.count {
                     return
                 }
                 buttons[index]!.frame.origin = CGPoint(x: x, y: y)
-                x += gWidth + gBigRadius
+                x += gHeight
                 ++index
             }
             firstLine = !firstLine
             if firstLine {
                 x = 0
             } else {
-                x = gWidth - gXStep
+                x = gSmallRadiusr
             }
-            y += gSmallRadiusr
+            y += gBigRadius + gXStep
         }
     }
     
@@ -557,6 +549,16 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         gBigRadius = 18
         gWidth = 2 * gBigRadius
         gSmallRadiusr = 0.86603 * gBigRadius
+        gHeight = 2 * gSmallRadiusr
+        gXStep = 0.5 * gBigRadius
+    }
+    
+    
+    
+    func initHexagonWithSmallRadius(radius: CGFloat) {
+        gSmallRadiusr = radius
+        gBigRadius = radius / 0.86603
+        gWidth = 2 * gBigRadius
         gHeight = 2 * gSmallRadiusr
         gXStep = 0.5 * gBigRadius
     }

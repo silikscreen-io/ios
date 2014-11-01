@@ -61,6 +61,7 @@
 		B5339BF019F9B8A1003B1C88 /* home_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B5339BEF19F9B8A1003B1C88 /* home_icon.png */; };
 		B5339BF419FA66E4003B1C88 /* Art.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF319FA66E4003B1C88 /* Art.swift */; };
 		B5339BF619FA6B8F003B1C88 /* GMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF519FA6B8F003B1C88 /* GMarker.swift */; };
+		B5425D491A0516A2008B5CA0 /* hexagon_100_r.png in Resources */ = {isa = PBXBuildFile; fileRef = B5425D481A0516A2008B5CA0 /* hexagon_100_r.png */; };
 		B558EB7719FEA04A00C98904 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */; };
 		B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B558EB7819FEA49800C98904 /* ArtContentImageView.swift */; };
 		B565D1DE1A04571A0058860D /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1DD1A04571A0058860D /* UbertestersSDK.framework */; };
@@ -156,6 +157,7 @@
 		B5339BEF19F9B8A1003B1C88 /* home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_icon.png; sourceTree = "<group>"; };
 		B5339BF319FA66E4003B1C88 /* Art.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Art.swift; sourceTree = "<group>"; };
 		B5339BF519FA6B8F003B1C88 /* GMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMarker.swift; sourceTree = "<group>"; };
+		B5425D481A0516A2008B5CA0 /* hexagon_100_r.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hexagon_100_r.png; sourceTree = "<group>"; };
 		B558EB7519FEA04A00C98904 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		B558EB7819FEA49800C98904 /* ArtContentImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtContentImageView.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 		B5173DB219F2726C00B50011 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B5425D481A0516A2008B5CA0 /* hexagon_100_r.png */,
 				B5173DE419F2D30600B50011 /* hexagon_100.png */,
 				B5173DDA19F2B0AD00B50011 /* ann.jpg */,
 				B5173DDB19F2B0AD00B50011 /* gal.jpg */,
@@ -484,6 +487,7 @@
 				B5339BE919F97963003B1C88 /* Picture4.jpg in Resources */,
 				B51C979A19F9357500F286C5 /* audio_w.png in Resources */,
 				B5173DE019F2B0AD00B50011 /* rah.jpg in Resources */,
+				B5425D491A0516A2008B5CA0 /* hexagon_100_r.png in Resources */,
 				B5173DD919F290CB00B50011 /* user.jpg in Resources */,
 				B51C979D19F9357500F286C5 /* video_b.png in Resources */,
 				B51C979C19F9357500F286C5 /* email_w.png in Resources */,
