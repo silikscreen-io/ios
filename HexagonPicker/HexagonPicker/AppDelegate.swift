@@ -40,6 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         deviceOrientation = UIDevice.currentDevice().orientation
         let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
         println("deviceOrientation " + devOrientation)
+        
+        //Ubertesters.shared().initializeWithOptions(UbertestersActivationModeManual)
         return true
     }
 

@@ -11,3 +11,5 @@
 #import <AWSiOSSDKv2/SNS.h>
 
 #import <Parse/Parse.h>
+
+#import <UbertestersSDK/Ubertesters.h>

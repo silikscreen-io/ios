@@ -63,6 +63,10 @@
 		B5339BF619FA6B8F003B1C88 /* GMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5339BF519FA6B8F003B1C88 /* GMarker.swift */; };
 		B558EB7719FEA04A00C98904 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */; };
 		B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B558EB7819FEA49800C98904 /* ArtContentImageView.swift */; };
+		B565D1DE1A04571A0058860D /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1DD1A04571A0058860D /* UbertestersSDK.framework */; };
+		B565D1E01A04575B0058860D /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1DF1A04575B0058860D /* AdSupport.framework */; };
+		B565D1E21A04576F0058860D /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1E11A04576F0058860D /* CoreImage.framework */; };
+		B565D1E41A04577B0058860D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1E31A04577B0058860D /* CoreTelephony.framework */; };
 		B57DE42719F5B65700F47A00 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57DE42619F5B65700F47A00 /* CoreLocation.framework */; };
 		B57DE42E19F5C16600F47A00 /* Picture1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42B19F5C16600F47A00 /* Picture1.jpg */; };
 		B57DE42F19F5C16600F47A00 /* Picture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42C19F5C16600F47A00 /* Picture2.jpg */; };
@@ -155,6 +159,10 @@
 		B558EB7519FEA04A00C98904 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		B558EB7819FEA49800C98904 /* ArtContentImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtContentImageView.swift; sourceTree = "<group>"; };
+		B565D1DD1A04571A0058860D /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
+		B565D1DF1A04575B0058860D /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		B565D1E11A04576F0058860D /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		B565D1E31A04577B0058860D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		B57DE42619F5B65700F47A00 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B57DE42B19F5C16600F47A00 /* Picture1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture1.jpg; sourceTree = "<group>"; };
 		B57DE42C19F5C16600F47A00 /* Picture2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture2.jpg; sourceTree = "<group>"; };
@@ -179,7 +187,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B52898F319F7A61B000CC9EF /* OpenGLES.framework in Frameworks */,
+				B565D1E41A04577B0058860D /* CoreTelephony.framework in Frameworks */,
+				B565D1E21A04576F0058860D /* CoreImage.framework in Frameworks */,
+				B565D1E01A04575B0058860D /* AdSupport.framework in Frameworks */,
 				B57E9B561A02B65000BCAA35 /* StoreKit.framework in Frameworks */,
+				B565D1DE1A04571A0058860D /* UbertestersSDK.framework in Frameworks */,
 				B57E9B541A02B64200BCAA35 /* Security.framework in Frameworks */,
 				B57E9B521A02B62F00BCAA35 /* MobileCoreServices.framework in Frameworks */,
 				B57DE42719F5B65700F47A00 /* CoreLocation.framework in Frameworks */,
@@ -189,7 +202,6 @@
 				B5B9119619F9615400A8806C /* Foundation.framework in Frameworks */,
 				B52898F719F7A636000CC9EF /* SystemConfiguration.framework in Frameworks */,
 				B52898F519F7A627000CC9EF /* QuartzCore.framework in Frameworks */,
-				B52898F319F7A61B000CC9EF /* OpenGLES.framework in Frameworks */,
 				B528990C19F7B828000CC9EF /* UICKeyChainStore.framework in Frameworks */,
 				B52898F119F7A611000CC9EF /* libz.dylib in Frameworks */,
 				B52898EF19F7A603000CC9EF /* libicucore.dylib in Frameworks */,
@@ -328,6 +340,10 @@
 		B57DE42519F5B61A00F47A00 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B565D1E31A04577B0058860D /* CoreTelephony.framework */,
+				B565D1E11A04576F0058860D /* CoreImage.framework */,
+				B565D1DF1A04575B0058860D /* AdSupport.framework */,
+				B565D1DD1A04571A0058860D /* UbertestersSDK.framework */,
 				B57E9B551A02B65000BCAA35 /* StoreKit.framework */,
 				B57E9B531A02B64200BCAA35 /* Security.framework */,
 				B57E9B511A02B62E00BCAA35 /* MobileCoreServices.framework */,

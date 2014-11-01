@@ -54,10 +54,12 @@ class ArtView: UIImageView {
         
         shareButton = UIButton()
         shareButton!.setTitle("...", forState: UIControlState.Normal)
-        shareButton!.titleLabel!.font = UIFont(name: "Superclarendon-Bold", size: 25)
+        shareButton!.titleLabel!.font = UIFont(name: "Superclarendon-Bold", size: 35)
         shareButton!.titleLabel!.textColor = UIColor.whiteColor()
         shareButton!.sizeToFit()
-        shareButton!.frame = CGRect(origin: CGPoint(x: self.bounds.width - shareButton!.frame.width - padding, y: self.bounds.height - shareButton!.frame.height - padding), size: shareButton!.frame.size)
+        let newSize = CGSize(width: shareButton!.frame.width + padding * 2, height: shareButton!.frame.height)
+        shareButton!.frame.size = newSize
+        shareButton!.frame = CGRect(origin: CGPoint(x: self.bounds.width - shareButton!.frame.width, y: self.bounds.height - shareButton!.frame.height), size: shareButton!.frame.size)
         shareButton!.addTarget(self, action: "shareButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(shareButton!)
     }
