@@ -127,6 +127,20 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     
+//    func mapView(mapView: GMSMapView!, markerInfoContents marker: GMSMarker!) -> UIView! {
+//    }
+    
+    
+    
+    func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
+        let preview = UIImageView(image: (marker as GMarker).art!.image)
+        let scaleFactor = preview.bounds.width / preview.bounds.height
+        preview.frame = CGRect(origin: preview.frame.origin, size: CGSize(width: 200 * scaleFactor, height: 200))
+        return preview
+    }
+    
+    
+    
     func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
         let artViewController = ArtViewController()
         artViewController.art = tappedMarker!.art
