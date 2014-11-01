@@ -97,14 +97,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B5173DAF19F2726C00B50011 /* HexagonPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HexagonPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5173DAF19F2726C00B50011 /* Silkscreen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Silkscreen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5173DB319F2726C00B50011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5173DB419F2726C00B50011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5173DB619F2726C00B50011 /* ArtViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtViewController.swift; sourceTree = "<group>"; };
 		B5173DB919F2726C00B50011 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B5173DBB19F2726C00B50011 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B5173DBE19F2726C00B50011 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		B5173DC419F2726C00B50011 /* HexagonPickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HexagonPickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5173DC419F2726C00B50011 /* SilkscreenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SilkscreenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5173DC919F2726C00B50011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5173DCA19F2726C00B50011 /* HexagonPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagonPickerTests.swift; sourceTree = "<group>"; };
 		B5173DD419F2729B00B50011 /* gemeos.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gemeos.jpg; sourceTree = "<group>"; };
@@ -247,8 +247,8 @@
 		B5173DB019F2726C00B50011 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B5173DAF19F2726C00B50011 /* HexagonPicker.app */,
-				B5173DC419F2726C00B50011 /* HexagonPickerTests.xctest */,
+				B5173DAF19F2726C00B50011 /* Silkscreen.app */,
+				B5173DC419F2726C00B50011 /* SilkscreenTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -399,9 +399,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B5173DAE19F2726C00B50011 /* HexagonPicker */ = {
+		B5173DAE19F2726C00B50011 /* Silkscreen */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B5173DCE19F2726C00B50011 /* Build configuration list for PBXNativeTarget "HexagonPicker" */;
+			buildConfigurationList = B5173DCE19F2726C00B50011 /* Build configuration list for PBXNativeTarget "Silkscreen" */;
 			buildPhases = (
 				B5173DAB19F2726C00B50011 /* Sources */,
 				B5173DAC19F2726C00B50011 /* Frameworks */,
@@ -411,14 +411,14 @@
 			);
 			dependencies = (
 			);
-			name = HexagonPicker;
+			name = Silkscreen;
 			productName = HexagonPicker;
-			productReference = B5173DAF19F2726C00B50011 /* HexagonPicker.app */;
+			productReference = B5173DAF19F2726C00B50011 /* Silkscreen.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B5173DC319F2726C00B50011 /* HexagonPickerTests */ = {
+		B5173DC319F2726C00B50011 /* SilkscreenTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B5173DD119F2726C00B50011 /* Build configuration list for PBXNativeTarget "HexagonPickerTests" */;
+			buildConfigurationList = B5173DD119F2726C00B50011 /* Build configuration list for PBXNativeTarget "SilkscreenTests" */;
 			buildPhases = (
 				B5173DC019F2726C00B50011 /* Sources */,
 				B5173DC119F2726C00B50011 /* Frameworks */,
@@ -429,9 +429,9 @@
 			dependencies = (
 				B5173DC619F2726C00B50011 /* PBXTargetDependency */,
 			);
-			name = HexagonPickerTests;
+			name = SilkscreenTests;
 			productName = HexagonPickerTests;
-			productReference = B5173DC419F2726C00B50011 /* HexagonPickerTests.xctest */;
+			productReference = B5173DC419F2726C00B50011 /* SilkscreenTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -453,7 +453,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B5173DAA19F2726C00B50011 /* Build configuration list for PBXProject "HexagonPicker" */;
+			buildConfigurationList = B5173DAA19F2726C00B50011 /* Build configuration list for PBXProject "Silkscreen" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -466,8 +466,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B5173DAE19F2726C00B50011 /* HexagonPicker */,
-				B5173DC319F2726C00B50011 /* HexagonPickerTests */,
+				B5173DAE19F2726C00B50011 /* Silkscreen */,
+				B5173DC319F2726C00B50011 /* SilkscreenTests */,
 			);
 		};
 /* End PBXProject section */
@@ -552,7 +552,7 @@
 /* Begin PBXTargetDependency section */
 		B5173DC619F2726C00B50011 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B5173DAE19F2726C00B50011 /* HexagonPicker */;
+			target = B5173DAE19F2726C00B50011 /* Silkscreen */;
 			targetProxy = B5173DC519F2726C00B50011 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -672,7 +672,7 @@
 				INFOPLIST_FILE = HexagonPicker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Silkscreen;
 				SWIFT_OBJC_BRIDGING_HEADER = "HexagonPicker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -693,7 +693,7 @@
 				INFOPLIST_FILE = HexagonPicker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Silkscreen;
 				SWIFT_OBJC_BRIDGING_HEADER = "HexagonPicker-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -713,8 +713,8 @@
 				);
 				INFOPLIST_FILE = HexagonPickerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HexagonPicker.app/HexagonPicker";
+				PRODUCT_NAME = SilkscreenTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/$(PROJECT_NAME).app/$(PROJECT_NAME)";
 			};
 			name = Debug;
 		};
@@ -728,15 +728,15 @@
 				);
 				INFOPLIST_FILE = HexagonPickerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HexagonPicker.app/HexagonPicker";
+				PRODUCT_NAME = SilkscreenTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/$(PROJECT_NAME).app/$(PROJECT_NAME)";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B5173DAA19F2726C00B50011 /* Build configuration list for PBXProject "HexagonPicker" */ = {
+		B5173DAA19F2726C00B50011 /* Build configuration list for PBXProject "Silkscreen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B5173DCC19F2726C00B50011 /* Debug */,
@@ -745,7 +745,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B5173DCE19F2726C00B50011 /* Build configuration list for PBXNativeTarget "HexagonPicker" */ = {
+		B5173DCE19F2726C00B50011 /* Build configuration list for PBXNativeTarget "Silkscreen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B5173DCF19F2726C00B50011 /* Debug */,
@@ -754,7 +754,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B5173DD119F2726C00B50011 /* Build configuration list for PBXNativeTarget "HexagonPickerTests" */ = {
+		B5173DD119F2726C00B50011 /* Build configuration list for PBXNativeTarget "SilkscreenTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B5173DD219F2726C00B50011 /* Debug */,

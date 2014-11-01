@@ -8,7 +8,7 @@
         <!--Map View Controller-->
         <scene sceneID="Zda-5M-Sqe">
             <objects>
-                <viewController id="pnv-XL-coI" customClass="GMapViewController" customModule="HexagonPicker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="pnv-XL-coI" customClass="GMapViewController" customModule="Silkscreen" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Tv5-gU-Wz3"/>
                         <viewControllerLayoutGuide type="bottom" id="f0z-bj-PUA"/>
@@ -29,7 +29,7 @@
         <!--Art Feed View Controller-->
         <scene sceneID="TY7-zC-O0N">
             <objects>
-                <viewController id="WNY-R6-79i" customClass="ArtFeedViewController" customModule="HexagonPicker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="WNY-R6-79i" customClass="ArtFeedViewController" customModule="Silkscreen" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RZb-UL-zpr"/>
                         <viewControllerLayoutGuide type="bottom" id="uLO-6N-Ukv"/>
@@ -51,7 +51,7 @@
         <!--Login Web View Controller-->
         <scene sceneID="78R-TP-XR1">
             <objects>
-                <viewController id="Zhl-CF-D8k" customClass="LoginWebViewController" customModule="HexagonPicker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Zhl-CF-D8k" customClass="LoginWebViewController" customModule="Silkscreen" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="q1s-L1-ces"/>
                         <viewControllerLayoutGuide type="bottom" id="58U-TH-lYe"/>
@@ -87,7 +87,7 @@
         <!--Art View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ArtViewController" customModule="HexagonPicker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ArtViewController" customModule="Silkscreen" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zCq-g9-ugS"/>
                         <viewControllerLayoutGuide type="bottom" id="ZG3-Xv-Ro2"/>

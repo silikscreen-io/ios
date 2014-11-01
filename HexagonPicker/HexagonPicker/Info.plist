@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>vaisoft.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>com.vaisoft.HexagonPicker</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -39,13 +39,13 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>ubertesters_organization_token</key>
-	<string>64bfd386-6158-11e4-8c54-22000ac44c54</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>ubertesters_organization_token</key>
+	<string>64bfd386-6158-11e4-8c54-22000ac44c54</string>
 </dict>
 </plist>
