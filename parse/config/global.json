@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "silkscreen"
+        }, 
+        "silkscreen": {
+            "applicationId": "CHd4NrA6zIzEIvYXUKcsOKvo3rLmRNwwt9LV3DwA", 
+            "masterKey": "nLBRcTi6SVZnbKceLA2Gy1VmmRXv7JwEWfRdCD1G"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.1"
+    }
+}

@@ -8,6 +8,9 @@
 
 import UIKit
 
+let queue = dispatch_queue_create("com.example.MyQueue", nil)
+
+
 class ArtView: UIImageView {
     let users = ["ann.jpg", "gal.jpg", "rah.jpg", "ste.jpg"]
     
@@ -16,10 +19,13 @@ class ArtView: UIImageView {
     let buttonWidth: CGFloat = 34
     var artistButton: HexaButton?
     var parentViewController: UIViewController?
-
+    
+    var art: Art?
+    
     init(_ art: Art, _ length: CGFloat, _ width: CGFloat, _ heigth: CGFloat, _ parentViewController: UIViewController, _ deviceOrientationLandscape: Bool) {
         super.init()
         self.parentViewController = parentViewController
+        self.art = art
         
         let imageSize = art.image!.size
         let imageWidth = imageSize.width
@@ -32,7 +38,6 @@ class ArtView: UIImageView {
             frame.origin.y = length
         }
         frame.size = (deviceOrientationLandscape ? CGSize(width: imageViewLength, height: heigth) : CGSize(width: width, height: imageViewLength))
-        self.frame = frame
         image = art.image
         
         let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
@@ -40,6 +45,58 @@ class ArtView: UIImageView {
         userInteractionEnabled = true
         addGestureRecognizer(singleTap)
         initButtons(width, heigth)
+    }
+    
+    
+    
+    func update(art: Art, _ deviceOrientationLandscape: Bool) {
+//        dispatch_async(queue, {
+//            self.art = art
+//            self.image = art.image
+////            var error: NSError?
+////            let imageData: NSData? = NSData(contentsOfURL: NSURL(string: link)!, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &error)
+////            if error == nil {
+////                pictures1[link] = UIImage(data: imageData!)
+////                dispatch_async(dispatch_get_main_queue(), {
+////                    NSNotificationCenter.defaultCenter().postNotificationName(pictureLoadedNotification, object:self)
+////                })
+////            }
+//        });
+        self.art = art
+        image = art.image
+        
+//        let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
+//        singleTap.numberOfTapsRequired = 1
+//        userInteractionEnabled = true
+//        addGestureRecognizer(singleTap)
+    }
+    
+    
+    
+    func resize(length: CGFloat, _ width: CGFloat, _ heigth: CGFloat, _ deviceOrientationLandscape: Bool) {
+        println(frame)
+        let size = frame.size
+        let currentWidth = size.width
+        let currentHeight = size.height
+        let scaleFactor = (deviceOrientationLandscape ? currentHeight / heigth : currentWidth / width)
+        let imageViewLength = (deviceOrientationLandscape ? currentWidth / scaleFactor : currentHeight / scaleFactor)
+        frame.origin = CGPoint()
+        if deviceOrientationLandscape {
+            frame.origin.x = length
+        } else {
+            frame.origin.y = length
+        }
+        frame.size = (deviceOrientationLandscape ? CGSize(width: imageViewLength, height: heigth) : CGSize(width: width, height: imageViewLength))
+        println(frame)
+        
+        resizeButtons(width, heigth)
+    }
+    
+    
+    
+    func resizeButtons(width: CGFloat, _ heigth: CGFloat) {
+        let x = (width < heigth ? bounds.width - buttonWidth - padding : padding)
+        artistButton!.frame = CGRect(origin: CGPoint(x: x, y: padding), size: artistButton!.frame.size)
     }
     
     

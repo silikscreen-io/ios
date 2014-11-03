@@ -9,9 +9,11 @@
 import UIKit
 
 var artists: [String: Artist] = [:]
-let ARTIST_NAME_FIELD_ID = "artist_name"
+let ARTIST_NAME_FIELD_ID = "name"
 
 class Artist: NSObject {
+    
+    var pfObject: PFObject?
     
     var name: String = "Name unavailable"
    
@@ -30,6 +32,14 @@ class Artist: NSObject {
         if artist == nil {
             artist = Artist(artistName)
         }
-        artist!.arts.append(Art.addArt(artist!, pfObject))
+        //artist!.arts.append(Art.addArt(artist!, pfObject))
+        artist!.pfObject = pfObject
+        artists[artistName] = artist
+    }
+    
+    
+    
+    func addArt(art: Art) {
+        arts.append(art)
     }
 }

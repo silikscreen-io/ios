@@ -8,8 +8,12 @@
 
 import UIKit
 
+let IMAGE_FOR_ART_LOADED_NOTIFICATION_ID = "imageForArtLoadedNotification"
+let IMAGE_FOR_ART_RELOADED_NOTIFICATION_ID = "imageForArtReloadedNotification"
 var arts: [Art] = []
-
+var artsDisplayed: [Art] = []
+let MAX_NUMBER_OF_LOADED_IMAGES = 20
+var currentNumberOfLoadedImages = 0
 
 protocol ArtDelegate {
     func artTapped(art: Art)
@@ -17,12 +21,15 @@ protocol ArtDelegate {
 
 
 class Art: NSObject {
+    let LOCATION_FIELD_ID = "location"
     let LATITUDE_FIELD_ID = "lat"
     let LONGITUDE_FIELD_ID = "lng"
     let ART_DESCRIPTION_ID = "image_alt"
     let WORK_STATUS_ID = "work_status"
     
     var delegate: ArtDelegate?
+    
+    var pfObject: PFObject?
     
     weak var artist: Artist?
    
@@ -32,23 +39,62 @@ class Art: NSObject {
     var artStatus: String = "Status unavailable"
     var location: CLLocationCoordinate2D?
     
+    var imageIndex: Int?
     
-    init(_ artist: Artist, _ pfObject: PFObject) {
+    
+    init(_ artist: Artist?, _ pfObject: PFObject) {
         super.init()
-        let lat = (pfObject[LATITUDE_FIELD_ID] as NSString).doubleValue
-        let lng = (pfObject[LONGITUDE_FIELD_ID] as NSString).doubleValue
-        location = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-//        location = CLLocationCoordinate2D(latitude: pfObject[LATITUDE_FIELD_ID] as CLLocationDegrees, longitude: pfObject[LONGITUDE_FIELD_ID] as CLLocationDegrees)
+        if artist != nil {
+            self.artist = artist
+            self.artist!.addArt(self)
+        }
+        self.pfObject = pfObject
+        let locationObject = pfObject[LOCATION_FIELD_ID] as PFGeoPoint
+        self.location = CLLocationCoordinate2D(latitude: locationObject.latitude, longitude: locationObject.longitude)
         artDescription = pfObject[ART_DESCRIPTION_ID] as String
         artStatus = pfObject[WORK_STATUS_ID] as String
-        let imageFile = pfObject["image"] as PFFile
-        imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
-            if error == nil {
-                self.image = UIImage(data:imageData)
-                self.initIconImage()
+        loadImage()
+    }
+    
+    
+    
+    func loadImage(_ artView: ArtView? = nil) {
+        if currentNumberOfLoadedImages < MAX_NUMBER_OF_LOADED_IMAGES {
+            currentNumberOfLoadedImages++
+            println("Image stated load: \(currentNumberOfLoadedImages)")
+            self.imageIndex = currentNumberOfLoadedImages
+            let imageFile = pfObject!["image"] as PFFile
+            imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
+                if error == nil {
+                    println("Image end load: \(self.imageIndex)")
+                    self.image = UIImage(data:imageData)
+                    self.initIconImage()
+                    //                    currentNumberOfLoadedImages++
+                    //println("Image loaded: \(NSDate().timeIntervalSince1970)")
+                    artsDisplayed.append(self)
+                    NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!])
+                }
             }
         }
     }
+    
+    
+    
+    func reloadImage(artView: ArtView) {
+        self.imageIndex = currentNumberOfLoadedImages
+        let imageFile = pfObject!["image"] as PFFile
+        imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
+            if error == nil {
+                //println("Image end load: \(self.imageIndex)")
+                self.image = UIImage(data:imageData)
+                //                    currentNumberOfLoadedImages++
+                //println("Image loaded: \(NSDate().timeIntervalSince1970)")
+                artsDisplayed.append(self)
+                NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_RELOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView])
+            }
+        }
+    }
+    
     
     
     convenience init(_ imageName: String, _ location: CLLocationCoordinate2D) {
@@ -128,8 +174,37 @@ class Art: NSObject {
     
     class func addArt(artist: Artist, _ pfObject: PFObject) -> Art {
         let art = Art(artist, pfObject)
+        art.pfObject = pfObject
         arts.append(art)
         return art
+    }
+    
+    
+    
+    class func addArt(pfObject: PFObject) {
+        let artistsIds = pfObject["artist"] as NSArray
+        var artist: Artist?
+        if artists.count > 0 {
+            let artistId = artistsIds[0] as? String
+            if artistId != nil {
+                artist = artists[artistId!]
+            }
+        }
+        let art = Art(artist, pfObject)
+        art.pfObject = pfObject
+        arts.append(art)
+//        println(artists)
+//        // Assume PFObject *myPost was previously created.
+//        let query = PFQuery.queryWithClassName:@"Comment"];
+//        [query whereKey:@"post" equalTo:myPost];
+//        
+//        [query findObjectsInBackgroundWithBlock:^(NSArray *comments, NSError *error) {
+//        // comments now contains the comments for myPost
+//        }];
+//        
+//        let art = Art(artist, pfObject)
+//        art.pfObject = pfObject
+//        arts.append(art)
     }
     
     

@@ -48,11 +48,36 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     var artistTopButtonNext: HexaButton?
     var artTopButtonIndex = 0
     
+    var artIndexFirstDisplayed = 0
+    var artIndexTopDisplayed = 0
+    var artIndexFirst = 0
+    
+    var firstLayout = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.blackColor()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "imageForArtLoaded:", name: IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "imageForArtReloaded:", name: IMAGE_FOR_ART_RELOADED_NOTIFICATION_ID, object: nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceOrientationDidChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+//        screenSize = self.view.bounds
+//        //updateScreenSize()
+//        initFeed()
+//        initScrollView()
+//        initNavigationBar()
+//        scrollView.delegate = self
+    }
+    
+    
+    
+    override func viewWillLayoutSubviews() {
+        if !firstLayout {
+            return
+        }
+        firstLayout = false
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceOrientationDidChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
         screenSize = self.view.bounds
+        deviceOrientationLandscape = screenSize?.width > screenSize?.height
         //updateScreenSize()
         initFeed()
         initScrollView()
@@ -85,7 +110,8 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         if !updateScreenSize() {
             return
         }
-        updateScrollView()
+//        updateScrollView()
+        updateScrollView1()
         updateNavigationBar()
     }
     
@@ -177,7 +203,9 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         fillScrollView()
         self.view.addSubview(scrollView)
         contentOffset = scrollView!.contentOffset
-        view.bringSubviewToFront(artistTopButton!)
+        if artistTopButton != nil {
+            view.bringSubviewToFront(artistTopButton!)
+        }
     }
     
     
@@ -187,6 +215,40 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         scrollView!.subviews.map{ $0.removeFromSuperview() }
         fillScrollView()
         view.bringSubviewToFront(artistTopButton!)
+    }
+    
+    
+    
+    func updateScrollView1() {
+        let contentOffset = scrollView.contentOffset
+        println(scrollView.contentOffset)
+//        if artistTopButton != nil {
+//            artistTopButton!.removeFromSuperview()
+//            artistTopButton = nil
+//            artTopButtonIndex = 0
+//        }
+        var frame = screenSize!
+        scrollView!.frame = frame
+        let screenWidth = frame.width
+        let screenHeigth = frame.height
+        var scrollViewLength: CGFloat = 0
+        frame = CGRect()
+        for artView in artViews {
+            artView.resize(scrollViewLength, screenWidth, screenHeigth, deviceOrientationLandscape)
+            scrollViewLength += (deviceOrientationLandscape ? artView.frame.width : artView.frame.height)
+//            if artistTopButton == nil {
+//                artistTopButton = artView.artistButton
+//                artistTopButton!.removeFromSuperview()
+//                view.addSubview(artistTopButton!)
+//            } else if artistTopButtonNext == nil {
+//                artistTopButtonNext = artView.artistButton
+//            }
+        }
+        scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
+        let artView = artViews[artTopButtonIndex + 1]
+        let rect = scrollView.convertRect(artView.frame, toView: view)
+        println(rect)
+        scrollView.setContentOffset(rect.origin, animated: false)//CGPoint(x: contentOffset.y, y: contentOffset.x)
     }
     
     
@@ -203,7 +265,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         let screenHeigth = frame.height
         var scrollViewLength: CGFloat = 0
         frame = CGRect()
-        for art in arts {
+        for art in artsDisplayed {
             let artView = ArtView(art, scrollViewLength, screenWidth, screenHeigth, self, deviceOrientationLandscape)
             scrollView.addSubview(artView)
             scrollViewLength += (deviceOrientationLandscape ? artView.frame.width : artView.frame.height)
@@ -218,6 +280,54 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             }
         }
         scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
+    }
+    
+    
+    
+    func imageForArtLoaded(notification: NSNotification) {
+        let notificationDictionary = (notification.userInfo! as NSDictionary)
+        let art = notificationDictionary.objectForKey("art") as Art
+        let artView = notificationDictionary.objectForKey("artView") as? ArtView
+        
+
+        if artView != nil {
+            println("View update started")
+            artView!.update(art, deviceOrientationLandscape)
+            println("View updated")
+        } else {
+            var frame = screenSize!
+            scrollView!.frame = frame
+            let screenWidth = frame.width
+            let screenHeigth = frame.height
+            var scrollViewLength = deviceOrientationLandscape ? scrollView.contentSize.width : scrollView.contentSize.height
+            frame = CGRect()
+            let artView = ArtView(art, scrollViewLength, screenWidth, screenHeigth, self, deviceOrientationLandscape)
+            scrollView.addSubview(artView)
+            scrollViewLength += (deviceOrientationLandscape ? artView.frame.width : artView.frame.height)
+            art.delegate = self
+            artViews.append(artView)
+            if artistTopButton == nil {
+                artistTopButton = artView.artistButton
+                artistTopButton!.removeFromSuperview()
+                view.addSubview(artistTopButton!)
+            } else if artistTopButtonNext == nil {
+                artistTopButtonNext = artView.artistButton
+            }
+            scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
+        }
+    }
+    
+    
+    
+    func imageForArtReloaded(notification: NSNotification) {
+        let notificationDictionary = (notification.userInfo! as NSDictionary)
+        let art = notificationDictionary.objectForKey("art") as Art
+        let artView = notificationDictionary.objectForKey("artView") as ArtView
+        var frame = screenSize!
+        scrollView!.frame = frame
+        let screenWidth = frame.width
+        let screenHeigth = frame.height
+        artView.update(art, deviceOrientationLandscape)
     }
     
     
@@ -312,19 +422,33 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func initNavigationBar() {
-        //println("initNavigationBar")
-        var frame = screenSize!
-        frame.origin.y = frame.height
-        frame.size.height = buttonsToolbarHeight / 2
-        homeToolbar = UIToolbar()
-        addToolbar(&homeToolbar, frame)
-        initHomeToolbar()
-        
-        frame.origin.y = screenSize!.height - buttonsToolbarHeight
-        frame.size.height += buttonsToolbarHeight / 2
-        buttonsToolbarView = UIView()
-        addToolbar(&buttonsToolbarView!, frame)
-        initButtonsToolbar()
+        var screenSize = self.screenSize!
+        var frame = self.screenSize!
+        if deviceOrientationLandscape {
+            frame.origin.x = screenSize.width
+            frame.size.width = buttonsToolbarHeight / 2
+            homeToolbar = UIToolbar()
+            addToolbar(&homeToolbar, frame)
+            initHomeToolbar()
+            
+            frame.origin.x = screenSize.width - buttonsToolbarHeight
+            frame.size.width = buttonsToolbarHeight
+            buttonsToolbarView = UIView()
+            addToolbar(&buttonsToolbarView!, frame)
+            initButtonsToolbar()
+        } else {
+            frame.origin.y = frame.height
+            frame.size.height = buttonsToolbarHeight / 2
+            homeToolbar = UIToolbar()
+            addToolbar(&homeToolbar, frame)
+            initHomeToolbar()
+            
+            frame.origin.y = screenSize.height - buttonsToolbarHeight
+            frame.size.height += buttonsToolbarHeight / 2
+            buttonsToolbarView = UIView()
+            addToolbar(&buttonsToolbarView!, frame)
+            initButtonsToolbar()
+        }
     }
     
     
@@ -369,20 +493,15 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func initButtonsToolbar() {
-        let buttonWidth = screenSize!.width / 4
-        let buttonSize = CGSize(width: buttonWidth, height: buttonsToolbarHeight)
-        var buttonPosition = CGPoint(x: 0, y: 0)
-        buttonHome = UIButton(frame: CGRect(origin: buttonPosition, size: buttonSize))
+        buttonHome = UIButton()
         initButton(&buttonHome!, "homeButtonPressed", "hexagon")
-        buttonPosition.x += buttonWidth
-        buttonSearch = UIButton(frame: CGRect(origin: buttonPosition, size: buttonSize))
+        buttonSearch = UIButton()
         initButton(&buttonSearch!, "searchButtonPressed", "search")
-        buttonPosition.x += buttonWidth
-        buttonMap = UIButton(frame: CGRect(origin: buttonPosition, size: buttonSize))
+        buttonMap = UIButton()
         initButton(&buttonMap!, "mapButtonPressed", "map")
-        buttonPosition.x += buttonWidth
-        buttonUser = UIButton(frame: CGRect(origin: buttonPosition, size: buttonSize))
+        buttonUser = UIButton()
         initButton(&buttonUser!, "userButtonPressed", "user")
+        updateNavigationBarButtons()
     }
     
     
@@ -500,6 +619,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+//        println(scrollView.contentOffset)
         if deviceOrientationLandscape {
             scrollViewDidScrollLandscape(scrollView)
         } else {
@@ -580,6 +700,48 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     
+    
+    func updateDesplayedArts(newIndex: Int) {
+        artIndexTopDisplayed += newIndex
+        if newIndex > 0 {
+            if artIndexTopDisplayed > MAX_NUMBER_OF_LOADED_IMAGES / 2 {
+                //artIndexTopDisplayed -= newIndex
+                println("artIndexTopDisplayed: \(artIndexTopDisplayed)")
+                artIndexFirst += newIndex
+                let addArtIndex = artIndexFirst + MAX_NUMBER_OF_LOADED_IMAGES
+                println("addArtIndex: \(addArtIndex)")
+                println("arts.count: \(arts.count)")
+                if artIndexFirst + MAX_NUMBER_OF_LOADED_IMAGES < arts.count {
+                    let newDisplayedArt = arts[addArtIndex]
+                    currentNumberOfLoadedImages--
+                    var artView: ArtView?
+                    if artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2 < artViews.count {
+                        artView = artViews[artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2]
+                    }
+                    newDisplayedArt.loadImage(artView)
+                    println("artToDeleteImageView: \(artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex)")
+//                    var artToDeleteImageView = artViews[artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex]
+//                    artToDeleteImageView.art!.image = nil
+//                    artToDeleteImageView.image = nil
+                    //                artToDeleteImageView.removeFromSuperview()
+                    //                artViews.removeAtIndex(0)
+                }
+            }
+        } else {
+            //println("artIndexTopDisplayed: \(artIndexTopDisplayed)")
+            if artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 < 0 {
+                artIndexTopDisplayed = 0
+                return
+            }
+            println("artToReloadImageView: \(artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2)")
+            let newDisplayedArtView = artViews[artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2]
+            newDisplayedArtView.art!.reloadImage(newDisplayedArtView)
+        }
+        println(artIndexTopDisplayed)
+    }
+    
+    
+    
     func scrollViewDidScrollPortraitArtistButton(scrollView: UIScrollView) {
         let scrolledDown = scrollView.contentOffset.y > contentOffset!.y
         if scrolledDown {
@@ -599,6 +761,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton!.removeFromSuperview()
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex++
+                    updateDesplayedArts(1)
                 }
             }
         } else if (artTopButtonIndex > 0) {
@@ -619,6 +782,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.frame.width - artistTopButton!.frame.width - currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex--
+                    updateDesplayedArts(-1)
                 }
             }
         }
@@ -644,6 +808,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton!.removeFromSuperview()
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex++
+                    updateDesplayedArts(1)
                 }
             }
         } else if (artTopButtonIndex > 0) {
@@ -664,6 +829,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex--
+                    updateDesplayedArts(-1)
                 }
             }
         }
