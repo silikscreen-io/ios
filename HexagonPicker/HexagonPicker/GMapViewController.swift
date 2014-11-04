@@ -174,7 +174,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func initMarkers() {
-        for art in arts {
+        for art in artsDisplayed {
             GMarker.addMarkerForArt(art, mapView!)
         }
     }

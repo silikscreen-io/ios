@@ -10,6 +10,8 @@ import UIKit
 
 class LoginWebViewController: UIViewController, UIWebViewDelegate {
     
+    var token: NSString?
+    
     let baseURL = "https://instagram.com/"
     let instagramAPIBaseURL = "https://api.instagram.com"
     let clientID = "3e334386068c4aa7b574697ed6caeba4"
@@ -21,6 +23,7 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor.blackColor()
     }
     
     
@@ -42,32 +45,27 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate {
         var urlParts = url.pathComponents as [String]
         // do any of the following here
         println(urlString)
-        if urlParts[1] == "MAMP" {
-            //if ([urlString hasPrefix: @"localhost"]) {
-            var tokenParam = urlString.rangeOfString("access_token=")
-            if tokenParam.location != NSNotFound {
-                var token: NSString = urlString.substringFromIndex(NSMaxRange(tokenParam))
-                // If there are more args, don't include them in the token:
-                var endRange = token.rangeOfString("&")
-                if endRange.location != NSNotFound {
-                    token = token.substringToIndex(endRange.location)
-                }
-                
-                println("access token \(token)")
-//                if token.length > 0 ) {
-//                    // display the photos here
-////                    instagramTableViewController *iController = [[instagramPhotosTableViewController alloc] initWithStyle:UITableViewStylePlain];
-//                    NSString* redirectUrl = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/users/self/feed?access_token=%@", token];
-//                }
-                // use delegate if you want
-                //[self.delegate instagramLoginSucceededWithToken: token];
-                
+        //if ([urlString hasPrefix: @"localhost"]) {
+        var tokenParam = urlString.rangeOfString("access_token=")
+        if tokenParam.location != NSNotFound {
+            token = urlString.substringFromIndex(NSMaxRange(tokenParam))
+            // If there are more args, don't include them in the token:
+            var endRange = token!.rangeOfString("&")
+            if endRange.location != NSNotFound {
+                token = token!.substringToIndex(endRange.location)
             }
-            else {
-                // Handle the access rejected case here.
-                println("rejected case, user denied request")
-            }
-            return false
+            let urlUser = NSURL(string: "https://api.instagram.com/v1/users/self/?access_token=\(token!)")
+            let request = NSURLRequest(URL: urlUser!)
+            var error: NSError?
+            var response: NSURLResponse?
+            let reply = NSURLConnection.sendSynchronousRequest(request, returningResponse: &response, error: &error)
+            let requestData = NSJSONSerialization.JSONObjectWithData(reply!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary
+            currentUser = User(requestData["data"] as NSDictionary)
+            self.performSegueWithIdentifier("showArtFeedSegue", sender: self)
+            
+        } else {
+            // Handle the access rejected case here.
+            println("rejected case, user denied request")
         }
         return true
     }

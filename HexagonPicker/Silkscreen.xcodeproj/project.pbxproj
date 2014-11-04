@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B504E1E01A09446D00049A5B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B504E1DF1A09446D00049A5B /* User.swift */; };
+		B504E1E31A098C5500049A5B /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B504E1E21A098C5500049A5B /* UserViewController.swift */; };
 		B5173DB519F2726C00B50011 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5173DB419F2726C00B50011 /* AppDelegate.swift */; };
 		B5173DB719F2726C00B50011 /* ArtViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5173DB619F2726C00B50011 /* ArtViewController.swift */; };
 		B5173DBA19F2726C00B50011 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5173DB819F2726C00B50011 /* Main.storyboard */; };
@@ -99,6 +101,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B504E1DF1A09446D00049A5B /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B504E1E21A098C5500049A5B /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		B5173DAF19F2726C00B50011 /* Silkscreen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Silkscreen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5173DB319F2726C00B50011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5173DB419F2726C00B50011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -277,6 +281,8 @@
 				B51856E319FFBC2F009800CE /* ArtShareMenuView.swift */,
 				B5173DD619F2765700B50011 /* HexaButton.swift */,
 				B5173DEE19F5790700B50011 /* LoginWebViewController.swift */,
+				B504E1DF1A09446D00049A5B /* User.swift */,
+				B504E1E21A098C5500049A5B /* UserViewController.swift */,
 				B52898FC19F7A859000CC9EF /* GMapViewController.swift */,
 				B5339BF519FA6B8F003B1C88 /* GMarker.swift */,
 				B52898F819F7A75C000CC9EF /* HexagonPicker-Bridging-Header.h */,
@@ -533,6 +539,8 @@
 				B5339BE519F97644003B1C88 /* ArtFeedViewController.swift in Sources */,
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
 				B57E9B581A02BA9700BCAA35 /* Artist.swift in Sources */,
+				B504E1E01A09446D00049A5B /* User.swift in Sources */,
+				B504E1E31A098C5500049A5B /* UserViewController.swift in Sources */,
 				B5339BF419FA66E4003B1C88 /* Art.swift in Sources */,
 				B5173DEF19F5790700B50011 /* LoginWebViewController.swift in Sources */,
 				B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */,

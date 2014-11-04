@@ -61,16 +61,13 @@ class Art: NSObject {
     func loadImage(_ artView: ArtView? = nil) {
         if currentNumberOfLoadedImages < MAX_NUMBER_OF_LOADED_IMAGES {
             currentNumberOfLoadedImages++
-            println("Image stated load: \(currentNumberOfLoadedImages)")
+//            println("Image started load: \(currentNumberOfLoadedImages)")
             self.imageIndex = currentNumberOfLoadedImages
             let imageFile = pfObject!["image"] as PFFile
             imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
                 if error == nil {
-                    println("Image end load: \(self.imageIndex)")
                     self.image = UIImage(data:imageData)
                     self.initIconImage()
-                    //                    currentNumberOfLoadedImages++
-                    //println("Image loaded: \(NSDate().timeIntervalSince1970)")
                     artsDisplayed.append(self)
                     NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!])
                 }
@@ -109,7 +106,7 @@ class Art: NSObject {
         var ratio: CGFloat?
         var delta: CGFloat?
         var destinationSize = CGSize(width: 30, height: 30)
-        let imageSize = image!.size
+        let imageSize = self.image!.size
         
         ratio = destinationSize.width / imageSize.width;
         if imageSize.width > imageSize.height {
@@ -127,7 +124,7 @@ class Art: NSObject {
             UIGraphicsBeginImageContext(destinationSize);
         }
         UIRectClip(clipRect)
-        image!.drawInRect(clipRect)
+        self.image!.drawInRect(clipRect)
         self.iconImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext();
     }

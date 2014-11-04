@@ -10,6 +10,7 @@ import UIKit
 
 var deviceOrientation: UIDeviceOrientation?
 let ORIENTATION_CHANGED_NOTIFICATION = "orientationChangedNotification"
+var YYY: CGFloat = 10
 
 class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScrollViewDelegate, ArtDelegate {
     let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
@@ -59,13 +60,6 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         view.backgroundColor = UIColor.blackColor()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imageForArtLoaded:", name: IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imageForArtReloaded:", name: IMAGE_FOR_ART_RELOADED_NOTIFICATION_ID, object: nil)
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceOrientationDidChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
-//        screenSize = self.view.bounds
-//        //updateScreenSize()
-//        initFeed()
-//        initScrollView()
-//        initNavigationBar()
-//        scrollView.delegate = self
     }
     
     
@@ -221,7 +215,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func updateScrollView1() {
         let contentOffset = scrollView.contentOffset
-        println(scrollView.contentOffset)
+//        println(scrollView.contentOffset)
 //        if artistTopButton != nil {
 //            artistTopButton!.removeFromSuperview()
 //            artistTopButton = nil
@@ -245,9 +239,9 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
 //            }
         }
         scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
-        let artView = artViews[artTopButtonIndex + 1]
+        let artView = artViews[artIndexTopDisplayed]
         let rect = scrollView.convertRect(artView.frame, toView: view)
-        println(rect)
+        //println(rect)
         scrollView.setContentOffset(rect.origin, animated: false)//CGPoint(x: contentOffset.y, y: contentOffset.x)
     }
     
@@ -289,11 +283,22 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         let art = notificationDictionary.objectForKey("art") as Art
         let artView = notificationDictionary.objectForKey("artView") as? ArtView
         
+        
+//        let imageViewTest = UIImageView(image: art.image)
+//        imageViewTest.frame = CGRect(x: 30, y: YYY, width: 100, height: 100)
+//        YYY += 30
+//        view.addSubview(imageViewTest)
+//        dispatch_async(dispatch_get_main_queue(), {
+//            let imageViewTest = UIImageView(image: art.image)
+//            imageViewTest.frame = CGRect(x: 30, y: YYY, width: 100, height: 100)
+//            YYY += 30
+//            self.view.addSubview(imageViewTest)
+//        })
 
         if artView != nil {
-            println("View update started")
+            //println("View update started")
             artView!.update(art, deviceOrientationLandscape)
-            println("View updated")
+            //println("View updated")
         } else {
             var frame = screenSize!
             scrollView!.frame = frame
@@ -303,6 +308,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             frame = CGRect()
             let artView = ArtView(art, scrollViewLength, screenWidth, screenHeigth, self, deviceOrientationLandscape)
             scrollView.addSubview(artView)
+            //println("Image added to scroll view")
             scrollViewLength += (deviceOrientationLandscape ? artView.frame.width : artView.frame.height)
             art.delegate = self
             artViews.append(artView)
@@ -313,6 +319,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             } else if artistTopButtonNext == nil {
                 artistTopButtonNext = artView.artistButton
             }
+            //println("scrollView.contentSize \(scrollView.contentSize)")
             scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
         }
     }
@@ -533,7 +540,13 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func userButtonPressed() {
-        
+        let userViewController = UserViewController()
+        userViewController.homeViewController = self
+        if iOS8Delta {
+            showViewController(userViewController, sender: self)
+        } else {
+            presentViewController(userViewController, animated: true, completion: nil)
+        }
     }
     
     
@@ -703,41 +716,49 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func updateDesplayedArts(newIndex: Int) {
         artIndexTopDisplayed += newIndex
+        println("artIndexTopDisplayed: \(artIndexTopDisplayed)")
         if newIndex > 0 {
             if artIndexTopDisplayed > MAX_NUMBER_OF_LOADED_IMAGES / 2 {
                 //artIndexTopDisplayed -= newIndex
                 println("artIndexTopDisplayed: \(artIndexTopDisplayed)")
-                artIndexFirst += newIndex
                 let addArtIndex = artIndexFirst + MAX_NUMBER_OF_LOADED_IMAGES
                 println("addArtIndex: \(addArtIndex)")
-                println("arts.count: \(arts.count)")
+                println("artViews.count: \(artViews.count)")
                 if artIndexFirst + MAX_NUMBER_OF_LOADED_IMAGES < arts.count {
                     let newDisplayedArt = arts[addArtIndex]
                     currentNumberOfLoadedImages--
                     var artView: ArtView?
-                    if artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2 < artViews.count {
-                        artView = artViews[artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2]
+                    if artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex < artViews.count {
+                        artView = artViews[artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex]
                     }
                     newDisplayedArt.loadImage(artView)
-                    println("artToDeleteImageView: \(artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex)")
-//                    var artToDeleteImageView = artViews[artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex]
-//                    artToDeleteImageView.art!.image = nil
-//                    artToDeleteImageView.image = nil
-                    //                artToDeleteImageView.removeFromSuperview()
-                    //                artViews.removeAtIndex(0)
+                    clearImage(artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex)
+                    artIndexFirst += newIndex
                 }
             }
         } else {
-            //println("artIndexTopDisplayed: \(artIndexTopDisplayed)")
             if artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 < 0 {
                 artIndexTopDisplayed = 0
                 return
             }
+            artIndexFirst += newIndex
             println("artToReloadImageView: \(artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2)")
             let newDisplayedArtView = artViews[artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2]
             newDisplayedArtView.art!.reloadImage(newDisplayedArtView)
+            clearImage(artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2)
         }
         println(artIndexTopDisplayed)
+    }
+    
+    
+    
+    func clearImage(index: Int) {
+        println("artViews.count: \(artViews.count)")
+        println("artToDeleteImageView: \(index)")
+        var artToDeleteImageView = artViews[index]
+        artToDeleteImageView.art!.image = nil
+        artToDeleteImageView.image = nil
+        artsDisplayed.removeAtIndex(find(artsDisplayed, artToDeleteImageView.art!)!)
     }
     
     

@@ -65,10 +65,10 @@ class ArtView: UIImageView {
         self.art = art
         image = art.image
         
-//        let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
-//        singleTap.numberOfTapsRequired = 1
-//        userInteractionEnabled = true
-//        addGestureRecognizer(singleTap)
+        let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
+        singleTap.numberOfTapsRequired = 1
+        userInteractionEnabled = true
+        addGestureRecognizer(singleTap)
     }
     
     

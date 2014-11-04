@@ -6,6 +6,9 @@
          contextName = "HexagonPicker.ViewController.setMaskImage (HexagonPicker.ViewController)(ObjectiveC.UIImage) -&gt; ():ViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "HexagonPicker.ViewController.optimizeHexagonWidth (HexagonPicker.ViewController)() -&gt; ():ViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "HexagonPicker.ViewController.fillViewWithButtons (HexagonPicker.ViewController)() -&gt; ():ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -14,7 +17,12 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "HexagonPicker.ViewController.optimizeHexagonWidth (HexagonPicker.ViewController)() -&gt; ():ViewController.swift">
+         contextName = "Silkscreen.ArtView.init (Silkscreen.ArtView.Type)(Silkscreen.Art, CoreGraphics.CGFloat, CoreGraphics.CGFloat, CoreGraphics.CGFloat, ObjectiveC.UIViewController, Swift.Bool) -&gt; Silkscreen.ArtView:ArtView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "image">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>

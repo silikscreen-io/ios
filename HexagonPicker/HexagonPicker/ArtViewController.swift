@@ -567,7 +567,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func buttonPressed(button: HexaButton) {
         if button.image == nil {
-            button.setMainImage(UIImage(named: "user.jpg"))
+            button.setMainImage(currentUser!.icon)
         } else {
             let title = NSLocalizedString("Alert", comment:"Alert")
             let message = NSLocalizedString("You pressed button #\(button.index)", comment:"This function is only available on the iPhone")
