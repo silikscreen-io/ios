@@ -8,12 +8,18 @@
 
 import UIKit
 
+protocol ArtFeedViewControllerDelegate {
+    func dismissArtFeedViewController()
+}
+
 var deviceOrientation: UIDeviceOrientation?
 let ORIENTATION_CHANGED_NOTIFICATION = "orientationChangedNotification"
 var YYY: CGFloat = 10
 
 class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScrollViewDelegate, ArtDelegate {
     let SHOW_ART_FROM_FEED_SEGUE_ID = "showArtFromFeedSegue"
+    
+    var delegate: ArtFeedViewControllerDelegate?
     
     var images: [UIImage] = []
     var artViews: [ArtView] = []
@@ -575,6 +581,14 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func dismissArtViewController() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    
+    func dismissUserViewController() {
+        self.dismissViewControllerAnimated(true, completion: { () -> Void in
+            self.delegate!.dismissArtFeedViewController()
+        })
     }
     
     

@@ -8,14 +8,18 @@
 
 import UIKit
 
-class LoginWebViewController: UIViewController, UIWebViewDelegate {
-    
-    var token: NSString?
+class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewControllerDelegate {
     
     let baseURL = "https://instagram.com/"
     let instagramAPIBaseURL = "https://api.instagram.com"
     let clientID = "3e334386068c4aa7b574697ed6caeba4"
     let redirectURI = "http://silkscreen.io"
+        //let authenticationURL = baseURL + "oauth/authorize/?client_id=\(clientID)&redirect_uri=\(redirectURI)&response_type=token&scope=likes+comments+basic"
+        //https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=token
+        //let authenticationURL = instagramAPIBaseURL + "/oauth/authorize/?client_id=\(clientID)&redirect_uri=\(redirectURI)&response_type=code"
+    var requestURL = ""
+    
+    var token: NSString?
 
     
     @IBOutlet weak var webView: UIWebView!
@@ -24,16 +28,19 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.blackColor()
+        requestURL = baseURL + "oauth/authorize/?client_id=\(clientID)&redirect_uri=\(redirectURI)&response_type=token&scope=basic+likes"
     }
     
     
     
     override func viewWillAppear(animated: Bool) {
-        //let authenticationURL = baseURL + "oauth/authorize/?client_id=\(clientID)&redirect_uri=\(redirectURI)&response_type=token&scope=likes+comments+basic"
-        let authenticationURL = baseURL + "oauth/authorize/?client_id=\(clientID)&redirect_uri=\(redirectURI)&response_type=token&scope=basic+likes"
-        //https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=token
-        //let authenticationURL = instagramAPIBaseURL + "/oauth/authorize/?client_id=\(clientID)&redirect_uri=\(redirectURI)&response_type=code"
-        let request = NSURLRequest(URL: NSURL(string: authenticationURL)!)
+        login()
+    }
+    
+    
+    
+    func login() {
+        let request = NSURLRequest(URL: NSURL(string: requestURL)!)
         webView.loadRequest(request)
     }
     
@@ -68,6 +75,30 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate {
             println("rejected case, user denied request")
         }
         return true
+    }
+    
+    
+    
+    func dismissArtFeedViewController() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        token = nil
+//        var cookie = NSHTTPCookie()
+        var storage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+        for cookie in storage.cookies as [NSHTTPCookie] {
+            storage.deleteCookie(cookie)
+        }
+        NSUserDefaults.standardUserDefaults().synchronize()
+        //requestURL = "https://instagram.com/accounts/logout/"
+        login()
+    }
+    
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showArtFeedSegue" {
+            let artFeedViewController = segue.destinationViewController as ArtFeedViewController
+            artFeedViewController.delegate = self
+        }
     }
 
 }

@@ -24,6 +24,9 @@ class UserViewController: UIViewController {
     var userName: UILabel?
     let userNamePaddingY: CGFloat = 50
     
+    var instagramLabel: UILabel?
+    var instagramButton: UIButton?
+    
     var userPicture: UIImageView?
 
     override func viewDidLoad() {
@@ -44,9 +47,30 @@ class UserViewController: UIViewController {
         screenSize = self.view.bounds
         initFullNameLabel()
         initPicture()
-        let buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: buttonWidth, height: buttonHeight)
+        var buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: buttonWidth, height: buttonHeight)
         backButton = UIButton(frame: buttonFrame)
         initButton(&backButton!, "back", "backButtonPressed:")
+        initInstagram()
+    }
+    
+    
+    
+    func initInstagram() {
+        let y = userPicture!.frame.origin.y + userPicture!.frame.height + 4 * buttonPadding
+        instagramLabel = UILabel()
+        instagramLabel!.frame = CGRect(origin: CGPoint(x: paddingX, y: y), size: CGSize(width: screenSize!.width, height: 10))
+        instagramLabel!.text = "Instagram"
+        instagramLabel!.textAlignment = NSTextAlignment.Center
+        instagramLabel!.numberOfLines = 0
+        instagramLabel!.sizeToFit()
+        instagramLabel!.frame = CGRect(origin: CGPoint(x: screenSize!.width / 2 - paddingX - instagramLabel!.frame.width, y: y - instagramLabel!.frame.size.height / 2), size: instagramLabel!.frame.size)
+        instagramLabel!.textColor = UIColor.whiteColor()
+        view.addSubview(instagramLabel!)
+
+        
+        var buttonFrame = CGRect(x: screenSize!.width / 2 + paddingX, y: y - buttonHeight / 2, width: buttonWidth * 2, height: buttonHeight)
+        instagramButton = UIButton(frame: buttonFrame)
+        initButton(&instagramButton!, "Log out", "logoutButtonPressed:")
     }
     
     
@@ -104,6 +128,15 @@ class UserViewController: UIViewController {
         let y = userName!.frame.origin.y + userName!.frame.height + userNamePaddingY
         userPicture!.frame = CGRect(x: x, y: y, width: width, height: height)
     }
+    
+    
+    
+    func alignInstagram() {
+        let y = userPicture!.frame.origin.y + userPicture!.frame.height + 4 * buttonPadding
+        let buttonFrame = CGRect(x: screenSize!.width / 2 + buttonPadding, y: y - buttonHeight / 2, width: buttonWidth * 2, height: buttonHeight)
+        instagramButton!.frame = buttonFrame
+        instagramLabel!.frame = CGRect(origin: CGPoint(x: screenSize!.width / 2 - buttonPadding - instagramLabel!.frame.width, y: y - instagramLabel!.frame.size.height / 2), size: instagramLabel!.frame.size)
+    }
 
     
     
@@ -133,6 +166,15 @@ class UserViewController: UIViewController {
         }
         alignUserName()
         alignPicture()
+        alignInstagram()
+    }
+    
+    
+    
+    func logoutButtonPressed(sender: UIButton) {
+        if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
+            (homeViewController as ArtFeedViewController).dismissUserViewController()
+        }
     }
     
     
