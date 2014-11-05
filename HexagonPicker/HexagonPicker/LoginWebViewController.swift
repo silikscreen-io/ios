@@ -62,7 +62,7 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate {
             let requestData = NSJSONSerialization.JSONObjectWithData(reply!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary
             currentUser = User(requestData["data"] as NSDictionary)
             self.performSegueWithIdentifier("showArtFeedSegue", sender: self)
-            
+            return false
         } else {
             // Handle the access rejected case here.
             println("rejected case, user denied request")

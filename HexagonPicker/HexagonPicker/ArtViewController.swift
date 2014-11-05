@@ -39,6 +39,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
 
     var scrollView: UIScrollView?
     var art: Art?
+    var clearImageWhenLeave = false
     var backgroundImageView: UIImageView?
     var screenshotView: UIImageView?
     var screenshot: UIImage?
@@ -63,6 +64,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         self.view.backgroundColor = UIColor.blackColor()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "imageForArtLoaded:", name: IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil)
         initMaskImageForHexaButton()
     }
     
@@ -85,22 +87,41 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         }
         firstLayout = false
         screenSize = self.view.bounds
-        //updateScreenSize()
         fillViewWithButtons()
         
         initScrollView()
         
-        initbackgroundImageView()
-        
-        setupScrollViewWithArt()
-        
-        initMotions()
+        initAllConnectedWithArtImage()
         
         initButtons()
         
         artShareMenuView = ArtShareMenuView(self.view)
-        
-        //initNavigationBar()
+    }
+    
+    
+    
+    func initAllConnectedWithArtImage() {
+        if art!.image == nil {
+            art!.loadImage(nil, false)
+            return
+        }
+        initbackgroundImageView()
+        setupScrollViewWithArt()
+        initMotions()
+
+    }
+    
+    
+    
+    func imageForArtLoaded(notification: NSNotification) {
+        let notificationDictionary = (notification.userInfo! as NSDictionary)
+        let loadedForFeed = (notificationDictionary.objectForKey("loadedForFeed") as NSNumber).boolValue
+        if loadedForFeed {
+            return
+        }
+        clearImageWhenLeave = true
+        let art = notificationDictionary.objectForKey("art") as Art
+        initAllConnectedWithArtImage()
     }
     
     
@@ -147,6 +168,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func updateScrollView() {
+        if art!.image == nil {
+            return
+        }
         scrollView!.frame = screenSize!
         let imageSize = art!.image!.size
         var scrollViewFrame = scrollView!.frame
@@ -186,7 +210,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func initbackgroundImageView() {
-        //backgroundImageView = UIImageView(frame: getFrameForbackgroundImageView())
         let imageSize = art!.image!.size
         backgroundImageView = UIImageView(frame: CGRect(origin: CGPoint(), size: imageSize))
         
@@ -340,7 +363,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 presentViewController(mapViewController, animated: true, completion: nil)
             }
         } else {
-            buttons.removeAll(keepCapacity: false)
+            clear()
             delegate.dismissArtViewController()
         }
     }
@@ -382,7 +405,23 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         } else if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
             (homeViewController as ArtFeedViewController).dismissArtViewController()
         }
+        clear()
+    }
+    
+    
+    
+    func clear() {
         buttons.removeAll(keepCapacity: false)
+        clearImage()
+    }
+    
+    
+    
+    func clearImage() {
+        if clearImageWhenLeave {
+            backgroundImageView!.image = nil
+            art!.image = nil
+        }
     }
     
     
@@ -390,7 +429,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     func dismissMap() {
         self.dismissViewControllerAnimated(true, completion: {
             if self.homeViewController != nil {
-                buttons.removeAll(keepCapacity: false)
+                self.clear()
                 (self.homeViewController as ArtFeedViewController).dismissArtViewController()
             }
         })
@@ -479,7 +518,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 self.fillButtonWithImage("rah.jpg")
                 self.fillButtonWithImage("ste.jpg")
                 self.view.bringSubviewToFront(self.tagsOnOffButton!)
-                UIView.animateWithDuration(0.2, animations: { self.backgroundImageView!.alpha = self.tagsOn ? 0.6 : 1 })
+                if self.backgroundImageView != nil {
+                    UIView.animateWithDuration(0.2, animations: { self.backgroundImageView!.alpha = self.tagsOn ? 0.6 : 1 })
+                }
                 self.view.bringSubviewToFront(self.showRouteButton!)
                 self.view.bringSubviewToFront(self.shareButton!)
                 self.view.bringSubviewToFront(self.artShareMenuView!)

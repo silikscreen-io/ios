@@ -38,12 +38,16 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     var screenSize: CGRect?
     var firstLayout = true
     
+    var previewLoaded = false
+    var infoPreview: UIImageView?
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "previewLoaded:", name: PREVIEW_LOADED_NOTIFICATION_ID, object: nil)
     }
     
     
@@ -129,14 +133,28 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
 //    func mapView(mapView: GMSMapView!, markerInfoContents marker: GMSMarker!) -> UIView! {
 //    }
-    
+    func previewLoaded(notification: NSNotification) {
+        let notificationDictionary = (notification.userInfo! as NSDictionary)
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            let image = notificationDictionary.objectForKey("preview") as? UIImage
+            self.infoPreview!.image = notificationDictionary.objectForKey("preview") as? UIImage
+            if !self.previewLoaded {
+                self.previewLoaded = !self.previewLoaded
+                self.mapView!.selectedMarker = self.tappedMarker!
+            }
+        })
+    }
     
     
     func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
-        let preview = UIImageView(image: (marker as GMarker).art!.image)
-        let scaleFactor = preview.bounds.width / preview.bounds.height
-        preview.frame = CGRect(origin: preview.frame.origin, size: CGSize(width: 200 * scaleFactor, height: 200))
-        return preview
+        if self.previewLoaded {
+            self.previewLoaded = !self.previewLoaded
+        } else {
+            (marker as GMarker).art!.getPreview()
+            infoPreview = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        }
+        return infoPreview
     }
     
     
@@ -174,8 +192,10 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func initMarkers() {
-        for art in artsDisplayed {
-            GMarker.addMarkerForArt(art, mapView!)
+        for art in arts {
+            if art.iconImage != nil {
+                GMarker.addMarkerForArt(art, mapView!)
+            }
         }
     }
     

@@ -280,6 +280,10 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func imageForArtLoaded(notification: NSNotification) {
         let notificationDictionary = (notification.userInfo! as NSDictionary)
+        let loadedForFeed = (notificationDictionary.objectForKey("loadedForFeed") as NSNumber).boolValue
+        if !loadedForFeed {
+            return
+        }
         let art = notificationDictionary.objectForKey("art") as Art
         let artView = notificationDictionary.objectForKey("artView") as? ArtView
         

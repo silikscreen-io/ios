@@ -12,6 +12,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     let ARTISTS_CLASS_NAME = "Artists"
     let ARTS_CLASS_NAME = "Arts"
+    let ADDITIONAL_RESOURCES_CLASS_NAME = "AdditionalResources"
     
     let parseApplicationId = "CHd4NrA6zIzEIvYXUKcsOKvo3rLmRNwwt9LV3DwA"
     let parseClientKey = "Fy6hMPkvDVoif4oVXTep04gVi726t22VQdbGdmVW"
@@ -95,6 +96,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 var allObjects = objects as [PFObject]
                 for object in allObjects {
                     Art.addArt(object)
+                }
+            } else {
+            }
+            self.queryAdditionalResources()
+        }
+    }
+    
+    
+    
+    func queryAdditionalResources() {
+        var query = PFQuery(className: ADDITIONAL_RESOURCES_CLASS_NAME)
+        query.limit = 1000
+        query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if error == nil {
+                var allObjects = objects as [PFObject]
+                for object in allObjects {
+                    Art.addAdditionalResources(object)
                 }
             } else {
             }

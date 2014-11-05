@@ -10,10 +10,13 @@ import UIKit
 
 let IMAGE_FOR_ART_LOADED_NOTIFICATION_ID = "imageForArtLoadedNotification"
 let IMAGE_FOR_ART_RELOADED_NOTIFICATION_ID = "imageForArtReloadedNotification"
+let PREVIEW_LOADED_NOTIFICATION_ID = "previewLoadedNotification"
 var arts: [Art] = []
+var artsDictionary: [String: Art] = [:]
 var artsDisplayed: [Art] = []
 let MAX_NUMBER_OF_LOADED_IMAGES = 20
 var currentNumberOfLoadedImages = 0
+var iconAdded = 0
 
 protocol ArtDelegate {
     func artTapped(art: Art)
@@ -30,11 +33,13 @@ class Art: NSObject {
     var delegate: ArtDelegate?
     
     var pfObject: PFObject?
+    var pfObjectAdditionalResources: PFObject?
     
     weak var artist: Artist?
    
     var image: UIImage?
     var iconImage: UIImage?
+    var previewImage: UIImage?
     var artDescription: String = "Description unavailable"
     var artStatus: String = "Status unavailable"
     var location: CLLocationCoordinate2D?
@@ -58,18 +63,19 @@ class Art: NSObject {
     
     
     
-    func loadImage(_ artView: ArtView? = nil) {
-        if currentNumberOfLoadedImages < MAX_NUMBER_OF_LOADED_IMAGES {
-            currentNumberOfLoadedImages++
+    func loadImage(_ artView: ArtView? = nil, _ forFeed: Bool = true) {
+        if currentNumberOfLoadedImages < MAX_NUMBER_OF_LOADED_IMAGES || !forFeed {
+            if forFeed {
+                currentNumberOfLoadedImages++
+            }
 //            println("Image started load: \(currentNumberOfLoadedImages)")
             self.imageIndex = currentNumberOfLoadedImages
             let imageFile = pfObject!["image"] as PFFile
             imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
                 if error == nil {
                     self.image = UIImage(data:imageData)
-                    self.initIconImage()
                     artsDisplayed.append(self)
-                    NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!])
+                    NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!, "loadedForFeed": NSNumber(bool: forFeed)])
                 }
             }
         }
@@ -96,7 +102,6 @@ class Art: NSObject {
     
     convenience init(_ imageName: String, _ location: CLLocationCoordinate2D) {
         self.init(UIImage(named: imageName)!, location)
-        initIconImage()
     }
     
     
@@ -173,6 +178,7 @@ class Art: NSObject {
         let art = Art(artist, pfObject)
         art.pfObject = pfObject
         arts.append(art)
+        artsDictionary[pfObject["objectId"] as String] = art
         return art
     }
     
@@ -190,18 +196,34 @@ class Art: NSObject {
         let art = Art(artist, pfObject)
         art.pfObject = pfObject
         arts.append(art)
-//        println(artists)
-//        // Assume PFObject *myPost was previously created.
-//        let query = PFQuery.queryWithClassName:@"Comment"];
-//        [query whereKey:@"post" equalTo:myPost];
-//        
-//        [query findObjectsInBackgroundWithBlock:^(NSArray *comments, NSError *error) {
-//        // comments now contains the comments for myPost
-//        }];
-//        
-//        let art = Art(artist, pfObject)
-//        art.pfObject = pfObject
-//        arts.append(art)
+        artsDictionary[pfObject.objectId] = art
+    }
+    
+    
+    
+    class func addAdditionalResources(pfObject: PFObject) {
+        let artObject = pfObject["art"] as PFObject
+        let art = artsDictionary[artObject.objectId]!
+        var imageFile = pfObject["thumbnail"] as PFFile
+        imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
+            if error == nil {
+                art.iconImage = UIImage(data:imageData)
+                println("Image icon added: \(iconAdded++)")
+            }
+        }
+        art.pfObjectAdditionalResources = pfObject
+    }
+    
+    
+    
+    func getPreview() {
+        var imageFile = pfObjectAdditionalResources!["preview"] as PFFile
+        imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
+            if error == nil {
+                let image = UIImage(data:imageData)!
+                NSNotificationCenter.defaultCenter().postNotificationName(PREVIEW_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["preview" :image])
+            }
+        }
     }
     
     
