@@ -22,12 +22,12 @@ class UserViewController: UIViewController {
     var firstLayout = true
     
     var userName: UILabel?
-    let userNamePaddingY: CGFloat = 50
+    let userNamePaddingY: CGFloat = 40
     
     var instagramLabel: UILabel?
     var instagramButton: UIButton?
     
-    var userPicture: UIImageView?
+    var userPicture: HexaButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,9 +108,12 @@ class UserViewController: UIViewController {
     
     
     func initPicture() {
-        userPicture = UIImageView(image: currentUser!.profilePicture)
-        alignPicture()
+        userPicture = HexaButton(100, 250, currentUser!.profilePicture!.size.width)
+        let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: userPicture!.frame.size)
+        let imageRef = CGImageCreateWithImageInRect(currentUser!.profilePicture!.CGImage, rect);
+        userPicture!.setMainImage(UIImage(CGImage: imageRef))
         view.addSubview(userPicture!)
+        alignPicture()
     }
     
     

@@ -69,6 +69,12 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
             let requestData = NSJSONSerialization.JSONObjectWithData(reply!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary
             currentUser = User(requestData["data"] as NSDictionary)
             self.performSegueWithIdentifier("showArtFeedSegue", sender: self)
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "UserLoddedIn")
+            NSUserDefaults.standardUserDefaults().synchronize()
+//            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//            [defaults setObject:[self serialize] forKey:defaultsKey];
+//            [defaults synchronize];
+
             return false
         } else {
             // Handle the access rejected case here.
@@ -87,6 +93,7 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
         for cookie in storage.cookies as [NSHTTPCookie] {
             storage.deleteCookie(cookie)
         }
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "UserLoddedIn")
         NSUserDefaults.standardUserDefaults().synchronize()
         //requestURL = "https://instagram.com/accounts/logout/"
         login()

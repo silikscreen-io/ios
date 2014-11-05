@@ -217,10 +217,10 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         backgroundImageView!.image = art!.image
         frameBase = backgroundImageView!.frame
         
-        let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected")
-        singleTap.numberOfTapsRequired = 1
-        backgroundImageView!.userInteractionEnabled = true
-        backgroundImageView!.addGestureRecognizer(singleTap)
+//        let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected")
+//        singleTap.numberOfTapsRequired = 1
+//        backgroundImageView!.userInteractionEnabled = true
+//        backgroundImageView!.addGestureRecognizer(singleTap)
         //self.view.addSubview(backgroundImageView!)
         scrollView!.addSubview(backgroundImageView!)
     }
