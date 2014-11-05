@@ -29,6 +29,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     var scrollView: UIScrollView!
     var contentOffset: CGPoint?
     var scrollingStarted = false
+    var handleScrollingStarted = false
     var upSwipeRecognizer: UISwipeGestureRecognizer?
     var downSwipeRecognizer: UISwipeGestureRecognizer?
     
@@ -92,15 +93,16 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         
         if orientation == UIDeviceOrientation.PortraitUpsideDown || orientation == UIDeviceOrientation.FaceUp || orientation == UIDeviceOrientation.FaceDown || orientation == UIDeviceOrientation.Unknown || deviceOrientation == orientation || deviceOrientation == nil {
             let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
-            println("deviceOrientationChanged: " + devOrientation)
+            //println("deviceOrientationChanged: " + devOrientation)
             deviceOrientation = orientation;
             return;
         }
         deviceOrientation = orientation;
         deviceOrientationLandscape = (deviceOrientation! != UIDeviceOrientation.Portrait) && (deviceOrientation! != UIDeviceOrientation.PortraitUpsideDown)
         let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
-        println("deviceOrientationChanged: " + devOrientation)
+        //println("deviceOrientationChanged: " + devOrientation)
         NSNotificationCenter.defaultCenter().postNotificationName(ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        scrollView!.setContentOffset(scrollView!.contentOffset, animated: false)
         updateView()
     }
     
@@ -110,8 +112,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
         if !updateScreenSize() {
             return
         }
-//        updateScrollView()
-        updateScrollView1()
+        updateScrollView()
         updateNavigationBar()
     }
     
@@ -211,15 +212,6 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func updateScrollView() {
-        artViews.removeAll(keepCapacity: false)
-        scrollView!.subviews.map{ $0.removeFromSuperview() }
-        fillScrollView()
-        view.bringSubviewToFront(artistTopButton!)
-    }
-    
-    
-    
-    func updateScrollView1() {
         let contentOffset = scrollView.contentOffset
 //        println(scrollView.contentOffset)
 //        if artistTopButton != nil {
@@ -601,6 +593,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         scrollingStarted = true
+        handleScrollingStarted = true
 //        for artView in artViews {
 //            artView.hideStatistic()
 //        }
@@ -633,16 +626,18 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             }
         }
         scrollingStarted = false
-//        if !decelerate {
+        if !decelerate {
+            handleScrollingStarted = false
 //            for artView in artViews {
 //                artView.showStatistic()
 //            }
-//        }
+        }
     }
     
     
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        handleScrollingStarted = false
 //        for artView in artViews {
 //            artView.showStatistic()
 //        }
@@ -732,13 +727,15 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     
-    func updateDesplayedArts(newIndex: Int) {
+    func updateDisplayedArts(newIndex: Int) {
+        if !handleScrollingStarted {
+            return
+        }
         artIndexTopDisplayed += newIndex
         println("artIndexTopDisplayed: \(artIndexTopDisplayed)")
         if newIndex > 0 {
             if artIndexTopDisplayed > MAX_NUMBER_OF_LOADED_IMAGES / 2 {
                 //artIndexTopDisplayed -= newIndex
-                println("artIndexTopDisplayed: \(artIndexTopDisplayed)")
                 let addArtIndex = artIndexFirst + MAX_NUMBER_OF_LOADED_IMAGES
                 println("addArtIndex: \(addArtIndex)")
                 println("artViews.count: \(artViews.count)")
@@ -765,7 +762,6 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             newDisplayedArtView.art!.reloadImage(newDisplayedArtView)
             clearImage(artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2)
         }
-        println(artIndexTopDisplayed)
     }
     
     
@@ -787,7 +783,6 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
             let nextArt = artViews[artTopButtonIndex + 1]
             let rect = scrollView.convertRect(nextArt.frame, toView: view)
             if rect.origin.y <= nextArt.artistButton!.frame.height + nextArt.padding * 2 {
-                //                println(rect.origin.y - nextArt.artistButton!.height! - nextArt.padding * 2)
                 artistTopButton!.frame.origin.y = rect.origin.y - artistTopButton!.frame.height - nextArt.padding
                 if artistTopButton!.frame.origin.y + artistTopButton!.frame.height + nextArt.padding <= 0 {
                     artistTopButton!.removeFromSuperview()
@@ -800,7 +795,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton!.removeFromSuperview()
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex++
-                    updateDesplayedArts(1)
+                    updateDisplayedArts(1)
                 }
             }
         } else if (artTopButtonIndex > 0) {
@@ -821,7 +816,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.frame.width - artistTopButton!.frame.width - currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex--
-                    updateDesplayedArts(-1)
+                    updateDisplayedArts(-1)
                 }
             }
         }
@@ -847,7 +842,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton!.removeFromSuperview()
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex++
-                    updateDesplayedArts(1)
+                    updateDisplayedArts(1)
                 }
             }
         } else if (artTopButtonIndex > 0) {
@@ -868,7 +863,7 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
                     artistTopButton!.frame = CGRect(origin: CGPoint(x: currentTopArt.padding, y: currentTopArt.padding), size: artistTopButton!.frame.size)
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex--
-                    updateDesplayedArts(-1)
+                    updateDisplayedArts(-1)
                 }
             }
         }

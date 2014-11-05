@@ -51,7 +51,7 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
         var url = request.URL
         var urlParts = url.pathComponents as [String]
         // do any of the following here
-        println(urlString)
+//        println(urlString)
         //if ([urlString hasPrefix: @"localhost"]) {
         var tokenParam = urlString.rangeOfString("access_token=")
         if tokenParam.location != NSNotFound {
@@ -72,7 +72,7 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
             return false
         } else {
             // Handle the access rejected case here.
-            println("rejected case, user denied request")
+//            println("rejected case, user denied request")
         }
         return true
     }

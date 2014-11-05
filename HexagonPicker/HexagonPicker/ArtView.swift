@@ -74,7 +74,6 @@ class ArtView: UIImageView {
     
     
     func resize(length: CGFloat, _ width: CGFloat, _ heigth: CGFloat, _ deviceOrientationLandscape: Bool) {
-        println(frame)
         let size = frame.size
         let currentWidth = size.width
         let currentHeight = size.height
@@ -87,7 +86,6 @@ class ArtView: UIImageView {
             frame.origin.y = length
         }
         frame.size = (deviceOrientationLandscape ? CGSize(width: imageViewLength, height: heigth) : CGSize(width: width, height: imageViewLength))
-        println(frame)
         
         resizeButtons(width, heigth)
     }

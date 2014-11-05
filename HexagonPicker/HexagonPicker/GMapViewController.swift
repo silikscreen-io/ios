@@ -47,6 +47,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "iconLoaded:", name: ICON_LOADED_NOTIFICATION_ID, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "previewLoaded:", name: PREVIEW_LOADED_NOTIFICATION_ID, object: nil)
     }
     
@@ -131,8 +132,14 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     
-//    func mapView(mapView: GMSMapView!, markerInfoContents marker: GMSMarker!) -> UIView! {
-//    }
+    func iconLoaded(notification: NSNotification) {
+        let notificationDictionary = (notification.userInfo! as NSDictionary)
+        let art = notificationDictionary.objectForKey("art") as Art
+        addMarker(art)
+    }
+    
+    
+    
     func previewLoaded(notification: NSNotification) {
         let notificationDictionary = (notification.userInfo! as NSDictionary)
         
@@ -193,9 +200,15 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     func initMarkers() {
         for art in arts {
-            if art.iconImage != nil {
-                GMarker.addMarkerForArt(art, mapView!)
-            }
+            addMarker(art)
+        }
+    }
+    
+    
+    
+    func addMarker(art: Art) {
+        if art.iconImage != nil {
+            GMarker.addMarkerForArt(art, mapView!)
         }
     }
     

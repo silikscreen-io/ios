@@ -29,47 +29,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId(parseApplicationId, clientKey: parseClientKey)
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
 
-        
-//        PFCloud.callFunctionInBackground("getLocationAverage", withParameters: NSDictionary(), block: { (object, error) -> Void in
-//            if error == nil {
-////                let objectt = object as PFObject
-////                let objectt = object as NSDictionary
-//                let imageFile = object as PFFile
-//                imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
-//                    if error == nil {
-//                        let image = UIImage(data:imageData)
-////                        self.initIconImage()
-//                        println("Image loaded: \(NSDate().timeIntervalSince1970)")
-//                    }
-//                }
-////                println(objectt)
-//            } else {
-//                
-//            }
-//        })
-//        [PFCloud callFunctionInBackground:@"getLocationAverage" withParameters:[NSDictionary new] block:^(id object, NSError *error) {
-//            if (!error) {
-//                avgPoint = object;
-//                [avgButton setTitle:@"See average location!" forState:UIControlStateNormal];
-//            } else {
-//                avgPoint = nil;
-//                [avgButton setTitle:@"Sorry, not available!" forState:UIControlStateNormal];
-//            }
-//        }];
-
         queryArtists(0)
         deviceOrientation = UIDevice.currentDevice().orientation
         let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
         println("deviceOrientation " + devOrientation)
         
-        Ubertesters.shared().initializeWithOptions(UbertestersActivationModeShake)
+        //Ubertesters.shared().initializeWithOptions(UbertestersActivationModeShake)
         return true
     }
     
     
     
     func queryArtists(skip: Int) {
-        //        println("Query started")
         var query = PFQuery(className: ARTISTS_CLASS_NAME)
         query.limit = 1000
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in

@@ -10,7 +10,9 @@ import UIKit
 
 let IMAGE_FOR_ART_LOADED_NOTIFICATION_ID = "imageForArtLoadedNotification"
 let IMAGE_FOR_ART_RELOADED_NOTIFICATION_ID = "imageForArtReloadedNotification"
+let ICON_LOADED_NOTIFICATION_ID = "iconLoadedNotification"
 let PREVIEW_LOADED_NOTIFICATION_ID = "previewLoadedNotification"
+
 var arts: [Art] = []
 var artsDictionary: [String: Art] = [:]
 var artsDisplayed: [Art] = []
@@ -103,36 +105,7 @@ class Art: NSObject {
     convenience init(_ imageName: String, _ location: CLLocationCoordinate2D) {
         self.init(UIImage(named: imageName)!, location)
     }
-    
-    
-    
-    func initIconImage() {
-        var offset = CGPoint()
-        var ratio: CGFloat?
-        var delta: CGFloat?
-        var destinationSize = CGSize(width: 30, height: 30)
-        let imageSize = self.image!.size
-        
-        ratio = destinationSize.width / imageSize.width;
-        if imageSize.width > imageSize.height {
-            delta = ratio! * (imageSize.width - imageSize.height);
-            offset = CGPointMake(delta! / 2, 0);
-        } else {
-            delta = ratio! * (imageSize.height - imageSize.width);
-            offset = CGPointMake(0, delta! / 2);
-        }
-        var clipRect = CGRectMake(-offset.x, -offset.y, (ratio! * imageSize.width) + delta!, (ratio! * imageSize.height) + delta!);
-        
-        if UIScreen.mainScreen().respondsToSelector("scale") {
-            UIGraphicsBeginImageContextWithOptions(destinationSize, true, 0.0)
-        } else {
-            UIGraphicsBeginImageContext(destinationSize);
-        }
-        UIRectClip(clipRect)
-        self.image!.drawInRect(clipRect)
-        self.iconImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext();
-    }
+
     
     
     init(_ image: UIImage, _ location: CLLocationCoordinate2D) {
@@ -208,7 +181,8 @@ class Art: NSObject {
         imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
             if error == nil {
                 art.iconImage = UIImage(data:imageData)
-                println("Image icon added: \(iconAdded++)")
+                NSNotificationCenter.defaultCenter().postNotificationName(ICON_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art": art])
+//                println("Image icon added: \(iconAdded++)")
             }
         }
         art.pfObjectAdditionalResources = pfObject
