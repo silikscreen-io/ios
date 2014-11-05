@@ -105,6 +105,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             art!.loadImage(nil, false)
             return
         }
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil)
         initbackgroundImageView()
         setupScrollViewWithArt()
         initMotions()
@@ -411,6 +412,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func clear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         buttons.removeAll(keepCapacity: false)
         clearImage()
     }

@@ -769,10 +769,12 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     func clearImage(index: Int) {
         println("artViews.count: \(artViews.count)")
         println("artToDeleteImageView: \(index)")
-        var artToDeleteImageView = artViews[index]
-        artToDeleteImageView.art!.image = nil
-        artToDeleteImageView.image = nil
-        artsDisplayed.removeAtIndex(find(artsDisplayed, artToDeleteImageView.art!)!)
+        if index < artViews.count {
+            var artToDeleteImageView = artViews[index]
+            artToDeleteImageView.art!.image = nil
+            artToDeleteImageView.image = nil
+            artsDisplayed.removeAtIndex(find(artsDisplayed, artToDeleteImageView.art!)!)
+        }
     }
     
     
@@ -780,6 +782,9 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     func scrollViewDidScrollPortraitArtistButton(scrollView: UIScrollView) {
         let scrolledDown = scrollView.contentOffset.y > contentOffset!.y
         if scrolledDown {
+            if artTopButtonIndex + 1 >= artViews.count {
+                return
+            }
             let nextArt = artViews[artTopButtonIndex + 1]
             let rect = scrollView.convertRect(nextArt.frame, toView: view)
             if rect.origin.y <= nextArt.artistButton!.frame.height + nextArt.padding * 2 {
@@ -827,6 +832,9 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     func scrollViewDidScrollLandscapeArtistButton(scrollView: UIScrollView) {
         let scrolledLeft = scrollView.contentOffset.x > contentOffset!.x
         if scrolledLeft {
+            if artTopButtonIndex + 1 >= artViews.count {
+                return
+            }
             let nextArt = artViews[artTopButtonIndex + 1]
             let rect = scrollView.convertRect(nextArt.frame, toView: view)
             if rect.origin.x <= nextArt.artistButton!.width! + nextArt.padding * 2 {

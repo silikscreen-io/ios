@@ -128,6 +128,9 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         } else {
             delegate!.dismissGMapViewController()
         }
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ICON_LOADED_NOTIFICATION_ID, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: PREVIEW_LOADED_NOTIFICATION_ID, object: nil)
     }
     
     
