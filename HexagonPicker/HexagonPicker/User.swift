@@ -34,7 +34,7 @@ class User: NSObject {
         var offset = CGPoint()
         var ratio: CGFloat?
         var delta: CGFloat?
-        var destinationSize = CGSize(width: 30, height: 30)
+        var destinationSize = CGSize(width: 100, height: 100)
         let imageSize = self.profilePicture!.size
         
         ratio = destinationSize.width / imageSize.width;

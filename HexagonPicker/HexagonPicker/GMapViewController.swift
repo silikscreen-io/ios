@@ -31,6 +31,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     var firstLook = true
     var currentLocation: CLLocationCoordinate2D?
+    var artLocation:CLLocationCoordinate2D?
 
     var homeToolbar: UIToolbar!
     var homeToolbarItems: [UIBarItem]!
@@ -40,6 +41,8 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     var previewLoaded = false
     var infoPreview: UIImageView?
+    
+    var routeButton: UIButton?
     
     
     
@@ -71,6 +74,31 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         initMap()
         initMarkers()
         initNavigationBar()
+        initRouteButton()
+    }
+    
+    
+    
+    func initRouteButton() {
+        routeButton = UIButton(frame: CGRect(origin: CGPoint(x: 20, y: 20), size: CGSize(width: 32, height: 32)))
+        routeButton!.setBackgroundImage(UIImage(named: "road"), forState: UIControlState.Normal)
+        routeButton!.addTarget(self, action: "createRouteButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(routeButton!)
+        if artForRoute == nil {
+            routeButton!.enabled = false
+        }
+    }
+    
+    
+    
+    func createRouteButtonPressed() {
+        createRouteAndAppropriateZoom(currentLocation, artLocation!)
+    }
+    
+    
+    
+    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
+        routeButton!.enabled = false
     }
     
     
@@ -219,7 +247,8 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     func dismissArtViewController() {
         self.dismissViewControllerAnimated(true, completion: nil)
-        createRouteAndAppropriateZoom(currentLocation, tappedMarker!.position)
+        zoomToLocation(tappedMarker!.position)
+        //createRouteAndAppropriateZoom(currentLocation, tappedMarker!.position)
     }
     
     
@@ -244,6 +273,12 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     
+    func zoomToLocation(location: CLLocationCoordinate2D) {
+        mapView!.camera = GMSCameraPosition(target: location, zoom: 20, bearing: 0, viewingAngle: 0)
+    }
+    
+    
+    
     func cantCreateRouteAlert() {
         let title = "Warning"
         let message = "Sorry, can't create route!"
@@ -255,6 +290,8 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
         tappedMarker = marker as? GMarker
+        artLocation = tappedMarker!.art!.location
+        self.routeButton!.enabled = true
         return false
     }
     
@@ -296,14 +333,16 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         let overviewPolyline = (routes[0] as NSDictionary)["overview_polyline"] as NSDictionary
         let points = overviewPolyline["points"] as String
         let path = GMSPath(fromEncodedPath: points)
-        if polyline != nil {
-            polyline!.map = nil
-            polyline = nil
-        }
-        polyline = GMSPolyline(path: path)
-        polyline!.strokeWidth = 5
-        polyline!.strokeColor = UIColor.blueColor()
-        polyline!.map = mapView
+        dispatch_async(dispatch_get_main_queue(), {
+            if self.polyline != nil {
+                self.polyline!.map = nil
+                self.polyline = nil
+            }
+            self.polyline = GMSPolyline(path: path)
+            self.polyline!.strokeWidth = 5
+            self.polyline!.strokeColor = UIColor.blueColor()
+            self.polyline!.map = self.mapView
+        })
     }
     
     
@@ -315,7 +354,9 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             var camera: GMSCameraPosition = GMSCameraPosition(target: currentLocation!, zoom: 14, bearing: 0, viewingAngle: 0)
             mapView!.camera = camera
             if artForRoute != nil && homeViewController!.isMemberOfClass(ArtViewController.self) {
-                createRouteAndAppropriateZoom(currentLocation, artForRoute!.location!)
+//                createRouteAndAppropriateZoom(currentLocation, artForRoute!.location!)
+                zoomToLocation(artForRoute!.location!)
+                artLocation = artForRoute!.location!
                 artForRoute = nil
             }
         }

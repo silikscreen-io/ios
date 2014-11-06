@@ -12,7 +12,7 @@ let queue = dispatch_queue_create("com.example.MyQueue", nil)
 
 
 class ArtView: UIImageView {
-    let users = ["ann.jpg", "gal.jpg", "rah.jpg", "ste.jpg"]
+    let users = ["ann.jpg", "gal.jpg", "rah.jpg", "ste.png", "vad.jpg"]
     
     let padding: CGFloat = 10
     
@@ -102,7 +102,7 @@ class ArtView: UIImageView {
     func initButtons(width: CGFloat, _ heigth: CGFloat) {
         let x = (width < heigth ? bounds.width - buttonWidth - padding : padding)
         artistButton = HexaButton(x, padding, buttonWidth)
-        artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(4))]))
+        artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
         artistButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(artistButton!)
     }

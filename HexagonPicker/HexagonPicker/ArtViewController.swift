@@ -254,7 +254,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         initButton(&tagsOnOffButton!, tagsOn ? "tags off" : "tags on", "tagsOnOffButtonPressed:")
         buttonFrame = CGRect(x: screenFrame.width - buttonWidth - buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         showRouteButton = UIButton(frame: buttonFrame)
-        initButton(&showRouteButton!, "show route", "showRouteButtonPressed:")
+        initButton(&showRouteButton!, "map", "showRouteButtonPressed:")
         buttonFrame = CGRect(x: (screenFrame.width - buttonWidth) / 2, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         shareButton = UIButton(frame: buttonFrame)
         initButton(&shareButton!, "share", "shareButtonPressed:")
@@ -324,14 +324,14 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
 //            let artContentView = ArtContentView(screenshotView!, screenshotView!.frame, artContentDisplayed)
             let artContentView = ArtContentView(self.view, screenshotView!.frame, artContentDisplayed)
             artContentView.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
-            for _ in 0...Int(arc4random_uniform(4)) {
+            for _ in 0...Int(arc4random_uniform(5)) {
                 artContentView.addButton(ArtContentView.CONTENT_ID)
             }
             self.artContentView = artContentView
         } else {
             let artContentView = ArtContentImageView(screenshot!, view.bounds, artContentDisplayed, view)
             artContentView.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
-            for _ in 0...Int(arc4random_uniform(4)) {
+            for _ in 0...Int(arc4random_uniform(5)) {
                 artContentView.addButton(ArtContentImageView.CONTENT_ID)
             }
             self.artContentView = artContentView
@@ -518,7 +518,8 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 self.fillButtonWithImage("ann.jpg")
                 self.fillButtonWithImage("gal.jpg")
                 self.fillButtonWithImage("rah.jpg")
-                self.fillButtonWithImage("ste.jpg")
+                self.fillButtonWithImage("ste.png")
+                self.fillButtonWithImage("vad.jpg")
                 self.view.bringSubviewToFront(self.tagsOnOffButton!)
                 if self.backgroundImageView != nil {
                     UIView.animateWithDuration(0.2, animations: { self.backgroundImageView!.alpha = self.tagsOn ? 0.6 : 1 })
@@ -610,7 +611,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func buttonPressed(button: HexaButton) {
         if button.image == nil {
-            button.setMainImage(currentUser!.icon)
+            button.setMainImage(currentUser!.profilePicture!)
         } else {
             let title = NSLocalizedString("Alert", comment:"Alert")
             let message = NSLocalizedString("You pressed button #\(button.index)", comment:"This function is only available on the iPhone")

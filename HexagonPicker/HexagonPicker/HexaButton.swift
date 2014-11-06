@@ -84,11 +84,21 @@ class HexaButton: UIButton {
     
     func setMainImage(image: UIImage?) {
         if image != nil {
+            let widthRatio = image!.size.width / frame.size.width
+            let heightRatio = image!.size.height / frame.size.height
+            let ratio = widthRatio < heightRatio ? widthRatio : heightRatio
+            let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: frame.size.width * ratio, height: frame.size.height * ratio ))
+            let imageRef = CGImageCreateWithImageInRect(image!.CGImage, rect);
+            let croppedImage = UIImage(CGImage: imageRef)
             var destinationSize = self.frame.size
-            UIGraphicsBeginImageContext(destinationSize)
-            image!.drawInRect(CGRectMake(0, 0, destinationSize.width, destinationSize.height))
-            var newImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
+            
+            UIGraphicsBeginImageContextWithOptions(destinationSize, false, 0)
+            var context = UIGraphicsGetCurrentContext()
+            CGContextSetInterpolationQuality(context, kCGInterpolationHigh)
+            
+            croppedImage!.drawInRect(CGRectMake(0, 0, destinationSize.width, destinationSize.height))
+            var newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
             self.image = newImage
             self.setNeedsDisplay()
         }

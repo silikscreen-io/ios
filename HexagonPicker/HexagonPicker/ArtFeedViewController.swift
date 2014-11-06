@@ -277,6 +277,9 @@ class ArtFeedViewController: UIViewController, GMapViewControllerDelegate, UIScr
     
     
     func imageForArtLoaded(notification: NSNotification) {
+        if screenSize == nil {
+            return
+        }
         let notificationDictionary = (notification.userInfo! as NSDictionary)
         let loadedForFeed = (notificationDictionary.objectForKey("loadedForFeed") as NSNumber).boolValue
         if !loadedForFeed {
