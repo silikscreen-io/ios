@@ -57,7 +57,7 @@ class HexaButton: UIButton {
     
     
     
-    class func addButton(x: CGFloat, y: CGFloat, target: AnyObject?, action: Selector, view: UIView) {
+    class func addButton(x: CGFloat, y: CGFloat, target: AnyObject?, action: Selector, view: UIView, hidden: Bool = false) {
         var button = HexaButton(frame: CGRectMake(x, y, gHeight, gWidth))
         button.R = gBigRadius
         button.width = gWidth
@@ -69,6 +69,7 @@ class HexaButton: UIButton {
         dispatch_async(dispatch_get_main_queue(), {
             view.addSubview(button)
         })
+        button.hidden = true
         buttons[button.index!] = button
     }
     

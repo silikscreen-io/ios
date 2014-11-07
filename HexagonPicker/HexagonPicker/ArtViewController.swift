@@ -34,7 +34,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var prevGY: Double?
     var frameBase: CGRect?
     
-    var tagsOn = true
+    var tagsOn = false
     var artContentDisplayed = false
 
     var scrollView: UIScrollView?
@@ -440,7 +440,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func initMotions() {
-        if !motionManager.accelerometerAvailable {
+        if !motionManager.accelerometerAvailable || !tagsOn {
             return
         }
         motionManager.accelerometerUpdateInterval = 0.1
@@ -503,7 +503,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             var y: CGFloat = 0
             while trunc(y + gWidth) <= maxY {
                 while trunc(x + gHeight) <= maxX {
-                    HexaButton.addButton(x, y: y, target: self, action: "buttonPressed:", view: self.view)
+                    HexaButton.addButton(x, y: y, target: self, action: "buttonPressed:", view: self.view, hidden: !self.tagsOn)
                     x += gHeight
                 }
                 firstLine = !firstLine
