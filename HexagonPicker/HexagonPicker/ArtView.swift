@@ -103,16 +103,16 @@ class ArtView: UIImageView {
         let x = (width < heigth ? bounds.width - buttonWidth - padding : padding)
         artistButton = HexaButton(x, padding, buttonWidth)
         artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
-        artistButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        artistButton!.addTarget(self, action: "artistButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(artistButton!)
     }
     
     
     
-    func userButtonPressed(button: UIButton) {
-        let userDetailViewController = ArtistDetailViewController()
-        userDetailViewController.homeViewController = parentViewController!
-        parentViewController!.presentViewController(userDetailViewController, animated: true, completion: nil)
+    func artistButtonPressed(button: UIButton) {
+        let artistDetailViewController = ArtistDetailViewController()
+        artistDetailViewController.artist = art!.artist
+        parentViewController!.presentViewController(artistDetailViewController, animated: true, completion: nil)
     }
     
     

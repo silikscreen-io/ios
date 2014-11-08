@@ -9,9 +9,12 @@
 import UIKit
 
 class ArtistDetailViewController: UIViewController {
-    var homeViewController: UIViewController?
     
+    var artist: Artist?
     var screenSize: CGRect?
+    var firstLayout = true
+    
+    var artistLabel: UILabel?
     let buttonWidth: CGFloat = 100
     let buttonHeight: CGFloat = 40
     let buttonPadding: CGFloat = 10
@@ -20,35 +23,77 @@ class ArtistDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.blackColor()
+    }
+    
+    
+    
+    override func viewWillLayoutSubviews() {
+        if !firstLayout {
+            return
+        }
+        firstLayout = false
         screenSize = self.view.bounds
         initButtons()
-        let label = UILabel()
-        label.text = "User details"
-        label.sizeToFit()
-        label.textColor = UIColor.magentaColor()
-        label.frame = CGRect(origin: CGPoint(x: (screenSize!.width - label.frame.width) / 2, y: buttonPadding), size: label.frame.size)
-        view.addSubview(label)
+        artistLabel = UILabel()
+        artistLabel!.text = artist!.name
+        artistLabel!.font = UIFont(name: artistLabel!.font.description, size: 30)
+        artistLabel!.sizeToFit()
+        artistLabel!.textColor = UIColor.magentaColor()
+        updateArtistLabel()
+        view.addSubview(artistLabel!)
+    }
+    
+    
+    
+    func updateArtistLabel() {
+        artistLabel!.frame = CGRect(origin: CGPoint(x: (screenSize!.width - artistLabel!.frame.width) / 2, y: buttonPadding), size: artistLabel!.frame.size)
     }
     
     
     
     func initButtons() {
         var screenFrame = screenSize!
-        var buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: buttonWidth / 2, height: buttonHeight)
+        let buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: 48, height: 48)
         backButton = UIButton(frame: buttonFrame)
-        initButton(&backButton!, "back", "backButtonPressed:")
+        initButton(&backButton!, "back_arrow", "backButtonPressed:")
     }
     
     
     
-    func initButton(inout button: UIButton, _ title: String, _ selector: Selector) {
-        button.setTitle(title, forState: UIControlState.Normal)
-        button.backgroundColor = UIColor.blackColor()
+    func initButton(inout button: UIButton, _ imageName: String, _ selector: Selector) {
+        button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
         button.alpha = 0.7
-        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Highlighted)
         button.addTarget(self, action: selector, forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(button)
+    }
+    
+    
+    
+    func updateScreenSize() -> Bool {
+        let deviceOrientationPortrait = ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
+        let minSize = screenSize!.size.width < screenSize!.height ? screenSize!.size.width : screenSize!.height
+        let maxSize = screenSize!.size.width > screenSize!.height ? screenSize!.size.width : screenSize!.height
+        if deviceOrientationPortrait {
+            if minSize == screenSize!.size.width {
+                return false
+            }
+            screenSize!.size = CGSize(width: minSize, height: maxSize)
+        } else {
+            if maxSize == screenSize!.size.width {
+                return false
+            }
+            screenSize!.size = CGSize(width: maxSize, height: minSize)
+        }
+        return true
+    }
+    
+    
+    
+    func orientationChanged() {
+        if !updateScreenSize() {
+            return
+        }
+        updateArtistLabel()
     }
     
     

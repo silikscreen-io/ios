@@ -645,7 +645,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         tagsOnOffButton!.setImage(UIImage(named: tagsOn ? "tags_off" : "tags_on"), forState: UIControlState.Normal)
         let alpha: CGFloat = tagsOn ? 0.8 : 1
         UIView.animateWithDuration(0.2, animations: { self.backgroundImageView!.alpha = alpha })
-        sender.setTitle(tagsOn ? "tags off" : "tags on", forState: UIControlState.Normal)
         if tagsOn {
             initMotions()
         } else {
@@ -658,8 +657,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func userButtonPressed(sender: UIButton) {
-        let userDetailViewController = ArtistDetailViewController()
-        presentViewController(userDetailViewController, animated: true, completion: nil)
+        let artistDetailViewController = ArtistDetailViewController()
+        artistDetailViewController.artist = art!.artist
+        presentViewController(artistDetailViewController, animated: true, completion: nil)
     }
     
     

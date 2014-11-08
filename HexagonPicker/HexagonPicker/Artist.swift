@@ -28,13 +28,14 @@ class Artist: NSObject {
     
     class func addArtist(pfObject: PFObject) {
         let artistName = pfObject[ARTIST_NAME_FIELD_ID] as String!
+        let artistId = pfObject.objectId
         var artist = artists[artistName]
         if artist == nil {
             artist = Artist(artistName)
         }
         //artist!.arts.append(Art.addArt(artist!, pfObject))
         artist!.pfObject = pfObject
-        artists[artistName] = artist
+        artists[artistId] = artist
     }
     
     
