@@ -9,10 +9,10 @@
 import UIKit
 
 let queue = dispatch_queue_create("com.example.MyQueue", nil)
+let users = ["ann.jpg", "gal.jpg", "rah.jpg", "ste.png", "vad.jpg"]
 
 
 class ArtView: UIImageView {
-    let users = ["ann.jpg", "gal.jpg", "rah.jpg", "ste.png", "vad.jpg"]
     
     let padding: CGFloat = 10
     

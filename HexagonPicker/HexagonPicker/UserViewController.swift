@@ -47,9 +47,12 @@ class UserViewController: UIViewController {
         screenSize = self.view.bounds
         initFullNameLabel()
         initPicture()
-        var buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: buttonWidth, height: buttonHeight)
+        var buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: CGFloat(48), height: CGFloat(48))
         backButton = UIButton(frame: buttonFrame)
-        initButton(&backButton!, "back", "backButtonPressed:")
+        backButton!.setImage(UIImage(named: "back_arrow"), forState: UIControlState.Normal)
+        backButton!.alpha = 0.7
+        backButton!.addTarget(self, action: "backButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(backButton!)
         initInstagram()
     }
     
@@ -183,9 +186,7 @@ class UserViewController: UIViewController {
     
     
     func backButtonPressed(sender: UIButton) {
-        if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
-            (homeViewController as ArtFeedViewController).dismissArtViewController()
-        }
+        dismissViewControllerAnimated(true, completion: nil)
     }
 
 }

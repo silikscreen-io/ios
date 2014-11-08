@@ -44,6 +44,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var screenshotView: UIImageView?
     var screenshot: UIImage?
     
+    let buttonSize: CGFloat = 52
     let buttonWidth: CGFloat = 100
     let buttonHeight: CGFloat = 40
     let buttonPadding: CGFloat = 10
@@ -51,6 +52,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var showRouteButton: UIButton?
     var shareButton: UIButton?
     var backButton: UIButton?
+    var artistButton: HexaButton?
     
     var screenSize: CGRect?
     
@@ -65,18 +67,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imageForArtLoaded:", name: IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil)
-        initMaskImageForHexaButton()
-    }
-    
-    
-    
-    func initMaskImageForHexaButton() {
-        var mask = UIImage(named: "hexagon_100_r.png")!
-        UIGraphicsBeginImageContext(CGSize(width: gHeight, height: gWidth))
-        mask.drawInRect(CGRectMake(0, 0, gHeight, gWidth))
-        var newImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        maskImage = newImage
     }
     
     
@@ -249,18 +239,39 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func initButtons() {
         var screenFrame = screenSize!
-        var buttonFrame = CGRect(x: buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        var buttonFrame = CGRect(x: buttonPadding, y: screenFrame.height - buttonSize - buttonPadding, width: buttonSize, height: buttonSize)
         tagsOnOffButton = UIButton(frame: buttonFrame)
-        initButton(&tagsOnOffButton!, tagsOn ? "tags off" : "tags on", "tagsOnOffButtonPressed:")
-        buttonFrame = CGRect(x: screenFrame.width - buttonWidth - buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        initButton(&tagsOnOffButton!, tagsOn ? "tags_off" : "tags_on", "tagsOnOffButtonPressed:")
+        buttonFrame = CGRect(x: screenFrame.width - buttonSize - buttonPadding, y: screenFrame.height - buttonSize - buttonPadding, width: buttonSize, height: buttonSize)
         showRouteButton = UIButton(frame: buttonFrame)
         initButton(&showRouteButton!, "map", "showRouteButtonPressed:")
-        buttonFrame = CGRect(x: (screenFrame.width - buttonWidth) / 2, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        buttonFrame = CGRect(x: (screenFrame.width - buttonSize) / 2, y: screenFrame.height - buttonSize - buttonPadding, width: buttonSize, height: buttonSize)
         shareButton = UIButton(frame: buttonFrame)
         initButton(&shareButton!, "share", "shareButtonPressed:")
-        buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: buttonWidth / 2, height: buttonHeight)
+        buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: buttonSize, height: buttonSize)
         backButton = UIButton(frame: buttonFrame)
-        initButton(&backButton!, "back", "backButtonPressed:")
+        initButton(&backButton!, "back_arrow", "backButtonPressed:")
+        
+        initArtistButton()
+    }
+    
+    
+    
+    func initArtistButton() {
+        artistButton = HexaButton(buttonPadding, buttonPadding, buttonSize)
+        artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
+        artistButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(artistButton!)
+        updateArtistButton()
+    }
+    
+    
+    
+    func initButton(inout button: UIButton, _ imageName: String, _ selector: Selector) {
+        button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
+        button.alpha = 0.7
+        button.addTarget(self, action: selector, forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(button)
     }
     
     
@@ -270,18 +281,14 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         tagsOnOffButton!.frame = CGRect(x: buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         showRouteButton!.frame = CGRect(x: screenFrame.width - buttonWidth - buttonPadding, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
         shareButton!.frame = CGRect(x: (screenFrame.width - buttonWidth) / 2, y: screenFrame.height - buttonHeight - buttonPadding, width: buttonWidth, height: buttonHeight)
+        updateArtistButton()
     }
     
     
     
-    func initButton(inout button: UIButton, _ title: String, _ selector: Selector) {
-        button.setTitle(title, forState: UIControlState.Normal)
-        button.backgroundColor = UIColor.blackColor()
-        button.alpha = 0.7
-        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Highlighted)
-        button.addTarget(self, action: selector, forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(button)
+    func updateArtistButton() {
+        let artistButtonSize = artistButton!.frame.size
+        artistButton!.frame = CGRect(origin: CGPoint(x: screenSize!.width - artistButtonSize.width - buttonPadding, y: buttonPadding), size: artistButtonSize)
     }
     
     
@@ -528,6 +535,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 self.view.bringSubviewToFront(self.shareButton!)
                 self.view.bringSubviewToFront(self.artShareMenuView!)
                 self.view.bringSubviewToFront(self.backButton!)
+                self.view.bringSubviewToFront(self.artistButton!)
                 //self.view.bringSubviewToFront(self.homeToolbar!)
             })
         })
@@ -634,6 +642,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     func tagsOnOffButtonPressed(sender: UIButton) {
         HexaButton.hideAllButtons(tagsOn)
         tagsOn = !tagsOn
+        tagsOnOffButton!.setImage(UIImage(named: tagsOn ? "tags_off" : "tags_on"), forState: UIControlState.Normal)
         let alpha: CGFloat = tagsOn ? 0.8 : 1
         UIView.animateWithDuration(0.2, animations: { self.backgroundImageView!.alpha = alpha })
         sender.setTitle(tagsOn ? "tags off" : "tags on", forState: UIControlState.Normal)
@@ -644,6 +653,13 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             backgroundImageView!.frame.origin.x = frameBase!.origin.x
             backgroundImageView!.frame.origin.y = frameBase!.origin.y
         }
+    }
+
+    
+    
+    func userButtonPressed(sender: UIButton) {
+        let userDetailViewController = ArtistDetailViewController()
+        presentViewController(userDetailViewController, animated: true, completion: nil)
     }
     
     

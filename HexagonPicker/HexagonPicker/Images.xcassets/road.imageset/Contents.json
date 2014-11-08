@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "road_48.png"
+      "filename" : "ic_directions_black_24dp.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "road_96.png"
+      "filename" : "ic_directions_black_48dp.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "road_96-1.png"
+      "filename" : "ic_directions_black_48dp-1.png"
     }
   ],
   "info" : {

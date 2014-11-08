@@ -54,7 +54,7 @@ class ArtistDetailViewController: UIViewController {
     
     
     func backButtonPressed(sender: UIButton) {
-        homeViewController!.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     

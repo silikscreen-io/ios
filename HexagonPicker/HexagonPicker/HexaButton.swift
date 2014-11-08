@@ -13,7 +13,6 @@ var gWidth: CGFloat = 2 * gBigRadius
 var gSmallRadiusr: CGFloat = 0.86603 * gBigRadius
 var gHeight: CGFloat = 2 * gSmallRadiusr
 var gXStep: CGFloat = 0.5 * gBigRadius
-var maskImage: UIImage?
 var maskImages: [Int: UIImage] = [:]
 
 var buttons: [Int: HexaButton] = [:]
@@ -47,6 +46,7 @@ class HexaButton: UIButton {
         height = 2 * r!
         xStep =  0.5 * R!
         super.init(frame: CGRectMake(x, y, height!, width))
+        initMaskImage()
     }
     
     
@@ -70,7 +70,21 @@ class HexaButton: UIButton {
             view.addSubview(button)
         })
         button.hidden = true
+        button.initMaskImage()
         buttons[button.index!] = button
+    }
+    
+    
+    
+    func initMaskImage() {
+        if maskImages[Int(R!)] == nil {
+            var mask = UIImage(named: "hexagon_100_r.png")!
+            UIGraphicsBeginImageContext(CGSize(width: height!, height: width!))
+            mask.drawInRect(CGRectMake(0, 0, height!, width!))
+            var newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            maskImages[Int(R!)] = newImage
+        }
     }
     
     
@@ -109,10 +123,10 @@ class HexaButton: UIButton {
     
     override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
         if (CGRectContainsPoint(self.bounds, point)) {
-            if maskImage == nil {
+            if maskImages[Int(R!)] == nil {
                 return super.pointInside(point, withEvent: event)
             } else {
-                let image = maskImage!
+                let image = maskImages[Int(R!)]!
                 let pointX = trunc(point.x)
                 let pointY = trunc(point.y)
                 let cgImage = image.CGImage
