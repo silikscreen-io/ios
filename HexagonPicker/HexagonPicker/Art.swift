@@ -20,6 +20,8 @@ let MAX_NUMBER_OF_LOADED_IMAGES = 20
 var currentNumberOfLoadedImages = 0
 var iconAdded = 0
 
+let cities = ["Miami", "London", "Berlin"]
+
 protocol ArtDelegate {
     func artTapped(art: Art)
 }
@@ -45,6 +47,7 @@ class Art: NSObject {
     var artDescription: String = "Description unavailable"
     var artStatus: String = "Status unavailable"
     var location: CLLocationCoordinate2D?
+    var city: String = "Miami"
     
     var imageIndex: Int?
     
@@ -61,6 +64,7 @@ class Art: NSObject {
         artDescription = pfObject[ART_DESCRIPTION_ID] as String
         artStatus = pfObject[WORK_STATUS_ID] as String
         loadImage()
+        city = cities[Int(arc4random_uniform(3))]
     }
     
     

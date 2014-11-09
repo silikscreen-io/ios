@@ -149,13 +149,19 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func homeTapped() {
-        if delegate == nil {
-            if homeViewController != nil {
-                (homeViewController as ArtViewController).dismissMap()
+//        if delegate == nil {
+//            if homeViewController != nil {
+//                (homeViewController as ArtViewController).dismissMap()
+//            }
+//        } else {
+//            delegate!.dismissGMapViewController()
+//        }
+        let presentingViewController = self.presentingViewController!
+        dismissViewControllerAnimated(true, completion: { () -> Void in
+            if presentingViewController.isMemberOfClass(ArtViewController.self) {
+                presentingViewController.dismissViewControllerAnimated(true, completion: nil)
             }
-        } else {
-            delegate!.dismissGMapViewController()
-        }
+        })
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ICON_LOADED_NOTIFICATION_ID, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: PREVIEW_LOADED_NOTIFICATION_ID, object: nil)

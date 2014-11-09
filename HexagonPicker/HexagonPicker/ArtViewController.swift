@@ -408,10 +408,12 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func backButtonPressed(sender: UIButton) {
-        if homeViewController!.isMemberOfClass(GMapViewController.self) {
-            (homeViewController as GMapViewController).dismissArtViewControllerWithowtShowingRout()
-        } else if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
-            (homeViewController as ArtFeedViewController).dismissArtViewController()
+        if presentingViewController!.isMemberOfClass(GMapViewController.self) {
+            (presentingViewController as GMapViewController).dismissArtViewControllerWithowtShowingRout()
+        } else if presentingViewController!.isMemberOfClass(ArtFeedViewController.self) {
+            (presentingViewController as ArtFeedViewController).dismissArtViewController()
+        } else {
+            dismissViewControllerAnimated(true, completion: nil)
         }
         clear()
     }

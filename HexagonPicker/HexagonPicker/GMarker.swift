@@ -26,7 +26,6 @@ class GMarker: GMSMarker {
         icon = art.iconImage//UIImage(named: "annotation.png")
         self.map = map
         self.art = art
-        let long = UILongPressGestureRecognizer(target: self, action: "longPress")
     }
     
     

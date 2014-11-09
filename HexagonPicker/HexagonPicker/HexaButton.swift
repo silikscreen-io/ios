@@ -147,7 +147,7 @@ class HexaButton: UIButton {
                 return a != 0.0
             }
         } else {
-            return false;
+            return false
         }
     }
     

@@ -34,8 +34,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
         println("deviceOrientation " + devOrientation)
         
-        Ubertesters.shared().initializeWithOptions(UbertestersActivationModeShake)
+        //Ubertesters.shared().initializeWithOptions(UbertestersActivationModeShake)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceOrientationDidChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
         return true
+    }
+    
+    
+    
+    func deviceOrientationDidChange(notification: NSNotification) {
+        let orientation = UIDevice.currentDevice().orientation
+        
+        if orientation == UIDeviceOrientation.PortraitUpsideDown || orientation == UIDeviceOrientation.FaceUp || orientation == UIDeviceOrientation.FaceDown || orientation == UIDeviceOrientation.Unknown || deviceOrientation == orientation || deviceOrientation == nil {
+            let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
+            deviceOrientation = orientation;
+            return;
+        }
+        deviceOrientation = orientation;
+        deviceOrientationLandscape = (deviceOrientation! != UIDeviceOrientation.Portrait) && (deviceOrientation! != UIDeviceOrientation.PortraitUpsideDown)
+        let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
+        //println("deviceOrientationChanged: " + devOrientation)
+        NSNotificationCenter.defaultCenter().postNotificationName(ORIENTATION_CHANGED_NOTIFICATION, object: nil)
     }
     
     

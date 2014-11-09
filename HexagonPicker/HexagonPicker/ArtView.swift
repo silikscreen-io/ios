@@ -40,7 +40,8 @@ class ArtView: UIImageView {
         frame.size = (deviceOrientationLandscape ? CGSize(width: imageViewLength, height: heigth) : CGSize(width: width, height: imageViewLength))
         image = art.image
         
-        let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
+        let singleTap = UITapGestureRecognizer()
+        singleTap.addTarget(art, action: "tapDetected:")
         singleTap.numberOfTapsRequired = 1
         userInteractionEnabled = true
         addGestureRecognizer(singleTap)
@@ -65,7 +66,8 @@ class ArtView: UIImageView {
         self.art = art
         image = art.image
         
-        let singleTap = UITapGestureRecognizer(target: art, action: "tapDetected:")
+        let singleTap = UITapGestureRecognizer()
+        singleTap.addTarget(art, action: "tapDetected:")
         singleTap.numberOfTapsRequired = 1
         userInteractionEnabled = true
         addGestureRecognizer(singleTap)

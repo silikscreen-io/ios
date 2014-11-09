@@ -68,6 +68,7 @@
 		B5425D4B1A057C29008B5CA0 /* hex_48dp.png in Resources */ = {isa = PBXBuildFile; fileRef = B5425D4A1A057C29008B5CA0 /* hex_48dp.png */; };
 		B558EB7719FEA04A00C98904 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */; };
 		B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B558EB7819FEA49800C98904 /* ArtContentImageView.swift */; };
+		B562BF451A0EB75C005EBE0B /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B562BF441A0EB75C005EBE0B /* SearchTableViewController.swift */; };
 		B565D1DE1A04571A0058860D /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1DD1A04571A0058860D /* UbertestersSDK.framework */; };
 		B565D1E01A04575B0058860D /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1DF1A04575B0058860D /* AdSupport.framework */; };
 		B565D1E21A04576F0058860D /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1E11A04576F0058860D /* CoreImage.framework */; };
@@ -91,6 +92,9 @@
 		B57E9B581A02BA9700BCAA35 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57E9B571A02BA9700BCAA35 /* Artist.swift */; };
 		B5B9119619F9615400A8806C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B9119519F9615400A8806C /* Foundation.framework */; };
 		B5BA1EF31A038BF600C99A99 /* arrowUp_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B5BA1EF21A038BF500C99A99 /* arrowUp_icon.png */; };
+		B5F502261A0EC32600E11D70 /* ArtToolbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F502251A0EC32600E11D70 /* ArtToolbarViewController.swift */; };
+		B5F502281A0EE56C00E11D70 /* ArtViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F502271A0EE56C00E11D70 /* ArtViewCell.swift */; };
+		B5F5022A1A0F64E200E11D70 /* ArtCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5F502291A0F64E200E11D70 /* ArtCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -171,6 +175,7 @@
 		B558EB7519FEA04A00C98904 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		B558EB7619FEA04A00C98904 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		B558EB7819FEA49800C98904 /* ArtContentImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtContentImageView.swift; sourceTree = "<group>"; };
+		B562BF441A0EB75C005EBE0B /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		B565D1DD1A04571A0058860D /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		B565D1DF1A04575B0058860D /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		B565D1E11A04576F0058860D /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
@@ -194,6 +199,9 @@
 		B57E9B571A02BA9700BCAA35 /* Artist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		B5B9119519F9615400A8806C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B5BA1EF21A038BF500C99A99 /* arrowUp_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowUp_icon.png; sourceTree = "<group>"; };
+		B5F502251A0EC32600E11D70 /* ArtToolbarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtToolbarViewController.swift; sourceTree = "<group>"; };
+		B5F502271A0EE56C00E11D70 /* ArtViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtViewCell.swift; sourceTree = "<group>"; };
+		B5F502291A0F64E200E11D70 /* ArtCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArtCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +283,7 @@
 				B5173DB819F2726C00B50011 /* Main.storyboard */,
 				B5173DBB19F2726C00B50011 /* Images.xcassets */,
 				B5173DBD19F2726C00B50011 /* LaunchScreen.xib */,
+				B5F502291A0F64E200E11D70 /* ArtCell.xib */,
 				B5173DB219F2726C00B50011 /* Supporting Files */,
 				B504E1E51A0AB7AC00049A5B /* FirstViewController.swift */,
 				B5173DEE19F5790700B50011 /* LoginWebViewController.swift */,
@@ -282,7 +291,10 @@
 				B57E9B571A02BA9700BCAA35 /* Artist.swift */,
 				B57E9B471A026FB500BCAA35 /* ArtistDetailViewController.swift */,
 				B57E9B451A00654B00BCAA35 /* ArtView.swift */,
+				B5F502251A0EC32600E11D70 /* ArtToolbarViewController.swift */,
 				B5339BE419F97644003B1C88 /* ArtFeedViewController.swift */,
+				B562BF441A0EB75C005EBE0B /* SearchTableViewController.swift */,
+				B5F502271A0EE56C00E11D70 /* ArtViewCell.swift */,
 				B5173DB619F2726C00B50011 /* ArtViewController.swift */,
 				B51C979019F907CE00F286C5 /* ArtContentView.swift */,
 				B558EB7819FEA49800C98904 /* ArtContentImageView.swift */,
@@ -501,6 +513,7 @@
 				B5173DE519F2D30600B50011 /* hexagon_100.png in Resources */,
 				B5BA1EF31A038BF600C99A99 /* arrowUp_icon.png in Resources */,
 				B51C979919F9357500F286C5 /* audio_b.png in Resources */,
+				B5F5022A1A0F64E200E11D70 /* ArtCell.xib in Resources */,
 				B5173DBA19F2726C00B50011 /* Main.storyboard in Resources */,
 				B5339BE919F97963003B1C88 /* Picture4.jpg in Resources */,
 				B51C979A19F9357500F286C5 /* audio_w.png in Resources */,
@@ -551,10 +564,13 @@
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
 				B57E9B581A02BA9700BCAA35 /* Artist.swift in Sources */,
 				B504E1E01A09446D00049A5B /* User.swift in Sources */,
+				B562BF451A0EB75C005EBE0B /* SearchTableViewController.swift in Sources */,
+				B5F502261A0EC32600E11D70 /* ArtToolbarViewController.swift in Sources */,
 				B504E1E31A098C5500049A5B /* UserViewController.swift in Sources */,
 				B5339BF419FA66E4003B1C88 /* Art.swift in Sources */,
 				B5173DEF19F5790700B50011 /* LoginWebViewController.swift in Sources */,
 				B558EB7919FEA49800C98904 /* ArtContentImageView.swift in Sources */,
+				B5F502281A0EE56C00E11D70 /* ArtViewCell.swift in Sources */,
 				B504E1E61A0AB7AC00049A5B /* FirstViewController.swift in Sources */,
 				B558EB7719FEA04A00C98904 /* UIImage+ImageEffects.m in Sources */,
 				B5173DB719F2726C00B50011 /* ArtViewController.swift in Sources */,
