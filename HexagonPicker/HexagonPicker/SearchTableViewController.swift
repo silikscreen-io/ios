@@ -131,6 +131,8 @@ class SearchTableViewController: ArtToolbarViewController, UITableViewDataSource
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let artViewController = ArtViewController()
         artViewController.art = searchArts[indexPath.row]
+        artViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+        artViewController.transitioningDelegate = self
         presentViewController(artViewController, animated: true, completion: nil)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }

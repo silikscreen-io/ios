@@ -25,6 +25,8 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     var tappedArt: Art?
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchArts = arts
@@ -193,6 +195,8 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
             let artViewController = segue.destinationViewController as ArtViewController
             artViewController.homeViewController = self
             artViewController.art = tappedArt
+            artViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+            artViewController.transitioningDelegate = self
         } else if segue.identifier == SHOW_MAP_SEGUE_ID {
             let mapViewController = segue.destinationViewController as GMapViewController
             mapViewController.delegate = self
@@ -416,6 +420,4 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
             }
         }
     }
-
-
 }

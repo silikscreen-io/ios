@@ -90,6 +90,47 @@ Parse.Cloud.define('getLocationAverage', function(request, response) {
 });
 
 
+
+Parse.Cloud.define('getArtsSizes', function(request, response) {
+  var artsObject = Parse.Object.extend("Arts");
+  var query = new Parse.Query(artsObject);
+  query.limit(5);
+  query.find({ success: function(results) {
+    	var images = [];
+		var promises = [];
+		console.log("results length");
+		console.log(results.length);
+		for (var i = 0; i < results.length; i++) { 
+						var url = art.get('image').url();
+						console.log(url);
+
+						promises.push(Parse.Cloud.httpRequest({ url: url }).then(function(response) {
+							console.log("Parse.Cloud.httpRequest");
+						  var image = new Image();
+						  return image.setData(response.buffer);
+						}).then(function(image) {
+							console.log("Get the bytes of the new image.");
+							console.log("Image is " + image.width() + "x" + image.height() + ".");
+							var imageSize = [];
+							imageSize.push(image.width());
+							imageSize.push(image.height());
+							images.push(cropped);
+						}));
+    	}
+
+		// _.each(results, function(art) {
+		// });
+		// Return a new promise that is resolved when all of the deletes are finished.
+		Parse.Promise.when(promises).then(function(results) {
+			console.log("Parse.Promise.when(promises).then(function(results)");
+			response.success(images);
+		});
+    }, error: function(error) {
+      response.error('Oups something went wrong');
+    }
+  });
+});
+
 		// for (var i = 0; i < results.length; i++) {
 		// 	var art = results[i];
 		// 	var AdditionalResources = Parse.Object.extend("AdditionalResources");

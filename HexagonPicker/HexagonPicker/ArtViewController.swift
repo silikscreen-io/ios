@@ -51,7 +51,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var tagsOnOffButton: UIButton?
     var showRouteButton: UIButton?
     var shareButton: UIButton?
-    var backButton: UIButton?
     var artistButton: HexaButton?
     
     var screenSize: CGRect?
@@ -67,6 +66,11 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imageForArtLoaded:", name: IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil)
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: "swipeUp")
+        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
+        self.view.addGestureRecognizer(swipeUp)
+        // alloc] initWithTarget:self action:@selector(slideToLeftWithGestureRecognizer:)];
+        //swipeLeftOrange.direction = UISwipeGestureRecognizerDirectionLeft;
     }
     
     
@@ -86,6 +90,12 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         initButtons()
         
         artShareMenuView = ArtShareMenuView(self.view)
+    }
+    
+    
+    
+    func swipeUp() {
+        close()
     }
     
     
@@ -248,9 +258,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         buttonFrame = CGRect(x: (screenFrame.width - buttonSize) / 2, y: screenFrame.height - buttonSize - buttonPadding, width: buttonSize, height: buttonSize)
         shareButton = UIButton(frame: buttonFrame)
         initButton(&shareButton!, "share", "shareButtonPressed:")
-        buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: buttonSize, height: buttonSize)
-        backButton = UIButton(frame: buttonFrame)
-        initButton(&backButton!, "back_arrow", "backButtonPressed:")
         
         initArtistButton()
     }
@@ -407,11 +414,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     
-    func backButtonPressed(sender: UIButton) {
+    func close() {
         if presentingViewController!.isMemberOfClass(GMapViewController.self) {
             (presentingViewController as GMapViewController).dismissArtViewControllerWithowtShowingRout()
-        } else if presentingViewController!.isMemberOfClass(ArtFeedViewController.self) {
-            (presentingViewController as ArtFeedViewController).dismissArtViewController()
         } else {
             dismissViewControllerAnimated(true, completion: nil)
         }
@@ -536,7 +541,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 self.view.bringSubviewToFront(self.showRouteButton!)
                 self.view.bringSubviewToFront(self.shareButton!)
                 self.view.bringSubviewToFront(self.artShareMenuView!)
-                self.view.bringSubviewToFront(self.backButton!)
                 self.view.bringSubviewToFront(self.artistButton!)
                 //self.view.bringSubviewToFront(self.homeToolbar!)
             })
@@ -674,6 +678,14 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidZoom(scrollView: UIScrollView!) {
         centerScrollViewContent()
+    }
+    
+    
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if scrollView.contentSize.height > screenSize!.height && scrollView.contentSize.height - screenSize!.height - scrollView.contentOffset.y < -50 {
+            close()
+        }
     }
     
     

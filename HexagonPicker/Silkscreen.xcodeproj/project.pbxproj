@@ -34,6 +34,7 @@
 		B51C979C19F9357500F286C5 /* email_w.png in Resources */ = {isa = PBXBuildFile; fileRef = B51C979619F9357500F286C5 /* email_w.png */; };
 		B51C979D19F9357500F286C5 /* video_b.png in Resources */ = {isa = PBXBuildFile; fileRef = B51C979719F9357500F286C5 /* video_b.png */; };
 		B51C979E19F9357500F286C5 /* video_w.png in Resources */ = {isa = PBXBuildFile; fileRef = B51C979819F9357500F286C5 /* video_w.png */; };
+		B51EEEAE1A1167D800017A1A /* TransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51EEEAD1A1167D800017A1A /* TransitionAnimator.swift */; };
 		B52898DF19F7A4B6000CC9EF /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B52898DE19F7A4B6000CC9EF /* GoogleMaps.framework */; };
 		B52898E119F7A528000CC9EF /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B52898E019F7A528000CC9EF /* GoogleMaps.bundle */; };
 		B52898E319F7A5A7000CC9EF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B52898E219F7A5A7000CC9EF /* AVFoundation.framework */; };
@@ -90,6 +91,7 @@
 		B57E9B541A02B64200BCAA35 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B531A02B64200BCAA35 /* Security.framework */; };
 		B57E9B561A02B65000BCAA35 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57E9B551A02B65000BCAA35 /* StoreKit.framework */; };
 		B57E9B581A02BA9700BCAA35 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57E9B571A02BA9700BCAA35 /* Artist.swift */; };
+		B5AC42C31A11377D005A983E /* ImageScout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AC42C21A11377D005A983E /* ImageScout.swift */; };
 		B5B9119619F9615400A8806C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B9119519F9615400A8806C /* Foundation.framework */; };
 		B5BA1EF31A038BF600C99A99 /* arrowUp_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B5BA1EF21A038BF500C99A99 /* arrowUp_icon.png */; };
 		B5F502261A0EC32600E11D70 /* ArtToolbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F502251A0EC32600E11D70 /* ArtToolbarViewController.swift */; };
@@ -139,6 +141,7 @@
 		B51C979619F9357500F286C5 /* email_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_w.png; sourceTree = "<group>"; };
 		B51C979719F9357500F286C5 /* video_b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_b.png; sourceTree = "<group>"; };
 		B51C979819F9357500F286C5 /* video_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_w.png; sourceTree = "<group>"; };
+		B51EEEAD1A1167D800017A1A /* TransitionAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionAnimator.swift; sourceTree = "<group>"; };
 		B52898DE19F7A4B6000CC9EF /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		B52898E019F7A528000CC9EF /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 		B52898E219F7A5A7000CC9EF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -197,6 +200,7 @@
 		B57E9B531A02B64200BCAA35 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B57E9B551A02B65000BCAA35 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		B57E9B571A02BA9700BCAA35 /* Artist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
+		B5AC42C21A11377D005A983E /* ImageScout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageScout.swift; sourceTree = "<group>"; };
 		B5B9119519F9615400A8806C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B5BA1EF21A038BF500C99A99 /* arrowUp_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowUp_icon.png; sourceTree = "<group>"; };
 		B5F502251A0EC32600E11D70 /* ArtToolbarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtToolbarViewController.swift; sourceTree = "<group>"; };
@@ -280,6 +284,8 @@
 			children = (
 				B57DE42A19F5C16600F47A00 /* Resources */,
 				B5173DB419F2726C00B50011 /* AppDelegate.swift */,
+				B5AC42C21A11377D005A983E /* ImageScout.swift */,
+				B51EEEAD1A1167D800017A1A /* TransitionAnimator.swift */,
 				B5173DB819F2726C00B50011 /* Main.storyboard */,
 				B5173DBB19F2726C00B50011 /* Images.xcassets */,
 				B5173DBD19F2726C00B50011 /* LaunchScreen.xib */,
@@ -560,11 +566,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B57E9B481A026FB500BCAA35 /* ArtistDetailViewController.swift in Sources */,
+				B51EEEAE1A1167D800017A1A /* TransitionAnimator.swift in Sources */,
 				B5339BE519F97644003B1C88 /* ArtFeedViewController.swift in Sources */,
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
 				B57E9B581A02BA9700BCAA35 /* Artist.swift in Sources */,
 				B504E1E01A09446D00049A5B /* User.swift in Sources */,
 				B562BF451A0EB75C005EBE0B /* SearchTableViewController.swift in Sources */,
+				B5AC42C31A11377D005A983E /* ImageScout.swift in Sources */,
 				B5F502261A0EC32600E11D70 /* ArtToolbarViewController.swift in Sources */,
 				B504E1E31A098C5500049A5B /* UserViewController.swift in Sources */,
 				B5339BF419FA66E4003B1C88 /* Art.swift in Sources */,

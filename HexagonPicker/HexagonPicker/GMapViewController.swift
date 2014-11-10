@@ -15,7 +15,7 @@ protocol GMapViewControllerDelegate {
     func dismissGMapViewController()
 }
 
-class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, ArtViewControllerDelegate {
+class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, ArtViewControllerDelegate, UIViewControllerTransitioningDelegate {
     var homeViewController: UIViewController?
     var artForRoute: Art?
     
@@ -208,6 +208,8 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         artViewController.art = tappedMarker!.art
         artViewController.homeViewController = self
         artViewController.delegate = self
+        artViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+        artViewController.transitioningDelegate = self
         if iOS8Delta {
             self.showViewController(artViewController, sender: self)
         } else {
@@ -394,4 +396,22 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         }
     }
     
+    
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
+    
+    
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TransitionAnimator()
+    }
+    
+    
+    
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TransitionAnimator(false)
+    }
+   
 }

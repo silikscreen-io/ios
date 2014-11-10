@@ -12,7 +12,7 @@ var deviceOrientation: UIDeviceOrientation?
 let ORIENTATION_CHANGED_NOTIFICATION = "orientationChangedNotification"
 var deviceOrientationLandscape = false
 
-class ArtToolbarViewController: UIViewController, UIScrollViewDelegate {
+class ArtToolbarViewController: UIViewController, UIScrollViewDelegate, UIViewControllerTransitioningDelegate {
     
     var delegate: ArtFeedViewControllerDelegate?
 
@@ -341,26 +341,6 @@ class ArtToolbarViewController: UIViewController, UIScrollViewDelegate {
     func mapButtonTapped() {
         performSegueWithIdentifier("showMapSegue", sender: self)
     }
-//    
-//    
-//    
-//    func dismissGMapViewController() {
-//        self.dismissViewControllerAnimated(true, completion: nil)
-//    }
-//    
-//    
-//    
-//    func dismissArtViewController() {
-//        self.dismissViewControllerAnimated(true, completion: nil)
-//    }
-//    
-//    
-//    
-//    func dismissUserViewController() {
-//        self.dismissViewControllerAnimated(true, completion: { () -> Void in
-//            self.delegate!.dismissArtFeedViewController()
-//        })
-//    }
     
     
     
@@ -511,5 +491,17 @@ class ArtToolbarViewController: UIViewController, UIScrollViewDelegate {
     func showHomeToolbar(inout buttonsToolbarCoordinate: CGFloat, inout _ homeToolbarCoordinate: CGFloat) {
         buttonsToolbarCoordinate -= self.buttonsToolbarHeight
         homeToolbarCoordinate += self.buttonsToolbarHeight / 2
+    }
+    
+    
+    
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TransitionAnimator()
+    }
+    
+    
+    
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TransitionAnimator(false)
     }
 }

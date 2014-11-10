@@ -188,5 +188,11 @@ class UserViewController: UIViewController {
     func backButtonPressed(sender: UIButton) {
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
 
 }
