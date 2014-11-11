@@ -89,14 +89,16 @@ class Art: NSObject {
                 var error: NSError?
                 let imageData = imageFile.getData(&error)
                 if error == nil {
-                    self.image = UIImage(data: imageData)
-                    artsDisplayed.append(self)
-                    //println("Image loaded         : \(NSDate().timeIntervalSince1970)")
-                    //println("Notification sent    : \(NSDate().timeIntervalSince1970)")
-                    NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!, "loadedForFeed": NSNumber(bool: forFeed)])
-//                    self.image = UIImage(data: imageData)
-//                    artsDisplayed.append(self)
-//                    NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!, "loadedForFeed": NSNumber(bool: forFeed)])
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.image = UIImage(data: imageData)
+                        if forFeed {
+                            artsDisplayed.append(self)
+                        }
+                        artsDisplayed.append(self)
+                        //                    println("Image loaded         : \(NSDate().timeIntervalSince1970)")
+                        //                    println("Notification sent    : \(NSDate().timeIntervalSince1970)")
+                        NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!, "loadedForFeed": NSNumber(bool: forFeed)])
+                    })
                 }
             })
         }

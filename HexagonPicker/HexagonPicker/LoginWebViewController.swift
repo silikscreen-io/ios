@@ -68,6 +68,37 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
             let reply = NSURLConnection.sendSynchronousRequest(request, returningResponse: &response, error: &error)
             let requestData = NSJSONSerialization.JSONObjectWithData(reply!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary
             currentUser = User(requestData["data"] as NSDictionary)
+            
+//            let id = (requestData["data"] as NSDictionary)["id"] as String
+            
+//            let urlUser1 = NSURL(string: "https://api.instagram.com/v1/users/search?q=ikeakiev&access_token=\(token!)")
+//            let request1 = NSURLRequest(URL: urlUser1!)
+//            var error1: NSError?
+//            var response1: NSURLResponse?
+//            let reply1 = NSURLConnection.sendSynchronousRequest(request1, returningResponse: &response1, error: &error1)
+//            let requestData1 = NSJSONSerialization.JSONObjectWithData(reply1!, options: NSJSONReadingOptions.MutableContainers, error: &error1) as NSDictionary
+//            let tt = requestData["data"]
+//            let id = ((requestData["data"] as NSArray)[0] as NSDictionary)["id"] as String
+//            
+//
+//            
+//            let urlUser2 = NSURL(string: "https://api.instagram.com/v1/users/\(id)/?access_token=\(token!)")
+//            let request2 = NSURLRequest(URL: urlUser2!)
+//            var error2: NSError?
+//            var response2: NSURLResponse?
+//            let reply2 = NSURLConnection.sendSynchronousRequest(request2, returningResponse: &response2, error: &error2)
+//            let requestData2 = NSJSONSerialization.JSONObjectWithData(reply2!, options: NSJSONReadingOptions.MutableContainers, error: &error2) as NSDictionary
+//            currentUser = User(requestData["data"] as NSDictionary)
+//            
+//            let data = requestData["data"] as NSDictionary
+//            let pictureUrlString = data["profile_picture"] as String
+//            let imageData = NSData(contentsOfURL: NSURL(string: pictureUrlString)!)
+//            let profilePicture = UIImage(data: imageData!)
+            
+            
+            
+            
+            
             self.performSegueWithIdentifier("showArtFeedSegue", sender: self)
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "UserLoddedIn")
             NSUserDefaults.standardUserDefaults().synchronize()

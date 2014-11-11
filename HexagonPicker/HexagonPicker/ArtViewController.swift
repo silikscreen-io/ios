@@ -221,7 +221,25 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
 //        singleTap.numberOfTapsRequired = 1
 //        backgroundImageView!.userInteractionEnabled = true
 //        backgroundImageView!.addGestureRecognizer(singleTap)
-        //self.view.addSubview(backgroundImageView!)
+//self.view.addSubview(backgroundImageView!)
+        let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected")
+        singleTap.numberOfTapsRequired = 1
+        backgroundImageView!.userInteractionEnabled = true
+        backgroundImageView!.addGestureRecognizer(singleTap)
+        
+        let doubleTap = UITapGestureRecognizer(target: self, action: "doubleTapDetected")
+        doubleTap.numberOfTapsRequired = 2
+        backgroundImageView!.addGestureRecognizer(doubleTap)
+        singleTap.requireGestureRecognizerToFail(doubleTap)
+        //        UITapGestureRecognizer *singleTap = [[[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(doSingleTap)] autorelease];
+        //        singleTap.numberOfTapsRequired = 1;
+        //        [self.view addGestureRecognizer:singleTap];
+        //
+        //        UITapGestureRecognizer *doubleTap = [[[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(doDoubleTap)] autorelease];
+        //        doubleTap.numberOfTapsRequired = 2;
+        //        [self.view addGestureRecognizer:doubleTap];
+        //
+        //        [singleTap requireGestureRecognizerToFail:doubleTap];
         scrollView!.addSubview(backgroundImageView!)
     }
     
@@ -312,22 +330,47 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func tapDetected() {
-        if tagsOn {
-            return
+//        if tagsOn {
+//            return
+//        }
+//        if !artContentDisplayed {
+//            initContentView()
+//        }
+//        artContentDisplayed = !artContentDisplayed
+////        artContentView!.show(artContentDisplayed)
+//        if iOS8Delta {
+//            (artContentView! as ArtContentView).show(artContentDisplayed)
+//        } else {
+//            (artContentView! as ArtContentImageView).show(artContentDisplayed)
+//        }
+//        let alpha: CGFloat = artContentDisplayed ? 0 : 0.8
+//        UIView.animateWithDuration(0.2, animations: { self.tagsOnOffButton!.alpha = alpha })
+//        UIView.animateWithDuration(0.2, animations: { self.showRouteButton!.alpha = alpha })
+    }
+    
+    
+    
+    func doubleTapDetected() {
+        let likeView = UIImageView(image: UIImage(named: "like")!)
+        var likeFrame = likeView.frame
+        likeFrame.origin.x = (screenSize!.width - likeFrame.width) / 2
+        likeFrame.origin.y = 50
+        likeView.frame = likeFrame
+        self.view.addSubview(likeView)
+        likeView.alpha = 0
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            likeView.alpha = 1
+        }) { (finished) -> Void in
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                likeView.alpha = 0.99
+                }) { (finished) -> Void in
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        likeView.alpha = 0
+                        }) { (finished) -> Void in
+                            likeView.removeFromSuperview()
+                    }
+            }
         }
-        if !artContentDisplayed {
-            initContentView()
-        }
-        artContentDisplayed = !artContentDisplayed
-//        artContentView!.show(artContentDisplayed)
-        if iOS8Delta {
-            (artContentView! as ArtContentView).show(artContentDisplayed)
-        } else {
-            (artContentView! as ArtContentImageView).show(artContentDisplayed)
-        }
-        let alpha: CGFloat = artContentDisplayed ? 0 : 0.8
-        UIView.animateWithDuration(0.2, animations: { self.tagsOnOffButton!.alpha = alpha })
-        UIView.animateWithDuration(0.2, animations: { self.showRouteButton!.alpha = alpha })
     }
     
     
