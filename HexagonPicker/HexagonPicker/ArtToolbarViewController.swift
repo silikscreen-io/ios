@@ -21,7 +21,7 @@ class ArtToolbarViewController: UIViewController, UIScrollViewDelegate, UIViewCo
     var scrollingStarted = false
     var handleScrollingStarted = false
     
-    let buttonsToolbarHeight: CGFloat = 48
+    let buttonsToolbarHeight: CGFloat = 44
     var buttonsBarDisplayed = true
     var homeToolbar: UIToolbar!
     var homeToolbarImageView: UIImageView!

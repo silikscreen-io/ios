@@ -10,8 +10,14 @@ import UIKit
 
 class FirstViewController: UIViewController {
 
+    @IBOutlet weak var loginButton: UIButton!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        if NSUserDefaults.standardUserDefaults().boolForKey("UserLoddedIn") {
+            loginButton.hidden = true
+        }
     }
     
     

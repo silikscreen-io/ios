@@ -47,6 +47,7 @@ class Art: NSObject {
     var image: UIImage?
     var size: CGSize = CGSize()
     var iconImage: UIImage?
+    var iconHexaImage: UIImage?
     var previewImage: UIImage?
     var artDescription: String = "Description unavailable"
     var artStatus: String = "Status unavailable"
@@ -203,6 +204,7 @@ class Art: NSObject {
         imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
             if error == nil {
                 art.iconImage = UIImage(data:imageData)
+                art.iconHexaImage = art.getMaskedImage(art.iconImage!, UIImage(named: "hexagon_100_mask_w.png")!)
                 NSNotificationCenter.defaultCenter().postNotificationName(ICON_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art": art])
 //                println("Image icon added: \(iconAdded++)")
             }
@@ -212,6 +214,23 @@ class Art: NSObject {
     
     
     
+    func getMaskedImage(originalImage: UIImage, _ maskImage: UIImage) -> UIImage {
+        let maskImageReference = maskImage.CGImage
+        let mask = CGImageMaskCreate(CGImageGetWidth(maskImageReference),
+            CGImageGetHeight(maskImageReference),
+            CGImageGetBitsPerComponent(maskImageReference),
+            CGImageGetBitsPerPixel(maskImageReference),
+            CGImageGetBytesPerRow(maskImageReference),
+            CGImageGetDataProvider(maskImageReference), nil, false)
+        
+        let maskedImageReference = CGImageCreateWithMask(originalImage.CGImage, mask)
+        let maskedImage = UIImage(CGImage: maskedImageReference)
+
+        return maskedImage!
+    }
+
+    
+        
     func getPreview() {
         var imageFile = pfObjectAdditionalResources!["preview"] as PFFile
         imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in

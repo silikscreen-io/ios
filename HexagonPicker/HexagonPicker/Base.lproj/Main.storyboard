@@ -87,6 +87,9 @@
                             <constraint firstItem="Y82-Ux-FT2" firstAttribute="top" secondItem="rYz-al-erl" secondAttribute="bottom" constant="46" id="UzR-ot-aZy"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="loginButton" destination="Y82-Ux-FT2" id="4M7-ms-qwj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dy7-Ks-xnf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
