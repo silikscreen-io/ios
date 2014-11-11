@@ -27,7 +27,7 @@ class ArtView: UIImageView {
         self.parentViewController = parentViewController
         self.art = art
         
-        let imageSize = art.image!.size
+        let imageSize = art.image == nil ? art.size : art.image!.size
         let imageWidth = imageSize.width
         let imageHeight = imageSize.height
         let scaleFactor = (deviceOrientationLandscape ? imageSize.height / heigth : imageSize.width / width)
@@ -51,18 +51,7 @@ class ArtView: UIImageView {
     
     
     func update(art: Art, _ deviceOrientationLandscape: Bool) {
-//        dispatch_async(queue, {
-//            self.art = art
-//            self.image = art.image
-////            var error: NSError?
-////            let imageData: NSData? = NSData(contentsOfURL: NSURL(string: link)!, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &error)
-////            if error == nil {
-////                pictures1[link] = UIImage(data: imageData!)
-////                dispatch_async(dispatch_get_main_queue(), {
-////                    NSNotificationCenter.defaultCenter().postNotificationName(pictureLoadedNotification, object:self)
-////                })
-////            }
-//        });
+//        println("Image reloaded in art view         : \(NSDate().timeIntervalSince1970)")
         self.art = art
         image = art.image
         

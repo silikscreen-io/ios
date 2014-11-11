@@ -94,35 +94,81 @@ Parse.Cloud.define('getLocationAverage', function(request, response) {
 Parse.Cloud.define('getArtsSizes', function(request, response) {
   var artsObject = Parse.Object.extend("Arts");
   var query = new Parse.Query(artsObject);
-  query.limit(5);
+  query.limit(1000);
   query.find({ success: function(results) {
     	var images = [];
 		var promises = [];
-		console.log("results length");
-		console.log(results.length);
+		// console.log("results length");
+		// console.log(results.length);
 		for (var i = 0; i < results.length; i++) { 
-						var url = art.get('image').url();
-						console.log(url);
+			
+			    (function(i) {
+			    	var art = results[i];
+ 						var url = art.get('image').url();
+						// console.log(url);
 
 						promises.push(Parse.Cloud.httpRequest({ url: url }).then(function(response) {
-							console.log("Parse.Cloud.httpRequest");
+							// console.log("Parse.Cloud.httpRequest");
 						  var image = new Image();
 						  return image.setData(response.buffer);
 						}).then(function(image) {
-							console.log("Get the bytes of the new image.");
-							console.log("Image is " + image.width() + "x" + image.height() + ".");
+							// console.log("Get the bytes of the new image.");
+							// console.log("Image is " + image.width() + "x" + image.height() + ".");
 							var imageSize = [];
 							imageSize.push(image.width());
 							imageSize.push(image.height());
-							images.push(cropped);
+							//images.push(imageSize);
+							var art = results[i];
+							console.log("Image size: " + imageSize);
+							console.log("art " + art.get("image_alt"));
+
+							art.set("size", imageSize);
+							images.push(image.width() / image.height());
+							return art.save();
+
+
+							// return art.save({
+							//     player: "Jake Cutter",
+							//     diceRoll: 2
+							//   }).then(function(gameTurnAgain) {
+							//     // The save was successful.
+							//   }, function(error) {
+							//     // The save failed.  Error is an instance of Parse.Error.
+							//   });
+						}).then(function(saved) {
+								console.log("The file has been saved to Parse.");
 						}));
+   				})(i);
+
+						// var url = art.get('image').url();
+						// // console.log(url);
+
+						// promises.push(Parse.Cloud.httpRequest({ url: url }).then(function(response) {
+						// 	// console.log("Parse.Cloud.httpRequest");
+						//   var image = new Image();
+						//   return image.setData(response.buffer);
+						// }).then(function(image) {
+						// 	// console.log("Get the bytes of the new image.");
+						// 	// console.log("Image is " + image.width() + "x" + image.height() + ".");
+						// 	var imageSize = [];
+						// 	imageSize.push(image.width());
+						// 	imageSize.push(image.height());
+						// 	//images.push(imageSize);
+						// 	var art = results[i];
+						// 	console.log("Image is " + image.width() + "x" + image.height() + ".");
+						// 	console.log("art " + art.get("image_alt"));
+
+						// 	art.set("size", imageSize);
+						// 	art.save();
+						// 	images.push(image.width() / image.height());
+						// }));
     	}
 
 		// _.each(results, function(art) {
 		// });
 		// Return a new promise that is resolved when all of the deletes are finished.
 		Parse.Promise.when(promises).then(function(results) {
-			console.log("Parse.Promise.when(promises).then(function(results)");
+			// console.log("Parse.Promise.when(promises).then(function(results)");
 			response.success(images);
 		});
     }, error: function(error) {

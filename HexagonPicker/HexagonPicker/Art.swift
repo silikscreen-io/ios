@@ -14,9 +14,11 @@ let ICON_LOADED_NOTIFICATION_ID = "iconLoadedNotification"
 let PREVIEW_LOADED_NOTIFICATION_ID = "previewLoadedNotification"
 
 var arts: [Art] = []
+var numberOfArts = 0
+var processedForSizeArts = 0
 var artsDictionary: [String: Art] = [:]
 var artsDisplayed: [Art] = []
-let MAX_NUMBER_OF_LOADED_IMAGES = 20
+let MAX_NUMBER_OF_LOADED_IMAGES = 16
 var currentNumberOfLoadedImages = 0
 var iconAdded = 0
 
@@ -33,6 +35,7 @@ class Art: NSObject {
     let LONGITUDE_FIELD_ID = "lng"
     let ART_DESCRIPTION_ID = "image_alt"
     let WORK_STATUS_ID = "work_status"
+    let SIZE_ID = "size"
     
     var delegate: ArtDelegate?
     
@@ -42,6 +45,7 @@ class Art: NSObject {
     weak var artist: Artist?
    
     var image: UIImage?
+    var size: CGSize = CGSize()
     var iconImage: UIImage?
     var previewImage: UIImage?
     var artDescription: String = "Description unavailable"
@@ -65,6 +69,8 @@ class Art: NSObject {
         artStatus = pfObject[WORK_STATUS_ID] as String
         loadImage()
         city = cities[Int(arc4random_uniform(3))]
+        let sizeArray = pfObject[SIZE_ID] as NSArray
+        size = CGSize(width: sizeArray[0] as CGFloat, height: sizeArray[1] as CGFloat)
     }
     
     
@@ -77,13 +83,21 @@ class Art: NSObject {
 //            println("Image started load: \(currentNumberOfLoadedImages)")
             self.imageIndex = currentNumberOfLoadedImages
             let imageFile = pfObject!["image"] as PFFile
-            imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
+            let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+            dispatch_async(queue, {
+                var error: NSError?
+                let imageData = imageFile.getData(&error)
                 if error == nil {
-                    self.image = UIImage(data:imageData)
+                    self.image = UIImage(data: imageData)
                     artsDisplayed.append(self)
+                    //println("Image loaded         : \(NSDate().timeIntervalSince1970)")
+                    //println("Notification sent    : \(NSDate().timeIntervalSince1970)")
                     NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!, "loadedForFeed": NSNumber(bool: forFeed)])
+//                    self.image = UIImage(data: imageData)
+//                    artsDisplayed.append(self)
+//                    NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!, "loadedForFeed": NSNumber(bool: forFeed)])
                 }
-            }
+            })
         }
     }
     
@@ -92,16 +106,20 @@ class Art: NSObject {
     func reloadImage(artView: ArtView) {
         self.imageIndex = currentNumberOfLoadedImages
         let imageFile = pfObject!["image"] as PFFile
-        imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
+        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+        artsDisplayed.append(self)
+        dispatch_async(queue, {
+            var error: NSError?
+            let imageData = imageFile.getData(&error)
             if error == nil {
-                //println("Image end load: \(self.imageIndex)")
-                self.image = UIImage(data:imageData)
-                //                    currentNumberOfLoadedImages++
-                //println("Image loaded: \(NSDate().timeIntervalSince1970)")
-                artsDisplayed.append(self)
-                NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_RELOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView])
+                self.image = UIImage(data: imageData)
+                //println("Image reloaded         : \(NSDate().timeIntervalSince1970)")
+                //println("Notification sent    : \(NSDate().timeIntervalSince1970)")
+                dispatch_async(dispatch_get_main_queue(), {
+                    NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_RELOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView])
+                })
             }
-        }
+        })
     }
     
     

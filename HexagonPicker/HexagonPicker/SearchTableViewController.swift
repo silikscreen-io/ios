@@ -52,7 +52,6 @@ class SearchTableViewController: ArtToolbarViewController, UITableViewDataSource
         }
         super.viewWillLayoutSubviews()
         scrollView!.frame = screenSize!
-        initNavigationBar()
         updateSubviews()
     }
     

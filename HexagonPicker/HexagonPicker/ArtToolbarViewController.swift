@@ -447,6 +447,9 @@ class ArtToolbarViewController: UIViewController, UIScrollViewDelegate, UIViewCo
             let deltaY = scrollView.contentOffset.y - contentOffset!.y
             let scrolledDown = scrollView.contentOffset.y > contentOffset!.y
             if scrolledDown {
+                if buttonsToolbarView!.frame.origin.y >= screenSize!.height {
+                    return
+                }
                 buttonsToolbarView!.frame.origin.y += deltaY
                 homeToolbar.frame.origin.y -= deltaY / 2
                 if homeToolbar.frame.origin.y <= screenSize!.height - homeToolbar.frame.height {

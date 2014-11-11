@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        //println(NSBundle.mainBundle().bundleIdentifier)
         GMSServices.provideAPIKey("AIzaSyAVpKvbAoNl3qQUiUkdUM9kMKO4rl2SJUM");
         //Art.initArts()
         UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
@@ -71,6 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             } else {
             }
+            println("queryArts() started         : \(NSDate().timeIntervalSince1970)")
             self.queryArts()
         }
     }
@@ -78,16 +78,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func queryArts() {
+        println("arts loading started         : \(NSDate().timeIntervalSince1970)")
         var query = PFQuery(className: ARTS_CLASS_NAME)
         query.limit = 1000
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error == nil {
                 var allObjects = objects as [PFObject]
+                numberOfArts = allObjects.count
                 for object in allObjects {
                     Art.addArt(object)
                 }
             } else {
             }
+            println("arts loaded         : \(NSDate().timeIntervalSince1970)")
+            artsDidLoaded = true
+            NSNotificationCenter.defaultCenter().postNotificationName(ARTS_LOADED_NOTIFICATION, object: nil)
             self.queryAdditionalResources()
         }
     }
