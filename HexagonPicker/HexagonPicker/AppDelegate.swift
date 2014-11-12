@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId(parseApplicationId, clientKey: parseClientKey)
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
 
-        queryArtists(0)
+        queryArts()
         deviceOrientation = UIDevice.currentDevice().orientation
         let devOrientation =  ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? "Portrait" : "Landscape"
         println("deviceOrientation " + devOrientation)
@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     
-    func queryArtists(skip: Int) {
+    func queryArtists() {
         var query = PFQuery(className: ARTISTS_CLASS_NAME)
         query.limit = 1000
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
@@ -70,8 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             } else {
             }
-            println("queryArts() started         : \(NSDate().timeIntervalSince1970)")
-            self.queryArts()
+            Art.connectArtsToArtists()
         }
     }
     
@@ -90,9 +89,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             } else {
             }
-            println("arts loaded         : \(NSDate().timeIntervalSince1970)")
             artsDidLoaded = true
-            NSNotificationCenter.defaultCenter().postNotificationName(ARTS_LOADED_NOTIFICATION, object: nil)
+            dispatch_async(dispatch_get_main_queue(), {
+                NSNotificationCenter.defaultCenter().postNotificationName(ARTS_LOADED_NOTIFICATION, object: nil)
+            })
+            self.queryArtists()
             self.queryAdditionalResources()
         }
     }

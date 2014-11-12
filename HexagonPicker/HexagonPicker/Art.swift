@@ -18,11 +18,11 @@ var numberOfArts = 0
 var processedForSizeArts = 0
 var artsDictionary: [String: Art] = [:]
 var artsDisplayed: [Art] = []
-let MAX_NUMBER_OF_LOADED_IMAGES = 16
+let MAX_NUMBER_OF_LOADED_IMAGES = 8
 var currentNumberOfLoadedImages = 0
 var iconAdded = 0
 
-let cities = ["Miami", "London", "Berlin"]
+let cities = ["Miami", "London", "Berlin", "Paris", "Ilion"]
 
 protocol ArtDelegate {
     func artTapped(art: Art)
@@ -43,6 +43,7 @@ class Art: NSObject {
     var pfObjectAdditionalResources: PFObject?
     
     weak var artist: Artist?
+    var artistId: String?
    
     var image: UIImage?
     var size: CGSize = CGSize()
@@ -69,7 +70,26 @@ class Art: NSObject {
         artDescription = pfObject[ART_DESCRIPTION_ID] as String
         artStatus = pfObject[WORK_STATUS_ID] as String
         loadImage()
-        city = cities[Int(arc4random_uniform(3))]
+        city = cities[Int(arc4random_uniform(2))]
+        let sizeArray = pfObject[SIZE_ID] as NSArray
+        size = CGSize(width: sizeArray[0] as CGFloat, height: sizeArray[1] as CGFloat)
+    }
+    
+    
+    init(_ pfObject: PFObject) {
+        super.init()
+        let artistsIds = pfObject["artist"] as NSArray
+        if artistsIds.count > 0 {
+            artistId = artistsIds[0] as? String
+        }
+
+        self.pfObject = pfObject
+        let locationObject = pfObject[LOCATION_FIELD_ID] as PFGeoPoint
+        self.location = CLLocationCoordinate2D(latitude: locationObject.latitude, longitude: locationObject.longitude)
+        artDescription = pfObject[ART_DESCRIPTION_ID] as String
+        artStatus = pfObject[WORK_STATUS_ID] as String
+        loadImage()
+        city = cities[Int(arc4random_uniform(2))]
         let sizeArray = pfObject[SIZE_ID] as NSArray
         size = CGSize(width: sizeArray[0] as CGFloat, height: sizeArray[1] as CGFloat)
     }
@@ -87,7 +107,9 @@ class Art: NSObject {
             let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
             dispatch_async(queue, {
                 var error: NSError?
+                println("Image load started         : \(NSDate().timeIntervalSince1970)")
                 let imageData = imageFile.getData(&error)
+                println("Image load ended         : \(NSDate().timeIntervalSince1970)")
                 if error == nil {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.image = UIImage(data: imageData)
@@ -96,7 +118,7 @@ class Art: NSObject {
                         }
                         artsDisplayed.append(self)
                         //                    println("Image loaded         : \(NSDate().timeIntervalSince1970)")
-                        //                    println("Notification sent    : \(NSDate().timeIntervalSince1970)")
+                        println("Notification image loaded sent    : \(NSDate().timeIntervalSince1970)")
                         NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!, "loadedForFeed": NSNumber(bool: forFeed)])
                     })
                 }
@@ -183,18 +205,20 @@ class Art: NSObject {
     
     
     class func addArt(pfObject: PFObject) {
-        let artistsIds = pfObject["artist"] as NSArray
-        var artist: Artist?
-        if artists.count > 0 {
-            let artistId = artistsIds[0] as? String
-            if artistId != nil {
-                artist = artists[artistId!]
-            }
-        }
-        let art = Art(artist, pfObject)
+        let art = Art(pfObject)
         art.pfObject = pfObject
         arts.append(art)
         artsDictionary[pfObject.objectId] = art
+    }
+    
+    
+    
+    class func connectArtsToArtists() {
+        for art in arts {
+            let artist = artists[art.artistId!] as Artist!
+            art.artist = artist
+            artist!.addArt(art)
+        }
     }
     
     

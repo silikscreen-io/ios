@@ -44,6 +44,8 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     var screenshotView: UIImageView?
     var screenshot: UIImage?
     
+    var activityIndicatorView: UIActivityIndicatorView?
+    
     let buttonSize: CGFloat = 52
     let buttonWidth: CGFloat = 100
     let buttonHeight: CGFloat = 40
@@ -103,13 +105,30 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     func initAllConnectedWithArtImage() {
         if art!.image == nil {
             art!.loadImage(nil, false)
+            activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+            updateActivityIndicator()
+            activityIndicatorView!.startAnimating()
+            self.view.addSubview(activityIndicatorView!)
             return
+        }
+        if activityIndicatorView != nil {
+            activityIndicatorView!.removeFromSuperview()
+            activityIndicatorView = nil
         }
         NSNotificationCenter.defaultCenter().removeObserver(self, name: IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil)
         initbackgroundImageView()
         setupScrollViewWithArt()
         initMotions()
 
+    }
+    
+    
+    
+    func updateActivityIndicator() {
+        if activityIndicatorView != nil {
+            activityIndicatorView!.frame.origin.x = (screenSize!.width - activityIndicatorView!.frame.width) / 2
+            activityIndicatorView!.frame.origin.y = (screenSize!.height - activityIndicatorView!.frame.height) / 2
+        }
     }
     
     
@@ -216,12 +235,11 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         
         backgroundImageView!.image = art!.image
         frameBase = backgroundImageView!.frame
+        backgroundImageView!.alpha = 0
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            self.backgroundImageView!.alpha = 1
+        })
         
-//        let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected")
-//        singleTap.numberOfTapsRequired = 1
-//        backgroundImageView!.userInteractionEnabled = true
-//        backgroundImageView!.addGestureRecognizer(singleTap)
-//self.view.addSubview(backgroundImageView!)
         let singleTap = UITapGestureRecognizer(target: self, action: "tapDetected")
         singleTap.numberOfTapsRequired = 1
         backgroundImageView!.userInteractionEnabled = true
@@ -231,15 +249,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         doubleTap.numberOfTapsRequired = 2
         backgroundImageView!.addGestureRecognizer(doubleTap)
         singleTap.requireGestureRecognizerToFail(doubleTap)
-        //        UITapGestureRecognizer *singleTap = [[[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(doSingleTap)] autorelease];
-        //        singleTap.numberOfTapsRequired = 1;
-        //        [self.view addGestureRecognizer:singleTap];
-        //
-        //        UITapGestureRecognizer *doubleTap = [[[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(doDoubleTap)] autorelease];
-        //        doubleTap.numberOfTapsRequired = 2;
-        //        [self.view addGestureRecognizer:doubleTap];
-        //
-        //        [singleTap requireGestureRecognizerToFail:doubleTap];
         scrollView!.addSubview(backgroundImageView!)
     }
     
@@ -585,6 +594,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
                 self.view.bringSubviewToFront(self.shareButton!)
                 self.view.bringSubviewToFront(self.artShareMenuView!)
                 self.view.bringSubviewToFront(self.artistButton!)
+                if self.activityIndicatorView != nil {
+                    self.view.bringSubviewToFront(self.activityIndicatorView!)
+                }
                 //self.view.bringSubviewToFront(self.homeToolbar!)
             })
         })
@@ -610,6 +622,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         //backgroundImageView!.frame = getFrameForbackgroundImageView()
         updateScrollView()
         updateButtons()
+        updateActivityIndicator()
         if artContentView != nil {
 //            artContentView!.updateToFrame(screenSize!)
             if iOS8Delta {

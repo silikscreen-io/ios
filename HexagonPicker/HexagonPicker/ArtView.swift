@@ -10,7 +10,7 @@ import UIKit
 
 let queue = dispatch_queue_create("com.example.MyQueue", nil)
 let users = ["ann.jpg", "gal.jpg", "rah.jpg", "ste.png", "vad.jpg"]
-
+var buttonsLoadedNumber = 0
 
 class ArtView: UIImageView {
     
@@ -38,20 +38,24 @@ class ArtView: UIImageView {
             frame.origin.y = length
         }
         frame.size = (deviceOrientationLandscape ? CGSize(width: imageViewLength, height: heigth) : CGSize(width: width, height: imageViewLength))
-        image = art.image
+        dispatch_async(dispatch_get_main_queue(), {
+            self.image = art.image
+        })
         
         let singleTap = UITapGestureRecognizer()
         singleTap.addTarget(art, action: "tapDetected:")
         singleTap.numberOfTapsRequired = 1
         userInteractionEnabled = true
         addGestureRecognizer(singleTap)
-        initButtons(width, heigth)
+        if buttonsLoadedNumber < MAX_NUMBER_OF_LOADED_IMAGES {
+            initButtons(width, heigth)
+            buttonsLoadedNumber++
+        }
     }
     
     
     
     func update(art: Art, _ deviceOrientationLandscape: Bool) {
-//        println("Image reloaded in art view         : \(NSDate().timeIntervalSince1970)")
         self.art = art
         image = art.image
         
@@ -84,6 +88,9 @@ class ArtView: UIImageView {
     
     
     func resizeButtons(width: CGFloat, _ heigth: CGFloat) {
+        if artistButton == nil {
+            return
+        }
         let x = (width < heigth ? bounds.width - buttonWidth - padding : padding)
         artistButton!.frame = CGRect(origin: CGPoint(x: x, y: padding), size: artistButton!.frame.size)
     }
@@ -91,11 +98,27 @@ class ArtView: UIImageView {
     
     
     func initButtons(width: CGFloat, _ heigth: CGFloat) {
-        let x = (width < heigth ? bounds.width - buttonWidth - padding : padding)
-        artistButton = HexaButton(x, padding, buttonWidth)
-        artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
-        artistButton!.addTarget(self, action: "artistButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        addSubview(artistButton!)
+        let x = (width < heigth ? self.bounds.width - self.buttonWidth - self.padding : self.padding)
+        let button = HexaButton(x, self.padding, self.buttonWidth)
+        self.artistButton = button
+        self.artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
+        self.artistButton!.addTarget(self, action: "artistButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addSubview(self.artistButton!)
+    }
+    
+    
+    
+    func addButton() {
+        initButtons(parentViewController!.view.frame.width, parentViewController!.view.frame.height)
+    }
+    
+    
+    
+    func removeButton() {
+        if artistButton != nil {
+            artistButton!.removeFromSuperview()
+            artistButton = nil
+        }
     }
     
     

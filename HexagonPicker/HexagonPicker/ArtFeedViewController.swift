@@ -81,8 +81,9 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     
     func initScrollView() {
-        fillScrollView()
         self.view.addSubview(scrollView)
+        println("scrollView added         : \(NSDate().timeIntervalSince1970)")
+        fillScrollView()
         contentOffset = scrollView!.contentOffset
         if artistTopButton != nil {
             view.bringSubviewToFront(artistTopButton!)
@@ -125,27 +126,35 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
         let screenHeigth = frame.height
         var scrollViewLength: CGFloat = 0
         frame = CGRect()
-        for art in arts {
-            let artView = ArtView(art, scrollViewLength, screenWidth, screenHeigth, self, deviceOrientationLandscape)
-            scrollView.addSubview(artView)
-            scrollViewLength += (deviceOrientationLandscape ? artView.frame.width : artView.frame.height)
-            art.delegate = self
-            artViews.append(artView)
-            if artView.image != nil {
-                artView.alpha = 0
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
-                    artView.alpha = 1
+//        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+//        dispatch_async(queue, {
+            for art in arts {
+                let artView = ArtView(art, scrollViewLength, screenWidth, screenHeigth, self, deviceOrientationLandscape)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.scrollView.addSubview(artView)
+                    if artView.image != nil {
+                        artView.alpha = 0
+                        UIView.animateWithDuration(0.5, animations: { () -> Void in
+                            artView.alpha = 1
+                        })
+                    }
                 })
+                scrollViewLength += (deviceOrientationLandscape ? artView.frame.width : artView.frame.height)
+                self.scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
+                art.delegate = self
+                self.artViews.append(artView)
+                if self.artistTopButton == nil {
+                    self.artistTopButton = artView.artistButton
+                    if self.artistTopButton != nil {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.view.addSubview(self.artistTopButton!)
+                        })
+                    }
+                } else if self.artistTopButtonNext == nil {
+                    self.artistTopButtonNext = artView.artistButton
+                }
             }
-            if artistTopButton == nil {
-                artistTopButton = artView.artistButton
-                artistTopButton!.removeFromSuperview()
-                view.addSubview(artistTopButton!)
-            } else if artistTopButtonNext == nil {
-                artistTopButtonNext = artView.artistButton
-            }
-        }
-        scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
+//        })
     }
     
     
@@ -161,7 +170,6 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
         }
         let art = notificationDictionary.objectForKey("art") as Art
         let artView = notificationDictionary.objectForKey("artView") as? ArtView
-
         if artView != nil {
             artView!.update(art, deviceOrientationLandscape)
         } else {
@@ -291,13 +299,9 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
             return
         }
         artIndexTopDisplayed += newIndex
-//        println("artIndexTopDisplayed: \(artIndexTopDisplayed)")
         if newIndex > 0 {
             if artIndexTopDisplayed > MAX_NUMBER_OF_LOADED_IMAGES / 2 {
-                //artIndexTopDisplayed -= newIndex
                 let addArtIndex = artIndexFirst + MAX_NUMBER_OF_LOADED_IMAGES
-                //println("addArtIndex: \(addArtIndex)")
-                //println("artViews.count: \(artViews.count)")
                 if artIndexFirst + MAX_NUMBER_OF_LOADED_IMAGES < arts.count {
                     let newDisplayedArt = arts[addArtIndex]
                     currentNumberOfLoadedImages--
@@ -305,22 +309,20 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
                     if artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex < artViews.count {
                         artView = artViews[artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex]
                     }
-                    //println("art view for reload image index: \(artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex)")
                     newDisplayedArt.reloadImage(artView!)
-//                    newDisplayedArt.loadImage(artView)
+                    artView!.addButton()
                     clearImage(artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 - newIndex)
                     artIndexFirst += newIndex
                 }
             }
         } else {
             if artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2 < 0 {
-                //artIndexTopDisplayed = 0
                 return
             }
             artIndexFirst += newIndex
-            //println("artToReloadImageView: \(artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2)")
             let newDisplayedArtView = artViews[artIndexTopDisplayed - MAX_NUMBER_OF_LOADED_IMAGES / 2]
             newDisplayedArtView.art!.reloadImage(newDisplayedArtView)
+            newDisplayedArtView.addButton()
             clearImage(artIndexTopDisplayed + MAX_NUMBER_OF_LOADED_IMAGES / 2)
         }
     }
@@ -328,13 +330,11 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     
     func clearImage(index: Int) {
-//        println("artsDisplayed.count: \(artsDisplayed.count)")
-//        println("artViews.count: \(artViews.count)")
-//        println("artToDeleteImageView: \(index)")
         if index < artViews.count {
             var artToDeleteImageView = artViews[index]
             artToDeleteImageView.art!.image = nil
             artToDeleteImageView.image = nil
+            artToDeleteImageView.removeButton()
             let index = find(artsDisplayed, artToDeleteImageView.art!)
             if index != nil {
                 artsDisplayed.removeAtIndex(index!)
