@@ -78,6 +78,7 @@
 		B565D1E41A04577B0058860D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B565D1E31A04577B0058860D /* CoreTelephony.framework */; };
 		B5687BD51A0AF993005FA9C8 /* ste.png in Resources */ = {isa = PBXBuildFile; fileRef = B5687BD41A0AF993005FA9C8 /* ste.png */; };
 		B5687BD71A0AFBD2005FA9C8 /* vad.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5687BD61A0AFBD2005FA9C8 /* vad.jpg */; };
+		B5691C831A14ADC10005F735 /* CollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5691C821A14ADC10005F735 /* CollectionsViewController.swift */; };
 		B57DE42719F5B65700F47A00 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57DE42619F5B65700F47A00 /* CoreLocation.framework */; };
 		B57DE42E19F5C16600F47A00 /* Picture1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42B19F5C16600F47A00 /* Picture1.jpg */; };
 		B57DE42F19F5C16600F47A00 /* Picture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B57DE42C19F5C16600F47A00 /* Picture2.jpg */; };
@@ -191,6 +192,7 @@
 		B565D1E31A04577B0058860D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		B5687BD41A0AF993005FA9C8 /* ste.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ste.png; sourceTree = "<group>"; };
 		B5687BD61A0AFBD2005FA9C8 /* vad.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = vad.jpg; sourceTree = "<group>"; };
+		B5691C821A14ADC10005F735 /* CollectionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionsViewController.swift; sourceTree = "<group>"; };
 		B57DE42619F5B65700F47A00 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B57DE42B19F5C16600F47A00 /* Picture1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture1.jpg; sourceTree = "<group>"; };
 		B57DE42C19F5C16600F47A00 /* Picture2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Picture2.jpg; sourceTree = "<group>"; };
@@ -303,8 +305,6 @@
 				B5D4AA991A12612400F0D54D /* FirstViewController.swift */,
 				B5173DEE19F5790700B50011 /* LoginWebViewController.swift */,
 				B5339BF319FA66E4003B1C88 /* Art.swift */,
-				B57E9B571A02BA9700BCAA35 /* Artist.swift */,
-				B57E9B471A026FB500BCAA35 /* ArtistDetailViewController.swift */,
 				B57E9B451A00654B00BCAA35 /* ArtView.swift */,
 				B5F502251A0EC32600E11D70 /* ArtToolbarViewController.swift */,
 				B5339BE419F97644003B1C88 /* ArtFeedViewController.swift */,
@@ -315,6 +315,9 @@
 				B558EB7819FEA49800C98904 /* ArtContentImageView.swift */,
 				B51856E319FFBC2F009800CE /* ArtShareMenuView.swift */,
 				B5173DD619F2765700B50011 /* HexaButton.swift */,
+				B5691C821A14ADC10005F735 /* CollectionsViewController.swift */,
+				B57E9B571A02BA9700BCAA35 /* Artist.swift */,
+				B57E9B471A026FB500BCAA35 /* ArtistDetailViewController.swift */,
 				B504E1DF1A09446D00049A5B /* User.swift */,
 				B504E1E21A098C5500049A5B /* UserViewController.swift */,
 				B52898FC19F7A859000CC9EF /* GMapViewController.swift */,
@@ -581,6 +584,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5691C831A14ADC10005F735 /* CollectionsViewController.swift in Sources */,
 				B57E9B481A026FB500BCAA35 /* ArtistDetailViewController.swift in Sources */,
 				B51EEEAE1A1167D800017A1A /* TransitionAnimator.swift in Sources */,
 				B5339BE519F97644003B1C88 /* ArtFeedViewController.swift in Sources */,

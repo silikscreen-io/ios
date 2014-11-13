@@ -146,9 +146,7 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
                 if self.artistTopButton == nil {
                     self.artistTopButton = artView.artistButton
                     if self.artistTopButton != nil {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.view.addSubview(self.artistTopButton!)
-                        })
+                        self.view.addSubview(self.artistTopButton!)
                     }
                 } else if self.artistTopButtonNext == nil {
                     self.artistTopButtonNext = artView.artistButton

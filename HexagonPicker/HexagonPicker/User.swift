@@ -16,6 +16,7 @@ class User: NSObject {
     var fullName: String?
     var profilePicture: UIImage?
     var icon: UIImage?
+    var likes: [Art] = []
    
     
     init(_ data: NSDictionary) {

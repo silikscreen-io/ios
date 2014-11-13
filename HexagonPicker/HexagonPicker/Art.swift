@@ -70,7 +70,7 @@ class Art: NSObject {
         artDescription = pfObject[ART_DESCRIPTION_ID] as String
         artStatus = pfObject[WORK_STATUS_ID] as String
         loadImage()
-        city = cities[Int(arc4random_uniform(2))]
+        city = cities[Int(arc4random_uniform(4))]
         let sizeArray = pfObject[SIZE_ID] as NSArray
         size = CGSize(width: sizeArray[0] as CGFloat, height: sizeArray[1] as CGFloat)
     }
@@ -89,7 +89,7 @@ class Art: NSObject {
         artDescription = pfObject[ART_DESCRIPTION_ID] as String
         artStatus = pfObject[WORK_STATUS_ID] as String
         loadImage()
-        city = cities[Int(arc4random_uniform(2))]
+        city = cities[Int(arc4random_uniform(4))]
         let sizeArray = pfObject[SIZE_ID] as NSArray
         size = CGSize(width: sizeArray[0] as CGFloat, height: sizeArray[1] as CGFloat)
     }
@@ -257,12 +257,12 @@ class Art: NSObject {
 
     
         
-    func getPreview() {
+    func loadPreview(_ collectionView: UICollectionView? = nil, _ indexPath: NSIndexPath? = nil) {
         var imageFile = pfObjectAdditionalResources!["preview"] as PFFile
         imageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
             if error == nil {
-                let image = UIImage(data:imageData)!
-                NSNotificationCenter.defaultCenter().postNotificationName(PREVIEW_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["preview" :image])
+                self.previewImage = UIImage(data:imageData)!
+                NSNotificationCenter.defaultCenter().postNotificationName(PREVIEW_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["preview": self.previewImage!, "collectionView": collectionView == nil ? NSNull() : collectionView!, "indexPath": indexPath == nil ? NSNull() : indexPath!])
             }
         }
     }

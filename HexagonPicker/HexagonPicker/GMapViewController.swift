@@ -179,6 +179,10 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     func previewLoaded(notification: NSNotification) {
         let notificationDictionary = (notification.userInfo! as NSDictionary)
+        let collectionView = notificationDictionary.objectForKey("collectionView") as? UICollectionView
+        if collectionView != nil {
+            return
+        }
         
         dispatch_async(dispatch_get_main_queue(), {
             let image = notificationDictionary.objectForKey("preview") as? UIImage
@@ -195,7 +199,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         if self.previewLoaded {
             self.previewLoaded = !self.previewLoaded
         } else {
-            (marker as GMarker).art!.getPreview()
+            (marker as GMarker).art!.loadPreview()
             infoPreview = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
         }
         return infoPreview
