@@ -35,6 +35,7 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        silkView.frame.size.height += 20
         searchArts = arts
         view.backgroundColor = UIColor.blackColor()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imageForArtLoaded:", name: IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil)
@@ -61,7 +62,8 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     
     override func viewDidLayoutSubviews() {
-        //silkLabel.frame.origin.y = -20
+        silkView.frame.origin.y = -20
+        silkView.frame.size.height += 20
     }
     
     

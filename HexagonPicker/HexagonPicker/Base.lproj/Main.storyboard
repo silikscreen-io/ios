@@ -71,7 +71,8 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="silkView" destination="QCT-Cs-54b" id="6Us-iL-vuO"/>
+                        <outlet property="silkLabel" destination="vZP-Cl-3L9" id="gDQ-Aa-ell"/>
+                        <outlet property="silkView" destination="QCT-Cs-54b" id="PUn-We-Awf"/>
                         <segue destination="pnv-XL-coI" kind="show" identifier="showMapSegue" id="aZT-Jl-g0J"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showArtFromFeedSegue" id="5lf-Nk-XYR"/>
                     </connections>
