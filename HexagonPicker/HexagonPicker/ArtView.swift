@@ -41,12 +41,7 @@ class ArtView: UIImageView {
         dispatch_async(dispatch_get_main_queue(), {
             self.image = art.image
         })
-        
-        let singleTap = UITapGestureRecognizer()
-        singleTap.addTarget(art, action: "tapDetected:")
-        singleTap.numberOfTapsRequired = 1
-        userInteractionEnabled = true
-        addGestureRecognizer(singleTap)
+        addGestureRecognizers()
         if buttonsLoadedNumber < MAX_NUMBER_OF_LOADED_IMAGES {
             initButtons(width, heigth)
             buttonsLoadedNumber++
@@ -58,12 +53,22 @@ class ArtView: UIImageView {
     func update(art: Art, _ deviceOrientationLandscape: Bool) {
         self.art = art
         image = art.image
-        
+        addGestureRecognizers()
+    }
+    
+    
+    
+    func addGestureRecognizers() {
         let singleTap = UITapGestureRecognizer()
-        singleTap.addTarget(art, action: "tapDetected:")
+        singleTap.addTarget(self.art!, action: "tapDetected:")
         singleTap.numberOfTapsRequired = 1
         userInteractionEnabled = true
         addGestureRecognizer(singleTap)
+        
+        let doubleTap = UITapGestureRecognizer(target: self, action: "doubleTapDetected:")
+        doubleTap.numberOfTapsRequired = 2
+        addGestureRecognizer(doubleTap)
+        singleTap.requireGestureRecognizerToFail(doubleTap)
     }
     
     
@@ -127,6 +132,35 @@ class ArtView: UIImageView {
         let artistDetailViewController = ArtistDetailViewController()
         artistDetailViewController.artist = art!.artist
         parentViewController!.presentViewController(artistDetailViewController, animated: true, completion: nil)
+    }
+    
+    
+    func doubleTapDetected(recognizer: UITapGestureRecognizer) {
+        if let index = find(currentUser!.likes, art!) {
+            currentUser!.likes.removeAtIndex(index)
+        } else {
+            currentUser!.likes.append(art!)
+        }
+        let likeView = UIImageView(image: UIImage(named: "like")!)
+        var likeFrame = likeView.frame
+        likeFrame.origin.x = (frame.width - likeFrame.width) / 2
+        likeFrame.origin.y = 50
+        likeView.frame = likeFrame
+        addSubview(likeView)
+        likeView.alpha = 0
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            likeView.alpha = 1
+        }) { (finished) -> Void in
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                likeView.alpha = 0.99
+                }) { (finished) -> Void in
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        likeView.alpha = 0
+                        }) { (finished) -> Void in
+                            likeView.removeFromSuperview()
+                    }
+            }
+        }
     }
     
     

@@ -373,26 +373,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
             let rectToZoomTo = CGRectMake(x, y, w, h);
             scrollView!.zoomToRect(rectToZoomTo, animated: true)
         }
-//        let likeView = UIImageView(image: UIImage(named: "like")!)
-//        var likeFrame = likeView.frame
-//        likeFrame.origin.x = (screenSize!.width - likeFrame.width) / 2
-//        likeFrame.origin.y = 50
-//        likeView.frame = likeFrame
-//        self.view.addSubview(likeView)
-//        likeView.alpha = 0
-//        UIView.animateWithDuration(0.3, animations: { () -> Void in
-//            likeView.alpha = 1
-//        }) { (finished) -> Void in
-//            UIView.animateWithDuration(0.5, animations: { () -> Void in
-//                likeView.alpha = 0.99
-//                }) { (finished) -> Void in
-//                    UIView.animateWithDuration(0.3, animations: { () -> Void in
-//                        likeView.alpha = 0
-//                        }) { (finished) -> Void in
-//                            likeView.removeFromSuperview()
-//                    }
-//            }
-//        }
     }
     
     
@@ -400,7 +380,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     func initContentView() {
         createScreenshot()
         if iOS8Delta {
-//            let artContentView = ArtContentView(screenshotView!, screenshotView!.frame, artContentDisplayed)
             let artContentView = ArtContentView(self.view, screenshotView!.frame, artContentDisplayed)
             artContentView.addDescription("Currently On Display Currently On Display Currently On Display Currently On Display")
             for _ in 0...Int(arc4random_uniform(5)) {

@@ -13,14 +13,14 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     let cellIdentifier = "collectionArtCell"
     
     
-    var personName: String = ""
     var artsSource:[Art] = []
     var arts:[String: [Art]] = [:]
     var citiesLabels: [UILabel] = []
     var screenSize: CGRect?
     var firstLayout = true
     
-    var artistLabel: UILabel?
+    var personName: String = ""
+    var personLabel: UILabel?
     let buttonWidth: CGFloat = 100
     let buttonHeight: CGFloat = 40
     let buttonPadding: CGFloat = 10
@@ -93,13 +93,13 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
         firstLayout = false
         screenSize = self.view.bounds
         initButtons()
-        artistLabel = UILabel()
-        artistLabel!.text = personName
-        artistLabel!.font = UIFont(name: artistLabel!.font.description, size: 30)
-        artistLabel!.sizeToFit()
-        artistLabel!.textColor = UIColor.magentaColor()
-        updateArtistLabel()
-        view.addSubview(artistLabel!)
+        personLabel = UILabel()
+        personLabel!.text = personName
+        personLabel!.font = UIFont(name: personLabel!.font.description, size: 30)
+        personLabel!.sizeToFit()
+        personLabel!.textColor = UIColor.magentaColor()
+        alignPersonLabel()
+        view.addSubview(personLabel!)
         alignScrollView()
         initArtsCollectionViews()
     }
@@ -209,15 +209,15 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     
     
     
-    func updateArtistLabel() {
-        artistLabel!.frame = CGRect(origin: CGPoint(x: (screenSize!.width - artistLabel!.frame.width) / 2, y: buttonPadding), size: artistLabel!.frame.size)
+    func alignPersonLabel() {
+        personLabel!.frame = CGRect(origin: CGPoint(x: (screenSize!.width - personLabel!.frame.width) / 2, y: buttonPadding), size: personLabel!.frame.size)
     }
     
     
     
     func initButtons() {
         var screenFrame = screenSize!
-        let buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: 48, height: 48)
+        let buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: 42, height: 42)
         backButton = UIButton(frame: buttonFrame)
         initButton(&backButton!, "back_arrow", "backButtonPressed:")
     }
@@ -257,7 +257,7 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
         if !updateScreenSize() {
             return
         }
-        updateArtistLabel()
+        alignPersonLabel()
         alignScrollView()
         alignCityLabels()
         alignCollectionViews()

@@ -102,6 +102,7 @@
 		B5F502261A0EC32600E11D70 /* ArtToolbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F502251A0EC32600E11D70 /* ArtToolbarViewController.swift */; };
 		B5F502281A0EE56C00E11D70 /* ArtViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F502271A0EE56C00E11D70 /* ArtViewCell.swift */; };
 		B5F5022A1A0F64E200E11D70 /* ArtCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5F502291A0F64E200E11D70 /* ArtCell.xib */; };
+		B5FAA5CC1A14CA9C00B31478 /* LikedArtsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FAA5CB1A14CA9C00B31478 /* LikedArtsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,6 +217,7 @@
 		B5F502251A0EC32600E11D70 /* ArtToolbarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtToolbarViewController.swift; sourceTree = "<group>"; };
 		B5F502271A0EE56C00E11D70 /* ArtViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtViewCell.swift; sourceTree = "<group>"; };
 		B5F502291A0F64E200E11D70 /* ArtCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArtCell.xib; sourceTree = "<group>"; };
+		B5FAA5CB1A14CA9C00B31478 /* LikedArtsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikedArtsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,6 +322,7 @@
 				B57E9B471A026FB500BCAA35 /* ArtistDetailViewController.swift */,
 				B504E1DF1A09446D00049A5B /* User.swift */,
 				B504E1E21A098C5500049A5B /* UserViewController.swift */,
+				B5FAA5CB1A14CA9C00B31478 /* LikedArtsViewController.swift */,
 				B52898FC19F7A859000CC9EF /* GMapViewController.swift */,
 				B5339BF519FA6B8F003B1C88 /* GMarker.swift */,
 				B52898F819F7A75C000CC9EF /* HexagonPicker-Bridging-Header.h */,
@@ -588,6 +591,7 @@
 				B57E9B481A026FB500BCAA35 /* ArtistDetailViewController.swift in Sources */,
 				B51EEEAE1A1167D800017A1A /* TransitionAnimator.swift in Sources */,
 				B5339BE519F97644003B1C88 /* ArtFeedViewController.swift in Sources */,
+				B5FAA5CC1A14CA9C00B31478 /* LikedArtsViewController.swift in Sources */,
 				B5D4AA9A1A12612400F0D54D /* FirstViewController.swift in Sources */,
 				B5173DD719F2765700B50011 /* HexaButton.swift in Sources */,
 				B57E9B581A02BA9700BCAA35 /* Artist.swift in Sources */,

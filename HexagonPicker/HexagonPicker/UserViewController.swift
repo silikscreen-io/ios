@@ -22,10 +22,11 @@ class UserViewController: UIViewController {
     var firstLayout = true
     
     var userName: UILabel?
-    let userNamePaddingY: CGFloat = 40
+    let userNamePaddingY: CGFloat = 30
     
     var instagramLabel: UILabel?
     var instagramButton: UIButton?
+    var likesButton: UIButton?
     
     var userPicture: HexaButton?
 
@@ -47,7 +48,7 @@ class UserViewController: UIViewController {
         screenSize = self.view.bounds
         initFullNameLabel()
         initPicture()
-        var buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: CGFloat(48), height: CGFloat(48))
+        var buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: CGFloat(42), height: CGFloat(42))
         backButton = UIButton(frame: buttonFrame)
         backButton!.setImage(UIImage(named: "back_arrow"), forState: UIControlState.Normal)
         backButton!.alpha = 0.7
@@ -74,6 +75,10 @@ class UserViewController: UIViewController {
         var buttonFrame = CGRect(x: screenSize!.width / 2 + paddingX, y: y - buttonHeight / 2, width: buttonWidth * 2, height: buttonHeight)
         instagramButton = UIButton(frame: buttonFrame)
         initButton(&instagramButton!, "Log out", "logoutButtonPressed:")
+        
+        buttonFrame = CGRect(x: screenSize!.width / 2 - buttonWidth * 2, y: instagramButton!.frame.origin.y + instagramButton!.frame.height, width: buttonWidth * 4, height: buttonHeight)
+        likesButton = UIButton(frame: buttonFrame)
+        initButton(&likesButton!, "Arts you've liked", "likedButtonPressed:")
     }
     
     
@@ -81,7 +86,6 @@ class UserViewController: UIViewController {
     func initButton(inout button: UIButton, _ title: String, _ selector: Selector) {
         button.setTitle(title, forState: UIControlState.Normal)
         button.backgroundColor = UIColor.blackColor()
-        button.alpha = 0.7
         button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Highlighted)
         button.addTarget(self, action: selector, forControlEvents: UIControlEvents.TouchUpInside)
@@ -100,12 +104,12 @@ class UserViewController: UIViewController {
     
     
     func alignUserName() {
-        userName!.frame = CGRect(origin: CGPoint(x: paddingX, y: userNamePaddingY), size: CGSize(width: screenSize!.width - 2 * paddingX, height: 10))
+        userName!.frame = CGRect(origin: CGPoint(x: paddingX, y: buttonPadding), size: CGSize(width: screenSize!.width - 2 * paddingX, height: 10))
         userName!.text = currentUser!.fullName
         userName!.textAlignment = NSTextAlignment.Center
         userName!.numberOfLines = 0
         userName!.sizeToFit()
-        userName!.frame = CGRect(origin: CGPoint(x: (screenSize!.width - userName!.frame.width) / 2 - paddingX, y: userNamePaddingY), size: userName!.frame.size)
+        userName!.frame = CGRect(origin: CGPoint(x: (screenSize!.width - userName!.frame.width) / 2 - paddingX, y: buttonPadding), size: userName!.frame.size)
     }
     
     
@@ -173,6 +177,7 @@ class UserViewController: UIViewController {
         alignUserName()
         alignPicture()
         alignInstagram()
+        likesButton!.frame.origin.x = screenSize!.width / 2 - buttonWidth * 2
     }
     
     
@@ -181,6 +186,13 @@ class UserViewController: UIViewController {
         if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
             (homeViewController as ArtFeedViewController).dismissUserViewController()
         }
+    }
+    
+    
+    
+    func likedButtonPressed(sender: UIButton) {
+        let likedArtsViewController = LikedArtsViewController()
+        presentViewController(likedArtsViewController, animated: true, completion: nil)
     }
     
     
@@ -196,3 +208,121 @@ class UserViewController: UIViewController {
     }
 
 }
+//
+//class UserViewController: CollectionsViewController {
+//    var homeViewController: UIViewController?
+//    
+//    
+//    let userNamePaddingY: CGFloat = 40
+//    let paddingX: CGFloat = 10
+//    
+//    var instagramLabel: UILabel?
+//    var instagramButton: UIButton?
+//    
+//    var userPicture: HexaButton?
+//
+//    override func viewDidLoad() {
+//        personName = currentUser!.fullName!
+//        artsSource = currentUser!.likes
+//        super.viewDidLoad()
+//    }
+//    
+//    
+//    
+//    override func viewWillLayoutSubviews() {
+//        if !firstLayout {
+//            return
+//        }
+//        super.viewWillLayoutSubviews()
+//        personLabel!.textColor = UIColor.whiteColor()
+//        initPicture()
+//        initInstagram()
+//        scrollView.frame.origin.y = instagramLabel!.frame.origin.y + instagramLabel!.frame.height + collectionPadding
+//    }
+//    
+//    
+//    
+//    func initInstagram() {
+//        let y = userPicture!.frame.origin.y + userPicture!.frame.height + 4 * buttonPadding
+//        instagramLabel = UILabel()
+//        instagramLabel!.frame = CGRect(origin: CGPoint(x: paddingX, y: y), size: CGSize(width: screenSize!.width, height: 10))
+//        instagramLabel!.text = "Instagram"
+//        instagramLabel!.textAlignment = NSTextAlignment.Center
+//        instagramLabel!.numberOfLines = 0
+//        instagramLabel!.sizeToFit()
+//        instagramLabel!.frame = CGRect(origin: CGPoint(x: screenSize!.width / 2 - paddingX - instagramLabel!.frame.width, y: y - instagramLabel!.frame.size.height / 2), size: instagramLabel!.frame.size)
+//        instagramLabel!.textColor = UIColor.whiteColor()
+//        view.addSubview(instagramLabel!)
+//
+//        
+//        var buttonFrame = CGRect(x: screenSize!.width / 2 + paddingX, y: y - buttonHeight / 2, width: buttonWidth * 2, height: buttonHeight)
+//        instagramButton = UIButton(frame: buttonFrame)
+//        initLogoutButton(&instagramButton!, "Log out", "logoutButtonPressed:")
+//    }
+//    
+//    
+//    
+//    func initLogoutButton(inout button: UIButton, _ title: String, _ selector: Selector) {
+//        button.setTitle(title, forState: UIControlState.Normal)
+//        button.backgroundColor = UIColor.blackColor()
+//        button.alpha = 0.7
+//        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+//        button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Highlighted)
+//        button.addTarget(self, action: selector, forControlEvents: UIControlEvents.TouchUpInside)
+//        self.view.addSubview(button)
+//    }
+//    
+//    
+//    
+//    func initPicture() {
+//        userPicture = HexaButton(100, 250, currentUser!.profilePicture!.size.width)
+//        let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: userPicture!.frame.size)
+//        let imageRef = CGImageCreateWithImageInRect(currentUser!.profilePicture!.CGImage, rect);
+//        userPicture!.setMainImage(UIImage(CGImage: imageRef))
+//        view.addSubview(userPicture!)
+//        alignPicture()
+//    }
+//    
+//    
+//    
+//    func alignPicture() {
+//        var width = userPicture!.frame.width
+//        var height = userPicture!.frame.height
+//        var availableWidth = screenSize!.width - 2 * paddingX
+//        if width > availableWidth {
+//            let ratio = width / availableWidth
+//            width = availableWidth
+//            height /= ratio
+//        }
+//        let x = (availableWidth - width) / 2
+//        let y = personLabel!.frame.origin.y + personLabel!.frame.height + userNamePaddingY
+//        userPicture!.frame = CGRect(x: x, y: y, width: width, height: height)
+//    }
+//    
+//    
+//    
+//    func alignInstagram() {
+//        let y = userPicture!.frame.origin.y + userPicture!.frame.height + 4 * buttonPadding
+//        let buttonFrame = CGRect(x: screenSize!.width / 2 + buttonPadding, y: y - buttonHeight / 2, width: buttonWidth * 2, height: buttonHeight)
+//        instagramButton!.frame = buttonFrame
+//        instagramLabel!.frame = CGRect(origin: CGPoint(x: screenSize!.width / 2 - buttonPadding - instagramLabel!.frame.width, y: y - instagramLabel!.frame.size.height / 2), size: instagramLabel!.frame.size)
+//    }
+//    
+//    
+//    
+//    override func orientationChanged() {
+//        if !updateScreenSize() {
+//            return
+//        }
+//        alignPicture()
+//        alignInstagram()
+//    }
+//    
+//    
+//    
+//    func logoutButtonPressed(sender: UIButton) {
+//        if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
+//            (homeViewController as ArtFeedViewController).dismissUserViewController()
+//        }
+//    }
+//}
