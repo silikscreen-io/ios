@@ -70,7 +70,7 @@ class Art: NSObject {
         artDescription = pfObject[ART_DESCRIPTION_ID] as String
         artStatus = pfObject[WORK_STATUS_ID] as String
         loadImage()
-        city = cities[Int(arc4random_uniform(4))]
+        city = cities[Int(arc4random_uniform(5))]
         let sizeArray = pfObject[SIZE_ID] as NSArray
         size = CGSize(width: sizeArray[0] as CGFloat, height: sizeArray[1] as CGFloat)
     }
@@ -89,7 +89,7 @@ class Art: NSObject {
         artDescription = pfObject[ART_DESCRIPTION_ID] as String
         artStatus = pfObject[WORK_STATUS_ID] as String
         loadImage()
-        city = cities[Int(arc4random_uniform(4))]
+        city = cities[Int(arc4random_uniform(5))]
         let sizeArray = pfObject[SIZE_ID] as NSArray
         size = CGSize(width: sizeArray[0] as CGFloat, height: sizeArray[1] as CGFloat)
     }
@@ -107,9 +107,9 @@ class Art: NSObject {
             let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
             dispatch_async(queue, {
                 var error: NSError?
-                println("Image load started         : \(NSDate().timeIntervalSince1970)")
+//                println("Image load started         : \(NSDate().timeIntervalSince1970)")
                 let imageData = imageFile.getData(&error)
-                println("Image load ended         : \(NSDate().timeIntervalSince1970)")
+//                println("Image load ended         : \(NSDate().timeIntervalSince1970)")
                 if error == nil {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.image = UIImage(data: imageData)
@@ -118,7 +118,7 @@ class Art: NSObject {
                         }
                         artsDisplayed.append(self)
                         //                    println("Image loaded         : \(NSDate().timeIntervalSince1970)")
-                        println("Notification image loaded sent    : \(NSDate().timeIntervalSince1970)")
+//                        println("Notification image loaded sent    : \(NSDate().timeIntervalSince1970)")
                         NSNotificationCenter.defaultCenter().postNotificationName(IMAGE_FOR_ART_LOADED_NOTIFICATION_ID, object: nil, userInfo: ["art" : self, "artView": artView == nil ? NSNull() : artView!, "loadedForFeed": NSNumber(bool: forFeed)])
                     })
                 }

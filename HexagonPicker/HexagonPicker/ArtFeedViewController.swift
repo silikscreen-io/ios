@@ -29,6 +29,10 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     var tappedArt: Art?
     
+    @IBOutlet weak var silkView: UIView!
+    @IBOutlet weak var silkLabel: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchArts = arts
@@ -51,6 +55,13 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
             initScrollView()
         }
         scrollView.delegate = self
+        view.bringSubviewToFront(silkView)
+    }
+    
+    
+    
+    override func viewDidLayoutSubviews() {
+        //silkLabel.frame.origin.y = -20
     }
     
     
@@ -82,7 +93,7 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     func initScrollView() {
         self.view.addSubview(scrollView)
-        println("scrollView added         : \(NSDate().timeIntervalSince1970)")
+//        println("scrollView added         : \(NSDate().timeIntervalSince1970)")
         fillScrollView()
         contentOffset = scrollView!.contentOffset
         if artistTopButton != nil {
@@ -132,6 +143,7 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
                 let artView = ArtView(art, scrollViewLength, screenWidth, screenHeigth, self, deviceOrientationLandscape)
                 dispatch_async(dispatch_get_main_queue(), {
                     self.scrollView.addSubview(artView)
+//                    println("Art added to scrollView         : \(NSDate().timeIntervalSince1970)")
                     if artView.image != nil {
                         artView.alpha = 0
                         UIView.animateWithDuration(0.5, animations: { () -> Void in
@@ -143,16 +155,24 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
                 self.scrollView.contentSize = (deviceOrientationLandscape ? CGSize(width: scrollViewLength, height: screenHeigth) : CGSize(width: screenWidth, height: scrollViewLength))
                 art.delegate = self
                 self.artViews.append(artView)
-                if self.artistTopButton == nil {
-                    self.artistTopButton = artView.artistButton
-                    if self.artistTopButton != nil {
-                        self.view.addSubview(self.artistTopButton!)
+                dispatch_async(dispatch_get_main_queue(), {
+                    if self.artistTopButton == nil {
+                        self.artistTopButton = artView.artistButton
+                        if self.artistTopButton != nil {
+                            self.view.addSubview(self.artistTopButton!)
+//                            println("Artist top button added         : \(NSDate().timeIntervalSince1970)")
+                        }
+                    } else if self.artistTopButtonNext == nil {
+                        self.artistTopButtonNext = artView.artistButton
                     }
-                } else if self.artistTopButtonNext == nil {
-                    self.artistTopButtonNext = artView.artistButton
-                }
+                })
             }
 //        })
+        dispatch_async(dispatch_get_main_queue(), {
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.silkView.alpha = 0
+            })
+        })
     }
     
     

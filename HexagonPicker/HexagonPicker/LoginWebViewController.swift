@@ -21,6 +21,7 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
     
     var token: NSString?
 
+    @IBOutlet weak var silkView: UIView!
     
     @IBOutlet weak var webView: UIWebView!
     
@@ -42,6 +43,11 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
     func login() {
         let request = NSURLRequest(URL: NSURL(string: requestURL)!)
         webView.loadRequest(request)
+        if !NSUserDefaults.standardUserDefaults().boolForKey("UserLoddedIn") {
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.silkView.alpha = 0
+            })
+        }
     }
     
     
@@ -137,6 +143,12 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
             let artFeedViewController = segue.destinationViewController as ArtFeedViewController
             artFeedViewController.delegate = self
         }
+    }
+    
+    
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
 
 }

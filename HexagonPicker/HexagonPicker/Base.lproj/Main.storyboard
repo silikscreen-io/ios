@@ -38,9 +38,40 @@
                     <view key="view" contentMode="scaleToFill" id="sxo-HU-sGM">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QCT-Cs-54b">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="cBa-1W-oQB">
+                                        <rect key="frame" x="290" y="290" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Silkscreen" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="vZP-Cl-3L9">
+                                        <rect key="frame" x="20" y="89" width="560" height="43"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.38823533058166504" green="0.36078432202339172" blue="0.4901961088180542" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstItem="vZP-Cl-3L9" firstAttribute="leading" secondItem="QCT-Cs-54b" secondAttribute="leading" constant="20" id="5Eo-qX-65a"/>
+                                    <constraint firstAttribute="centerX" secondItem="cBa-1W-oQB" secondAttribute="centerX" id="DEl-Hi-jJb"/>
+                                    <constraint firstItem="vZP-Cl-3L9" firstAttribute="top" secondItem="QCT-Cs-54b" secondAttribute="top" constant="89" id="Dv5-DU-bup"/>
+                                    <constraint firstAttribute="centerX" secondItem="vZP-Cl-3L9" secondAttribute="centerX" id="ECv-5e-oDU"/>
+                                    <constraint firstAttribute="centerY" secondItem="cBa-1W-oQB" secondAttribute="centerY" id="RSl-bv-pAX"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QCT-Cs-54b" firstAttribute="bottom" secondItem="uLO-6N-Ukv" secondAttribute="top" id="Nd8-Wj-Pse"/>
+                            <constraint firstItem="QCT-Cs-54b" firstAttribute="top" secondItem="sxo-HU-sGM" secondAttribute="top" id="iia-3j-5Nx"/>
+                            <constraint firstItem="QCT-Cs-54b" firstAttribute="leading" secondItem="sxo-HU-sGM" secondAttribute="leading" id="sD8-5M-EAq"/>
+                            <constraint firstAttribute="trailing" secondItem="QCT-Cs-54b" secondAttribute="trailing" id="sr5-nR-nu1"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="silkView" destination="QCT-Cs-54b" id="6Us-iL-vuO"/>
                         <segue destination="pnv-XL-coI" kind="show" identifier="showMapSegue" id="aZT-Jl-g0J"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showArtFromFeedSegue" id="5lf-Nk-XYR"/>
                     </connections>
@@ -61,12 +92,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Silkscreen" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="rYz-al-erl">
-                                <rect key="frame" x="20" y="89" width="560" height="43"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y82-Ux-FT2">
                                 <rect key="frame" x="226" y="178" width="148" height="30"/>
                                 <state key="normal" title="Log in with Instagram">
@@ -74,9 +99,15 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="Zhl-CF-D8k" kind="show" identifier="loginSegue" id="AzG-xN-cKV"/>
+                                    <segue destination="Zhl-CF-D8k" kind="presentation" identifier="loginSegue" modalTransitionStyle="crossDissolve" id="AzG-xN-cKV"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Silkscreen" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="rYz-al-erl">
+                                <rect key="frame" x="20" y="89" width="560" height="43"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.38823533058166504" green="0.36078432202339172" blue="0.4901961088180542" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
@@ -114,18 +145,45 @@
                                     <outlet property="delegate" destination="Zhl-CF-D8k" id="xSG-ho-BOA"/>
                                 </connections>
                             </webView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zd7-Hd-VNC">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Silkscreen" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="mVn-5M-lzY">
+                                        <rect key="frame" x="20" y="89" width="560" height="43"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="jTf-5i-uad">
+                                        <rect key="frame" x="290" y="290" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.38823533058166504" green="0.36078432202339172" blue="0.4901961088180542" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="jTf-5i-uad" secondAttribute="centerY" id="24P-oo-aO8"/>
+                                    <constraint firstAttribute="centerX" secondItem="jTf-5i-uad" secondAttribute="centerX" id="CES-qn-bGi"/>
+                                    <constraint firstItem="mVn-5M-lzY" firstAttribute="top" secondItem="zd7-Hd-VNC" secondAttribute="top" constant="89" id="R6C-aM-g7v"/>
+                                    <constraint firstItem="mVn-5M-lzY" firstAttribute="leading" secondItem="zd7-Hd-VNC" secondAttribute="leading" constant="20" id="XEC-y8-buR"/>
+                                    <constraint firstAttribute="centerX" secondItem="mVn-5M-lzY" secondAttribute="centerX" id="g6f-Ws-zw8"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="0rE-EC-dtA" firstAttribute="top" secondItem="q1s-L1-ces" secondAttribute="bottom" constant="-20" id="SeV-sC-hb9"/>
                             <constraint firstAttribute="trailing" secondItem="0rE-EC-dtA" secondAttribute="trailing" id="WC7-cs-tMk"/>
+                            <constraint firstAttribute="trailing" secondItem="zd7-Hd-VNC" secondAttribute="trailing" id="czk-Mh-7ey"/>
+                            <constraint firstItem="zd7-Hd-VNC" firstAttribute="leading" secondItem="ReQ-dI-r9N" secondAttribute="leading" id="hjH-yX-rUw"/>
                             <constraint firstItem="58U-TH-lYe" firstAttribute="top" secondItem="0rE-EC-dtA" secondAttribute="bottom" id="mju-B8-p2Z"/>
+                            <constraint firstItem="zd7-Hd-VNC" firstAttribute="top" secondItem="0rE-EC-dtA" secondAttribute="top" id="ogU-DN-PCX"/>
                             <constraint firstItem="0rE-EC-dtA" firstAttribute="leading" secondItem="ReQ-dI-r9N" secondAttribute="leading" id="pHh-Ke-68Q"/>
+                            <constraint firstItem="58U-TH-lYe" firstAttribute="top" secondItem="zd7-Hd-VNC" secondAttribute="bottom" id="wFw-Wn-Rge"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="silkView" destination="zd7-Hd-VNC" id="Bd4-mA-gZS"/>
                         <outlet property="webView" destination="0rE-EC-dtA" id="aQk-2d-1rV"/>
-                        <segue destination="WNY-R6-79i" kind="show" identifier="showArtFeedSegue" id="WVP-vd-Zuj"/>
+                        <segue destination="WNY-R6-79i" kind="presentation" identifier="showArtFeedSegue" modalTransitionStyle="crossDissolve" animates="NO" id="WVP-vd-Zuj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KNx-F4-D6X" userLabel="First Responder" sceneMemberID="firstResponder"/>

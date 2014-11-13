@@ -27,5 +27,11 @@ class FirstViewController: UIViewController {
             performSegueWithIdentifier("loginSegue", sender: self)
         }
     }
+    
+    
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
 
 }

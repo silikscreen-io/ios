@@ -20,6 +20,8 @@ class ArtView: UIImageView {
     var artistButton: HexaButton?
     var parentViewController: UIViewController?
     
+    var likeViewBottom: UIImageView?
+    
     var art: Art?
     
     init(_ art: Art, _ length: CGFloat, _ width: CGFloat, _ heigth: CGFloat, _ parentViewController: UIViewController, _ deviceOrientationLandscape: Bool) {
@@ -103,12 +105,15 @@ class ArtView: UIImageView {
     
     
     func initButtons(width: CGFloat, _ heigth: CGFloat) {
-        let x = (width < heigth ? self.bounds.width - self.buttonWidth - self.padding : self.padding)
-        let button = HexaButton(x, self.padding, self.buttonWidth)
-        self.artistButton = button
-        self.artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
-        self.artistButton!.addTarget(self, action: "artistButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.addSubview(self.artistButton!)
+//        dispatch_async(dispatch_get_main_queue(), {
+            let x = (width < heigth ? self.bounds.width - self.buttonWidth - self.padding : self.padding)
+            let button = HexaButton(x, self.padding, self.buttonWidth)
+            self.artistButton = button
+            self.artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
+            self.artistButton!.addTarget(self, action: "artistButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.addSubview(self.artistButton!)
+//            println("Artist button added         : \(NSDate().timeIntervalSince1970)")
+//        })
     }
     
     
@@ -138,26 +143,42 @@ class ArtView: UIImageView {
     func doubleTapDetected(recognizer: UITapGestureRecognizer) {
         if let index = find(currentUser!.likes, art!) {
             currentUser!.likes.removeAtIndex(index)
+            if likeViewBottom != nil {
+                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                    self.likeViewBottom!.alpha = 0
+                }, completion: { (finished) -> Void in
+                    self.likeViewBottom!.removeFromSuperview()
+                })
+            }
         } else {
             currentUser!.likes.append(art!)
-        }
-        let likeView = UIImageView(image: UIImage(named: "like")!)
-        var likeFrame = likeView.frame
-        likeFrame.origin.x = (frame.width - likeFrame.width) / 2
-        likeFrame.origin.y = 50
-        likeView.frame = likeFrame
-        addSubview(likeView)
-        likeView.alpha = 0
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
-            likeView.alpha = 1
-        }) { (finished) -> Void in
+            let hexagon = UIImage(named: "hexagon")!
+            let ratio = hexagon.size.width / hexagon.size.height
+            likeViewBottom = UIImageView(frame: CGRectMake(padding, frame.height - padding - 30, 30 * ratio, 30))
+            likeViewBottom!.image = hexagon
+            addSubview(likeViewBottom!)
+            likeViewBottom!.alpha = 0
             UIView.animateWithDuration(0.5, animations: { () -> Void in
-                likeView.alpha = 0.99
+                self.likeViewBottom!.alpha = 1
+            })
+            let likeView = UIImageView(image: UIImage(named: "like")!)
+            var likeFrame = likeView.frame
+            likeFrame.origin.x = (frame.width - likeFrame.width) / 2
+            likeFrame.origin.y = 50
+            likeView.frame = likeFrame
+            addSubview(likeView)
+            likeView.alpha = 0
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                likeView.alpha = 1
                 }) { (finished) -> Void in
-                    UIView.animateWithDuration(0.3, animations: { () -> Void in
-                        likeView.alpha = 0
+                    UIView.animateWithDuration(0.5, animations: { () -> Void in
+                        likeView.alpha = 0.99
                         }) { (finished) -> Void in
-                            likeView.removeFromSuperview()
+                            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                                likeView.alpha = 0
+                                }) { (finished) -> Void in
+                                    likeView.removeFromSuperview()
+                            }
                     }
             }
         }
