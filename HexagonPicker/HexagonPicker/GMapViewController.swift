@@ -80,7 +80,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func initRouteButton() {
-        routeButton = UIButton(frame: CGRect(origin: CGPoint(x: 20, y: 20), size: CGSize(width: 48, height: 48)))
+        routeButton = UIButton(frame: CGRect(origin: CGPoint(x: 10, y: 10), size: CGSize(width: 48, height: 48)))
         routeButton!.setBackgroundImage(UIImage(named: "road"), forState: UIControlState.Normal)
         routeButton!.addTarget(self, action: "createRouteButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(routeButton!)
@@ -109,6 +109,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         frame.size.height = 30
         homeToolbar = UIToolbar(frame: frame)
         homeToolbar!.barStyle = UIBarStyle.Black
+        homeToolbar!.tintColor = UIColor.whiteColor()
         homeToolbar!.alpha = 0.7
         self.view.addSubview(homeToolbar!)
         

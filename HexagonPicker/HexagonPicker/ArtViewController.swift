@@ -245,7 +245,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         backgroundImageView!.userInteractionEnabled = true
         backgroundImageView!.addGestureRecognizer(singleTap)
         
-        let doubleTap = UITapGestureRecognizer(target: self, action: "doubleTapDetected")
+        let doubleTap = UITapGestureRecognizer(target: self, action: "doubleTapDetected:")
         doubleTap.numberOfTapsRequired = 2
         backgroundImageView!.addGestureRecognizer(doubleTap)
         singleTap.requireGestureRecognizerToFail(doubleTap)
@@ -359,27 +359,40 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     
-    func doubleTapDetected() {
-        let likeView = UIImageView(image: UIImage(named: "like")!)
-        var likeFrame = likeView.frame
-        likeFrame.origin.x = (screenSize!.width - likeFrame.width) / 2
-        likeFrame.origin.y = 50
-        likeView.frame = likeFrame
-        self.view.addSubview(likeView)
-        likeView.alpha = 0
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
-            likeView.alpha = 1
-        }) { (finished) -> Void in
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
-                likeView.alpha = 0.99
-                }) { (finished) -> Void in
-                    UIView.animateWithDuration(0.3, animations: { () -> Void in
-                        likeView.alpha = 0
-                        }) { (finished) -> Void in
-                            likeView.removeFromSuperview()
-                    }
-            }
+    func doubleTapDetected(recognizer: UITapGestureRecognizer) {
+        if let imageView = backgroundImageView {
+            let pointInView = recognizer.locationInView(imageView)
+            var newZoomScale = scrollView!.zoomScale * 1.5
+            newZoomScale = min(newZoomScale, scrollView!.maximumZoomScale)
+            let scrollViewSize = scrollView!.bounds.size
+            let w = scrollViewSize.width / newZoomScale
+            let h = scrollViewSize.height / newZoomScale
+            let x = pointInView.x - (w / 2.0)
+            let y = pointInView.y - (h / 2.0)
+            
+            let rectToZoomTo = CGRectMake(x, y, w, h);
+            scrollView!.zoomToRect(rectToZoomTo, animated: true)
         }
+//        let likeView = UIImageView(image: UIImage(named: "like")!)
+//        var likeFrame = likeView.frame
+//        likeFrame.origin.x = (screenSize!.width - likeFrame.width) / 2
+//        likeFrame.origin.y = 50
+//        likeView.frame = likeFrame
+//        self.view.addSubview(likeView)
+//        likeView.alpha = 0
+//        UIView.animateWithDuration(0.3, animations: { () -> Void in
+//            likeView.alpha = 1
+//        }) { (finished) -> Void in
+//            UIView.animateWithDuration(0.5, animations: { () -> Void in
+//                likeView.alpha = 0.99
+//                }) { (finished) -> Void in
+//                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+//                        likeView.alpha = 0
+//                        }) { (finished) -> Void in
+//                            likeView.removeFromSuperview()
+//                    }
+//            }
+//        }
     }
     
     
