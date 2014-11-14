@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CollectionsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class CollectionsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate {
     
     let cellIdentifier = "collectionArtCell"
     
@@ -171,11 +171,8 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        println("B let cell = collectionView.deque")
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath:indexPath) as UICollectionViewCell
-        println("A let cell = collectionView.deque")
-        let city = collectionViews[collectionView]
-        let art = self.arts[city!]![indexPath.section]
+        let art = getArt(collectionView, indexPath)
         let imageView = cell.viewWithTag(100) as UIImageView
         if art.previewImage == nil {
             imageView.image = nil
@@ -193,6 +190,24 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(0, 1, 0, 1)
+    }
+    
+    
+    
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let artViewController = ArtViewController()
+        artViewController.art = getArt(collectionView, indexPath)
+        artViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+        artViewController.transitioningDelegate = self
+        presentViewController(artViewController, animated: true, completion: nil)
+    }
+    
+    
+    
+    func getArt(collectionView: UICollectionView, _ indexPath: NSIndexPath) -> Art {
+        let city = collectionViews[collectionView]
+        return self.arts[city!]![indexPath.section]
     }
     
     
@@ -276,5 +291,17 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    
+    
+    
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TransitionAnimator()
+    }
+    
+    
+    
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TransitionAnimator(false)
     }
 }
