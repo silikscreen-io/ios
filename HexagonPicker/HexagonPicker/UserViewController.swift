@@ -9,7 +9,6 @@
 import UIKit
 
 class UserViewController: CollectionsViewController {
-    var homeViewController: UIViewController?
     
     let paddingX: CGFloat = 10
     
@@ -122,8 +121,8 @@ class UserViewController: CollectionsViewController {
     
     
     func logoutButtonPressed(sender: UIButton) {
-        if homeViewController!.isMemberOfClass(ArtFeedViewController.self) {
-            (homeViewController as ArtFeedViewController).dismissUserViewController()
+        if presentingViewController!.isMemberOfClass(ArtFeedViewController.self) {
+            (presentingViewController as ArtFeedViewController).dismissUserViewController()
             artsDisplayed.removeAll(keepCapacity: false)
             buttonsLoadedNumber = 0
         }

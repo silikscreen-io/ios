@@ -16,7 +16,6 @@ protocol GMapViewControllerDelegate {
 }
 
 class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, ArtViewControllerDelegate, UIViewControllerTransitioningDelegate {
-    var homeViewController: UIViewController?
     var artForRoute: Art?
     
     var delegate: GMapViewControllerDelegate!
@@ -150,19 +149,11 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     func homeTapped() {
-//        if delegate == nil {
-//            if homeViewController != nil {
-//                (homeViewController as ArtViewController).dismissMap()
-//            }
-//        } else {
-//            delegate!.dismissGMapViewController()
-//        }
-        let presentingViewController = self.presentingViewController!
-        dismissViewControllerAnimated(true, completion: { () -> Void in
-            if presentingViewController.isMemberOfClass(ArtViewController.self) {
-                presentingViewController.dismissViewControllerAnimated(true, completion: nil)
-            }
-        })
+        for item in presentedViewControllers {
+            item.clear()
+        }
+        presentedViewControllers.removeAll(keepCapacity: false)
+        artFeedViewController!.dismissViewControllerAnimated(true, completion: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ICON_LOADED_NOTIFICATION_ID, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: PREVIEW_LOADED_NOTIFICATION_ID, object: nil)
@@ -211,7 +202,6 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
         let artViewController = ArtViewController()
         artViewController.art = tappedMarker!.art
-        artViewController.homeViewController = self
         artViewController.delegate = self
         artViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
         artViewController.transitioningDelegate = self
@@ -366,7 +356,7 @@ class GMapViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             firstLook = false
             var camera: GMSCameraPosition = GMSCameraPosition(target: currentLocation!, zoom: 14, bearing: 0, viewingAngle: 0)
             mapView!.camera = camera
-            if artForRoute != nil && homeViewController!.isMemberOfClass(ArtViewController.self) {
+            if artForRoute != nil && presentingViewController!.isMemberOfClass(ArtViewController.self) {
 //                createRouteAndAppropriateZoom(currentLocation, artForRoute!.location!)
                 zoomToLocation(artForRoute!.location!)
                 artLocation = artForRoute!.location!

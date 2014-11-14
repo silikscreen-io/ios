@@ -8,6 +8,9 @@
 
 import UIKit
 
+var artFeedViewController: UIViewController?
+
+
 protocol ArtFeedViewControllerDelegate {
     func dismissArtFeedViewController()
 }
@@ -36,6 +39,7 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        artFeedViewController = self
         silkView.frame.size.height += 20
         searchArts = arts
         view.backgroundColor = UIColor.blackColor()
@@ -240,7 +244,6 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == SHOW_ART_FROM_FEED_SEGUE_ID {
             let artViewController = segue.destinationViewController as ArtViewController
-            artViewController.homeViewController = self
             artViewController.art = tappedArt
             artViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
             artViewController.transitioningDelegate = self
@@ -273,7 +276,6 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     override func userButtonPressed() {
         let userViewController = UserViewController()
-        userViewController.homeViewController = self
         if iOS8Delta {
             showViewController(userViewController, sender: self)
         } else {

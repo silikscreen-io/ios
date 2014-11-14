@@ -322,7 +322,6 @@ class ArtToolbarViewController: UIViewController, UIScrollViewDelegate, UIViewCo
     
     func userButtonPressed() {
         let userViewController = UserViewController()
-        userViewController.homeViewController = self
         if iOS8Delta {
             showViewController(userViewController, sender: self)
         } else {

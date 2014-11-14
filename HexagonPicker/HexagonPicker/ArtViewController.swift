@@ -14,8 +14,7 @@ protocol ArtViewControllerDelegate {
 }
 
 
-class ArtViewController: UIViewController, UIScrollViewDelegate {
-    var homeViewController: UIViewController?
+class ArtViewController: UIViewController, UIScrollViewDelegate, ClearOnDismiss {
     
     let queue = dispatch_queue_create("com.vaisoft.hexagonpicker", nil)
     
@@ -64,6 +63,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presentedViewControllers.append(self)
         self.view.backgroundColor = UIColor.blackColor()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
@@ -415,7 +415,6 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     func showRouteButtonPressed(sender: UIButton) {
         if delegate == nil {
             let mapViewController = GMapViewController()
-            mapViewController.homeViewController = self
             mapViewController.artForRoute = art
             if iOS8Delta {
                 showViewController(mapViewController, sender: self)
@@ -460,6 +459,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     
     func close() {
+        presentedViewControllers.removeLast()
         if presentingViewController!.isMemberOfClass(GMapViewController.self) {
             (presentingViewController as GMapViewController).dismissArtViewControllerWithowtShowingRout()
         } else {
@@ -491,9 +491,9 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
     
     func dismissMap() {
         self.dismissViewControllerAnimated(true, completion: {
-            if self.homeViewController != nil {
+            if self.presentingViewController != nil {
                 self.clear()
-                (self.homeViewController as ArtFeedViewController).dismissArtViewController()
+                (self.presentingViewController as ArtFeedViewController).dismissArtViewController()
             }
         })
     }

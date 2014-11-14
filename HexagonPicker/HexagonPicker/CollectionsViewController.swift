@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CollectionsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate {
+class CollectionsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate, ClearOnDismiss {
     
     let cellIdentifier = "collectionArtCell"
     
@@ -40,6 +40,7 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presentedViewControllers.append(self)
         view.backgroundColor = UIColor.blackColor()
         
         for art in artsSource {
@@ -286,8 +287,20 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     
     
     func backButtonPressed(sender: UIButton) {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: PREVIEW_LOADED_NOTIFICATION_ID, object: nil)
-        dismissViewControllerAnimated(true, completion: nil)
+        presentedViewControllers.removeLast()
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        dismissViewControllerAnimated(true, completion: { () -> Void in
+            self.clear()
+        })
+    }
+    
+    
+    
+    func clear() {
+        for art in artsSource {
+            art.previewImage = nil
+        }
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     

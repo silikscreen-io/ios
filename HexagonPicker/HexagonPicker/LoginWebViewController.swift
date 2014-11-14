@@ -8,6 +8,8 @@
 
 import UIKit
 
+var loginViewController: UIViewController?
+
 class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewControllerDelegate {
     
     let baseURL = "https://instagram.com/"
@@ -28,6 +30,7 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loginViewController = self
         self.view.backgroundColor = UIColor.blackColor()
         requestURL = baseURL + "oauth/authorize/?client_id=\(clientID)&redirect_uri=\(redirectURI)&response_type=token&scope=basic+likes"
     }
@@ -123,6 +126,7 @@ class LoginWebViewController: UIViewController, UIWebViewDelegate, ArtFeedViewCo
     
     
     func dismissArtFeedViewController() {
+        artFeedViewController = nil
         self.dismissViewControllerAnimated(true, completion: nil)
         token = nil
 //        var cookie = NSHTTPCookie()

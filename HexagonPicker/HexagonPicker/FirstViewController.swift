@@ -8,6 +8,15 @@
 
 import UIKit
 
+
+protocol ClearOnDismiss {
+    func clear()
+}
+
+
+var presentedViewControllers: [ClearOnDismiss] = []
+
+
 class FirstViewController: UIViewController {
 
     @IBOutlet weak var loginButton: UIButton!
