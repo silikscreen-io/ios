@@ -33,6 +33,7 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     var scrollViewPosition: CGFloat = 50
     var scrollView: UIScrollView = UIScrollView()
     var collectionViews = [UICollectionView: String]()
+    var collectionViewPosition: CGFloat = 0
     let flowLayout = UICollectionViewFlowLayout()
     
     override func viewDidLoad() {
@@ -50,6 +51,7 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
         view.addSubview(scrollView)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "previewLoaded:", name: PREVIEW_LOADED_NOTIFICATION_ID, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
+        collectionViewPosition = collectionPadding
     }
     
     
@@ -57,14 +59,13 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     func initArtsCollectionViews() {
         flowLayout.itemSize = CGSizeMake(cellSize, cellSize)
         flowLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
-        var position: CGFloat = collectionPadding
         for (city, _) in self.arts {
             println(city)
-            addArtsCollectionView(position, city)
-            initCityLabel(position, city)
-            position += cellSize + collectionPadding
+            addArtsCollectionView(collectionViewPosition, city)
+            initCityLabel(collectionViewPosition, city)
+            collectionViewPosition += cellSize + collectionPadding
         }
-        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: position)
+        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: collectionViewPosition)
         alignCollectionViews()
     }
     
@@ -109,6 +110,7 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     func alignScrollView() {
         scrollView.frame = screenSize!
         scrollView.frame.origin.y = collectionPadding
+        scrollView.contentSize.width = screenSize!.width
     }
     
     
@@ -116,7 +118,7 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     func initCityLabel(position: CGFloat, _ city: String) {
         let label = UILabel()
         label.text = city
-        label.font = UIFont(name: "SnellRoundhand-Black", size: 30)
+        label.font = UIFont(name: "SnellRoundhand-Black", size: 20)
         label.sizeToFit()
         label.textColor = UIColor.grayColor()
         label.frame.origin.y = position - label.frame.height
@@ -226,7 +228,6 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     
     func initButton(inout button: UIButton, _ imageName: String, _ selector: Selector) {
         button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
-        button.alpha = 0.7
         button.addTarget(self, action: selector, forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(button)
     }
@@ -253,14 +254,15 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     
     
     
-    func orientationChanged() {
+    func orientationChanged() -> Bool {
         if !updateScreenSize() {
-            return
+            return false
         }
         alignPersonLabel()
         alignScrollView()
         alignCityLabels()
         alignCollectionViews()
+        return true
     }
     
     

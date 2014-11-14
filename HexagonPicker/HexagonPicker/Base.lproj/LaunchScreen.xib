@@ -3,17 +3,16 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Silkscreen" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="0kn-Kw-0kN">
-                    <rect key="frame" x="155" y="89" width="171" height="43"/>
+                    <rect key="frame" x="20" y="89" width="560" height="43"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -21,9 +20,9 @@
             </subviews>
             <color key="backgroundColor" red="0.38823533058166504" green="0.36078432202339172" blue="0.4901961088180542" alpha="1" colorSpace="deviceRGB"/>
             <constraints>
-                <constraint firstItem="0kn-Kw-0kN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="89" id="JfV-0R-oGn"/>
-                <constraint firstAttribute="centerYWithinMargins" secondItem="0kn-Kw-0kN" secondAttribute="centerYWithinMargins" constant="129.5" id="bW6-WS-NOL"/>
-                <constraint firstAttribute="centerX" secondItem="0kn-Kw-0kN" secondAttribute="centerX" id="c7E-CU-UFv"/>
+                <constraint firstItem="0kn-Kw-0kN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="A40-g8-D5A"/>
+                <constraint firstItem="0kn-Kw-0kN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="89" id="Rv6-lx-Z8U"/>
+                <constraint firstAttribute="centerX" secondItem="0kn-Kw-0kN" secondAttribute="centerX" id="a27-fQ-fma"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

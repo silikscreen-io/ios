@@ -333,7 +333,7 @@ class ArtToolbarViewController: UIViewController, UIScrollViewDelegate, UIViewCo
     
     
     func homeToolbarTapDetected() {
-//        showButtonsBar()
+        showButtonsBar()
     }
     
     

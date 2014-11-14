@@ -8,29 +8,21 @@
 
 import UIKit
 
-class UserViewController: UIViewController {
+class UserViewController: CollectionsViewController {
     var homeViewController: UIViewController?
     
-    let buttonWidth: CGFloat = 50
-    let buttonHeight: CGFloat = 40
-    let buttonPadding: CGFloat = 10
     let paddingX: CGFloat = 10
     
-    var backButton: UIButton?
-    
-    var screenSize: CGRect?
-    var firstLayout = true
-    
-    var userName: UILabel?
     let userNamePaddingY: CGFloat = 30
     
     var instagramLabel: UILabel?
     var instagramButton: UIButton?
-    var likesButton: UIButton?
     
     var userPicture: HexaButton?
 
     override func viewDidLoad() {
+        personName = currentUser!.fullName!
+        artsSource = currentUser!.likes
         super.viewDidLoad()
         view.backgroundColor = UIColor.blackColor()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: ORIENTATION_CHANGED_NOTIFICATION, object: nil)
@@ -40,21 +32,11 @@ class UserViewController: UIViewController {
     
     
     
-    override func viewWillLayoutSubviews() {
-        if !firstLayout {
-            return
-        }
-        firstLayout = false
-        screenSize = self.view.bounds
-        initFullNameLabel()
+    override func initArtsCollectionViews() {
         initPicture()
-        var buttonFrame = CGRect(x: buttonPadding, y: buttonPadding, width: CGFloat(42), height: CGFloat(42))
-        backButton = UIButton(frame: buttonFrame)
-        backButton!.setImage(UIImage(named: "back_arrow"), forState: UIControlState.Normal)
-        backButton!.alpha = 0.7
-        backButton!.addTarget(self, action: "backButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(backButton!)
         initInstagram()
+        collectionViewPosition += instagramLabel!.frame.origin.y + instagramLabel!.frame.height
+        super.initArtsCollectionViews()
     }
     
     
@@ -69,47 +51,24 @@ class UserViewController: UIViewController {
         instagramLabel!.sizeToFit()
         instagramLabel!.frame = CGRect(origin: CGPoint(x: screenSize!.width / 2 - paddingX - instagramLabel!.frame.width, y: y - instagramLabel!.frame.size.height / 2), size: instagramLabel!.frame.size)
         instagramLabel!.textColor = UIColor.whiteColor()
-        view.addSubview(instagramLabel!)
+        scrollView.addSubview(instagramLabel!)
 
         
         var buttonFrame = CGRect(x: screenSize!.width / 2 + paddingX, y: y - buttonHeight / 2, width: buttonWidth * 2, height: buttonHeight)
         instagramButton = UIButton(frame: buttonFrame)
-        initButton(&instagramButton!, "Log out", "logoutButtonPressed:")
-        
-        buttonFrame = CGRect(x: screenSize!.width / 2 - buttonWidth * 2, y: instagramButton!.frame.origin.y + instagramButton!.frame.height, width: buttonWidth * 4, height: buttonHeight)
-        likesButton = UIButton(frame: buttonFrame)
-        initButton(&likesButton!, "Arts you've liked", "likedButtonPressed:")
+        initTextButton(&instagramButton!, "Log out", "logoutButtonPressed:")
+        scrollView.contentSize.height += instagramLabel!.frame.height + collectionPadding
     }
     
     
     
-    func initButton(inout button: UIButton, _ title: String, _ selector: Selector) {
+    func initTextButton(inout button: UIButton, _ title: String, _ selector: Selector) {
         button.setTitle(title, forState: UIControlState.Normal)
         button.backgroundColor = UIColor.blackColor()
         button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Highlighted)
         button.addTarget(self, action: selector, forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(button)
-    }
-    
-    
-    
-    func initFullNameLabel() {
-        userName = UILabel()
-        alignUserName()
-        userName!.textColor = UIColor.whiteColor()
-        view.addSubview(userName!)
-    }
-    
-    
-    
-    func alignUserName() {
-        userName!.frame = CGRect(origin: CGPoint(x: paddingX, y: buttonPadding), size: CGSize(width: screenSize!.width - 2 * paddingX, height: 10))
-        userName!.text = currentUser!.fullName
-        userName!.textAlignment = NSTextAlignment.Center
-        userName!.numberOfLines = 0
-        userName!.sizeToFit()
-        userName!.frame = CGRect(origin: CGPoint(x: (screenSize!.width - userName!.frame.width) / 2 - paddingX, y: buttonPadding), size: userName!.frame.size)
+        scrollView.addSubview(button)
     }
     
     
@@ -119,7 +78,8 @@ class UserViewController: UIViewController {
         let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: userPicture!.frame.size)
         let imageRef = CGImageCreateWithImageInRect(currentUser!.profilePicture!.CGImage, rect);
         userPicture!.setMainImage(UIImage(CGImage: imageRef))
-        view.addSubview(userPicture!)
+        scrollView.addSubview(userPicture!)
+        scrollView.contentSize.height += userPicture!.height! + 4 * buttonPadding
         alignPicture()
     }
     
@@ -128,15 +88,14 @@ class UserViewController: UIViewController {
     func alignPicture() {
         var width = userPicture!.frame.width
         var height = userPicture!.frame.height
-        var availableWidth = screenSize!.width - 2 * paddingX
+        var availableWidth = screenSize!.width
         if width > availableWidth {
             let ratio = width / availableWidth
             width = availableWidth
             height /= ratio
         }
         let x = (availableWidth - width) / 2
-        let y = userName!.frame.origin.y + userName!.frame.height + userNamePaddingY
-        userPicture!.frame = CGRect(x: x, y: y, width: width, height: height)
+        userPicture!.frame = CGRect(x: x, y: 0, width: width, height: height)
     }
     
     
@@ -147,37 +106,17 @@ class UserViewController: UIViewController {
         instagramButton!.frame = buttonFrame
         instagramLabel!.frame = CGRect(origin: CGPoint(x: screenSize!.width / 2 - buttonPadding - instagramLabel!.frame.width, y: y - instagramLabel!.frame.size.height / 2), size: instagramLabel!.frame.size)
     }
-
     
     
-    func updateScreenSize() -> Bool {
-        let deviceOrientationPortrait = ((deviceOrientation! == UIDeviceOrientation.Portrait) || (deviceOrientation! == UIDeviceOrientation.PortraitUpsideDown)) ? true : false
-        let minSize = screenSize!.size.width < screenSize!.height ? screenSize!.size.width : screenSize!.height
-        let maxSize = screenSize!.size.width > screenSize!.height ? screenSize!.size.width : screenSize!.height
-        if deviceOrientationPortrait {
-            if minSize == screenSize!.size.width {
-                return false
-            }
-            screenSize!.size = CGSize(width: minSize, height: maxSize)
-        } else {
-            if maxSize == screenSize!.size.width {
-                return false
-            }
-            screenSize!.size = CGSize(width: maxSize, height: minSize)
+    
+    
+    override func orientationChanged() -> Bool {
+        if !super.orientationChanged() {
+            return false
         }
-        return true
-    }
-    
-    
-    
-    func orientationChanged() {
-        if !updateScreenSize() {
-            return
-        }
-        alignUserName()
         alignPicture()
         alignInstagram()
-        likesButton!.frame.origin.x = screenSize!.width / 2 - buttonWidth * 2
+        return true
     }
     
     
@@ -189,24 +128,4 @@ class UserViewController: UIViewController {
             buttonsLoadedNumber = 0
         }
     }
-    
-    
-    
-    func likedButtonPressed(sender: UIButton) {
-        let likedArtsViewController = LikedArtsViewController()
-        presentViewController(likedArtsViewController, animated: true, completion: nil)
-    }
-    
-    
-    
-    func backButtonPressed(sender: UIButton) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
-
 }
