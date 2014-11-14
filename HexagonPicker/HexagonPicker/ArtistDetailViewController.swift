@@ -16,5 +16,6 @@ class ArtistDetailViewController: CollectionsViewController {
         personName = artist!.name
         artsSource = artist!.arts
         super.viewDidLoad()
+        showLiked = true
     }
 }

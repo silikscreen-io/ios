@@ -295,6 +295,7 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         artistButton = HexaButton(buttonPadding, buttonPadding, buttonSize)
         artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
         artistButton!.addTarget(self, action: "userButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        artistButton!.setLikedStyle(art!.liked)
         view.addSubview(artistButton!)
         updateArtistButton()
     }
@@ -462,9 +463,11 @@ class ArtViewController: UIViewController, UIScrollViewDelegate {
         if presentingViewController!.isMemberOfClass(GMapViewController.self) {
             (presentingViewController as GMapViewController).dismissArtViewControllerWithowtShowingRout()
         } else {
-            dismissViewControllerAnimated(true, completion: nil)
+            dismissViewControllerAnimated(true, completion: { () -> Void in
+                self.clear()
+            })
         }
-        clear()
+        //clear()
     }
     
     

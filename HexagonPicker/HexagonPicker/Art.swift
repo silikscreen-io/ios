@@ -57,6 +57,8 @@ class Art: NSObject {
     
     var imageIndex: Int?
     
+    var liked = false
+    
     
     init(_ artist: Artist?, _ pfObject: PFObject) {
         super.init()

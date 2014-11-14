@@ -18,9 +18,16 @@ class ArtView: UIImageView {
     
     let buttonWidth: CGFloat = 34
     var artistButton: HexaButton?
+//        = nil {
+//        willSet(value) {
+//            println("Artist button will set         : \(NSDate().timeIntervalSince1970)")
+//            println(value)
+//        }
+//        didSet {
+//            println("Artist button did set         : \(NSDate().timeIntervalSince1970)")
+//        }
+//    }
     var parentViewController: UIViewController?
-    
-    var likeViewBottom: UIImageView?
     
     var art: Art?
     
@@ -107,12 +114,13 @@ class ArtView: UIImageView {
     func initButtons(width: CGFloat, _ heigth: CGFloat) {
 //        dispatch_async(dispatch_get_main_queue(), {
             let x = (width < heigth ? self.bounds.width - self.buttonWidth - self.padding : self.padding)
-            let button = HexaButton(x, self.padding, self.buttonWidth)
-            self.artistButton = button
+            self.artistButton = HexaButton(x, self.padding, self.buttonWidth)
             self.artistButton!.setMainImage(UIImage(named: users[Int(arc4random_uniform(5))]))
             self.artistButton!.addTarget(self, action: "artistButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.artistButton!.setLikedStyle(art!.liked)
             self.addSubview(self.artistButton!)
-//            println("Artist button added         : \(NSDate().timeIntervalSince1970)")
+//        println("Artist button added \(art!.artDescription)         : \(NSDate().timeIntervalSince1970)")
+//        println("View         : \(self)")
 //        })
     }
     
@@ -128,6 +136,7 @@ class ArtView: UIImageView {
         if artistButton != nil {
             artistButton!.removeFromSuperview()
             artistButton = nil
+//            println("Artist button removed         : \(NSDate().timeIntervalSince1970)")
         }
     }
     
@@ -143,28 +152,17 @@ class ArtView: UIImageView {
     func doubleTapDetected(recognizer: UITapGestureRecognizer) {
         if let index = find(currentUser!.likes, art!) {
             currentUser!.likes.removeAtIndex(index)
-            if likeViewBottom != nil {
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
-                    self.likeViewBottom!.alpha = 0
-                }, completion: { (finished) -> Void in
-                    self.likeViewBottom!.removeFromSuperview()
-                })
-            }
+            art!.liked = false
         } else {
+            art!.liked = true
             currentUser!.likes.append(art!)
             let hexagon = UIImage(named: "hexagon")!
             let ratio = hexagon.size.width / hexagon.size.height
-            likeViewBottom = UIImageView(frame: CGRectMake(padding, frame.height - padding - 30, 30 * ratio, 30))
-            likeViewBottom!.image = hexagon
-            addSubview(likeViewBottom!)
-            likeViewBottom!.alpha = 0
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
-                self.likeViewBottom!.alpha = 1
-            })
-            let likeView = UIImageView(image: UIImage(named: "like")!)
+            let likeView = UIImageView(image: UIImage(named: "hexagon")!)
+            likeView.frame.size = CGSize(width: 60, height: 60)
             var likeFrame = likeView.frame
             likeFrame.origin.x = (frame.width - likeFrame.width) / 2
-            likeFrame.origin.y = 50
+            likeFrame.origin.y = (frame.height - likeFrame.height) / 2
             likeView.frame = likeFrame
             addSubview(likeView)
             likeView.alpha = 0
@@ -182,6 +180,9 @@ class ArtView: UIImageView {
                     }
             }
         }
+//        println("Double tap \(art!.artDescription)         : \(NSDate().timeIntervalSince1970)")
+//        println("View         : \(self)")
+        artistButton!.setLikedStyle(art!.liked)
     }
     
     

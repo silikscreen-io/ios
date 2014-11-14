@@ -36,6 +36,8 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
     var collectionViewPosition: CGFloat = 0
     let flowLayout = UICollectionViewFlowLayout()
     
+    var showLiked = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.blackColor()
@@ -60,7 +62,6 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
         flowLayout.itemSize = CGSizeMake(cellSize, cellSize)
         flowLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
         for (city, _) in self.arts {
-            println(city)
             addArtsCollectionView(collectionViewPosition, city)
             initCityLabel(collectionViewPosition, city)
             collectionViewPosition += cellSize + collectionPadding
@@ -182,7 +183,10 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
             let activityIndicatorView = cell.viewWithTag(101) as UIActivityIndicatorView
             activityIndicatorView.hidden = true
         }
-        println(indexPath)
+        if showLiked && art.liked {
+            cell.layer.borderColor = UIColor(red: 1, green: 0, blue: 0.1, alpha: 0.5).CGColor
+            cell.layer.borderWidth = 1
+        }
         return cell
     }
     
@@ -219,7 +223,6 @@ class CollectionsViewController: UIViewController, UICollectionViewDataSource, U
             return
         }
         let indexPath = notificationDictionary.objectForKey("indexPath") as? NSIndexPath
-        println(indexPath)
         //collectionView!.reloadItemsAtIndexPaths([indexPath!])
         collectionView!.reloadData()
     }

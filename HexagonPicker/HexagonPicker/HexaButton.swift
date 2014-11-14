@@ -28,6 +28,8 @@ class HexaButton: UIButton {
     var color = UIColor(red: 1, green: 0.3, blue: 1, alpha: 0)
     var image: UIImage?
     
+    var strokeColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.6)
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -152,6 +154,19 @@ class HexaButton: UIButton {
     }
     
     
+    
+    func setLikedStyle(liked: Bool) {
+        var newColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.6)
+        if liked {
+            newColor = UIColor(red: 1, green: 0, blue: 0.1, alpha: 0.8)
+        }
+        if strokeColor != newColor {
+            strokeColor = newColor
+            self.setNeedsDisplay()
+        }
+    }
+    
+    
 
     override func drawRect(rect: CGRect)
     {
@@ -172,7 +187,6 @@ class HexaButton: UIButton {
         polygonPath.closePath()
         
         if image != nil {
-            let strokeColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.6)
             var imagePattern = UIColor(patternImage: image!)
             CGContextSaveGState(context)
             CGContextSetPatternPhase(context, CGSizeMake(0, 0))
