@@ -371,6 +371,7 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     
     func scrollViewDidScrollPortraitArtistButton(scrollView: UIScrollView) {
+        println("artistTopButton!.frame.origin.y: \(artistTopButton!.frame.origin.y)")
         let scrolledDown = scrollView.contentOffset.y > contentOffset!.y
         if scrolledDown {
             if artTopButtonIndex + 1 >= artViews.count {
@@ -413,6 +414,12 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex--
                     updateDisplayedArts(-1)
+                }
+            } else {
+                if artistTopButton!.frame.origin.y < artViews[artTopButtonIndex].padding {
+                    artistTopButton!.frame.origin.y += contentOffset!.y - scrollView.contentOffset.y
+                } else {
+                    artistTopButton!.frame.origin.y = artViews[artTopButtonIndex].padding
                 }
             }
         }
@@ -463,6 +470,12 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
                     view.addSubview(artistTopButton!)
                     artTopButtonIndex--
                     updateDisplayedArts(-1)
+                }
+            } else {
+                if artistTopButton!.frame.origin.x < artViews[artTopButtonIndex].padding {
+                    artistTopButton!.frame.origin.x += contentOffset!.x - scrollView.contentOffset.x
+                } else {
+                    artistTopButton!.frame.origin.x = artViews[artTopButtonIndex].padding
                 }
             }
         }
