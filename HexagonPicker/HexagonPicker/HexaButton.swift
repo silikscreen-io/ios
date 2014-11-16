@@ -33,6 +33,12 @@ class HexaButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        R = frame.height / 2
+        self.width = 2 * R!
+        r = 0.86603 * R!
+        height = 2 * r!
+        xStep =  0.5 * R!
+        initMaskImage()
     }
     
     

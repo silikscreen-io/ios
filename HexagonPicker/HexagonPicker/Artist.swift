@@ -9,6 +9,7 @@
 import UIKit
 
 var artists: [String: Artist] = [:]
+var artistsSortedByArtsNumber: [Artist] = []
 let ARTIST_NAME_FIELD_ID = "name"
 
 class Artist: NSObject {
@@ -36,6 +37,13 @@ class Artist: NSObject {
         //artist!.arts.append(Art.addArt(artist!, pfObject))
         artist!.pfObject = pfObject
         artists[artistId] = artist
+        artistsSortedByArtsNumber.append(artist!)
+    }
+    
+    
+    
+    class func sort() {
+        artistsSortedByArtsNumber.sort({ $0.arts.count > $1.arts.count })
     }
     
     

@@ -256,7 +256,8 @@ class ArtFeedViewController: ArtToolbarViewController, GMapViewControllerDelegat
     
     
     override func homeButtonPressed() {
-        
+        let featuredViewController = FeaturedViewController()
+        presentViewController(featuredViewController, animated: true, completion: nil)
     }
     
     

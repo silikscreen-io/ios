@@ -71,6 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
             }
             Art.connectArtsToArtists()
+            Artist.sort()
         }
     }
     
